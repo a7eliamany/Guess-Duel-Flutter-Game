@@ -8,10 +8,51 @@ The game allows players to challenge themselves through offline gameplay or comp
 
 ## 📱 Screenshots
 
+### 🚀 App Flow
+
 <p align="center">
-  Add your screenshots here
+  <img src="screenshots/splash_screen.jpg" width="220"/>
+  <img src="screenshots/home_screen.jpg" width="220"/>
 </p>
 
+---
+
+### 🌐 Online Mode
+
+<p align="center">
+  <img src="screenshots/create_room_screen.jpg" width="220"/>
+  <img src="screenshots/create_room_screen_2.jpg" width="220"/>
+  <img src="screenshots/lobby_screen.jpg" width="220"/>
+  <img src="screenshots/lobby_screen_2.jpg" width="220"/>
+</p>
+
+---
+
+### 🎯 Gameplay
+
+<p align="center">
+  <img src="screenshots/secret_number_screen.jpg" width="220"/>
+  <img src="screenshots/gameplay_screen.jpg" width="220"/>
+  <img src="screenshots/gameplay_screen_2.jpg" width="220"/>
+</p>
+
+---
+
+### 📴 Solo Challenge (Offline Mode)
+
+<p align="center">
+  <img src="screenshots/solo_challenge_screen.jpg" width="220"/>
+  <img src="screenshots/solo_challenge_screen_2.jpg" width="220"/>
+  <img src="screenshots/solo_challenge_screen_3.jpg" width="220"/>
+</p>
+
+---
+
+### 📜 History
+
+<p align="center">
+  <img src="screenshots/history_screen.jpg" width="220"/>
+</p>
 ---
 
 ## 🎮 Game Modes
