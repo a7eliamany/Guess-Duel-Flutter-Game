@@ -1,0 +1,24 @@
+Future<bool> showExitDialog(BuildContext context) async {
+      return await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Confirm'),
+              content: const Text('Are you sure you need to exit'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: const Text('no'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text('yes'),
+                ),
+              ],
+            ),
+          ) ??
+          false;
+    }

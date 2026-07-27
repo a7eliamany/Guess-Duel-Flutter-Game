@@ -1,0 +1,75 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guess_duel/cubit/Join%20Room/join_room_state.dart';
+import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
+import 'package:guess_duel/extensions/player_role_extension.dart';
+import 'package:guess_duel/models/Players/players_model.dart';
+import 'package:guess_duel/services/Firebase/firebase_service.dart';
+
+class JoinRoomCubit extends Cubit<JoinRoomState> {
+  JoinRoomCubit(this.internetCubit) : super(JoinRoomInitial());
+
+  final InternetCubit internetCubit;
+
+  Future<void> joinRoom(String roomId) async {
+    emit(JoinRoomLoading());
+    try {
+      final hasNet = await internetCubit.hasInternet();
+      if (!hasNet) {
+        emit(JoinRoomFailure(errorM: "Please check your internet connection"));
+        return;
+      }
+      final room = FirebaseFirestore.instance
+          .collection(FirebaseCollections.rooms)
+          .doc(roomId);
+      List<RoomPlayer> players = await FirebaseService.getPeopleRoomData(
+        roomId,
+      );
+      if (players.length > 1) {
+        emit(JoinRoomFailure(errorM: "Room is full"));
+        return;
+      }
+      final userID = FirebaseService.getCurrentUserFirebaseID();
+      if (userID == null) {
+        emit(JoinRoomFailure(errorM: "User not logged in"));
+        return;
+      }
+      final PlayerModel playerData = await FirebaseService.getPlayerData(
+        userID,
+      );
+      final RoomPlayer roomPlayerData = RoomPlayer(
+        roomPlayerStatus: RoomPlayerStatus.idle,
+        playerModel: playerData,
+        playerRole: PlayerRole.player,
+      );
+      await room
+          .collection(FirebaseCollections.roomPeople)
+          .doc(userID)
+          .set(roomPlayerData.toFirestore());
+
+      // Update room playersCount in Firestore to include the joining player
+      await room.update({"playersCount": players.length + 1});
+
+      emit(JoinRoomLoaded(roomId: roomId));
+    } catch (e) {
+      emit(JoinRoomFailure(errorM: "Something Wrong"));
+    }
+  }
+
+  Future<void> roomCodeCheck(String roomId) async {
+    emit(JoinRoomLoading());
+    try {
+      final room = await FirebaseFirestore.instance
+          .collection(FirebaseCollections.rooms)
+          .doc(roomId)
+          .get();
+      if (!room.exists) {
+        emit(JoinRoomFailure(errorM: "Room not Found"));
+      } else {
+        joinRoom(roomId);
+      }
+    } on FirebaseException catch (e) {
+      emit(JoinRoomFailure(errorM: e.message ?? "Error"));
+    }
+  }
+}

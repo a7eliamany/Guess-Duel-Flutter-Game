@@ -1,0 +1,108 @@
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+
+class Sqldb {
+  Database? _db;
+  Future<Database?> get db async {
+    if (_db == null) {
+      _db = await initsql();
+      return _db;
+    } else {
+      return _db;
+    }
+  }
+
+  Future<Database> initsql() async {
+    String dbpath = await getDatabasesPath();
+    String path = join(dbpath, "Mydb.db");
+
+    Database mydb = await openDatabase(
+      path,
+      version: 3,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
+      onCreate: _oncreate,
+    );
+    return mydb;
+  }
+
+  Future<void> _oncreate(Database db, version) async {
+    await db.execute('''
+  CREATE TABLE Folders(
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    time TEXT
+  )
+''');
+
+    await db.execute('''
+  CREATE TABLE notes(
+    id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    content TEXT,
+    time    TEXT ,
+    title   TEXT,
+    color   VARCHAR(40),
+    Folder_id INTEGER NOT NULL,
+    FOREIGN KEY (Folder_id) REFERENCES Folders(id)
+          ON DELETE CASCADE
+          ON UPDATE CASCADE 
+  )
+''');
+  }
+
+  Future<List<Map<dynamic, dynamic>>> readdata(String sql) async {
+    Database? mydb = await db;
+    List<Map> response = await mydb!.rawQuery(sql);
+    return response;
+  }
+
+  Future<int> insertdata(String sql) async {
+    Database? mydb = await db;
+    int response = await mydb!.rawInsert(sql);
+    return response;
+  }
+
+  Future<int> updatedata(String sql) async {
+    Database? mydb = await db;
+    int response = await mydb!.rawUpdate(sql);
+    return response;
+  }
+
+  Future<int> deletedata(String sql) async {
+    Database? mydb = await db;
+    int response = await mydb!.rawDelete(sql);
+    return response;
+  }
+
+  //shortcut
+
+  Future<List<Map<dynamic, dynamic>>> read(String table) async {
+    Database? mydb = await db;
+    List<Map> response = await mydb!.query(table);
+    return response;
+  }
+
+  Future<int> insert(String table, Map<String, Object?> values) async {
+    Database? mydb = await db;
+    int response = await mydb!.insert(table, values);
+    return response;
+  }
+
+  Future<int> update(
+    String table,
+    Map<String, Object?> values,
+    String? where,
+  ) async {
+    Database? mydb = await db;
+    int response = await mydb!.update(table, values, where: where);
+    return response;
+  }
+  
+
+  Future<int> delete(String table, String? where) async {
+    Database? mydb = await db;
+    int response = await mydb!.delete(table, where: where);
+    return response;
+  }
+}

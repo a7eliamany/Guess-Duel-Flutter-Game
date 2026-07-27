@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "473182681993",
+    "project_id": "guess-duel-3b9f1",
+    "storage_bucket": "guess-duel-3b9f1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473182681993:android:f3d80c4cb100e4419f7f58",
+        "android_client_info": {
+          "package_name": "com.example.guess_duel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7UxaM1U5sQnVUuc5v_HioD1Y770UzOLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

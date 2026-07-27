@@ -1,0 +1,44 @@
+import 'package:guess_duel/models/Attempts/attempts_model.dart';
+import 'package:guess_duel/models/History/history_model.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+class HistoryAdabter extends TypeAdapter<GameHistoryModel> {
+  @override
+  int get typeId => 3;
+
+  @override
+  GameHistoryModel read(BinaryReader reader) {
+    return GameHistoryModel(
+      dateTime: DateTime.fromMillisecondsSinceEpoch(reader.readInt()),
+      roomID: reader.readString(),
+      attemptsModel: reader.readList().cast<AttemptModel>(),
+      isWin: reader.readBool(),
+      players: reader.readList().cast<String>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, GameHistoryModel obj) {
+    writer.writeInt(obj.dateTime.millisecondsSinceEpoch);
+    writer.writeString(obj.roomID);
+    writer.writeList(obj.attemptsModel);
+    writer.writeBool(obj.isWin);
+    writer.writeList(obj.players);
+  }
+}
+
+class StatsAdapter extends TypeAdapter<StatsModel> {
+  @override
+  int get typeId => 4;
+
+  @override
+  StatsModel read(BinaryReader reader) {
+    return StatsModel(gamesPlayed: reader.readInt(), wins: reader.readInt());
+  }
+
+  @override
+  void write(BinaryWriter writer, StatsModel obj) {
+    writer.writeInt(obj.gamesPlayed);
+    writer.writeInt(obj.wins);
+  }
+}
