@@ -2,7 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class HudParticlesBackground extends StatefulWidget {
-  const HudParticlesBackground({super.key});
+  final bool isWin;
+  const HudParticlesBackground({super.key, required this.isWin});
 
   @override
   State<HudParticlesBackground> createState() => _HudParticlesBackgroundState();
@@ -80,7 +81,7 @@ class _HudParticlesBackgroundState extends State<HudParticlesBackground>
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _ParticlesPainter(_particles),
+      painter: _ParticlesPainter(_particles, widget.isWin),
       size: Size.infinite,
     );
   }
@@ -88,15 +89,17 @@ class _HudParticlesBackgroundState extends State<HudParticlesBackground>
 
 class _ParticlesPainter extends CustomPainter {
   final List<_Particle> particles;
-
-  _ParticlesPainter(this.particles);
+  final bool isWin;
+  _ParticlesPainter(this.particles, this.isWin);
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
 
     for (var particle in particles) {
-      paint.color = const Color(0xFFFFB4AB).withOpacity(particle.opacity);
+      paint.color = isWin
+          ? const Color(0xFF8AB4FF).withValues(alpha: particle.opacity)
+          : const Color(0xFFFFB4AB).withValues(alpha: particle.opacity);
       canvas.drawCircle(
         Offset(particle.x * size.width, particle.y * size.height),
         particle.size,

@@ -8,6 +8,7 @@ import '../../../../theme/solo_challenge_theme.dart';
 class ChallengeStatsCard extends StatelessWidget {
   final String modeName;
   final int totalTime;
+  final int maxAttempts;
   final int digitCount;
 
   const ChallengeStatsCard({
@@ -16,6 +17,7 @@ class ChallengeStatsCard extends StatelessWidget {
 
     this.digitCount = 4,
     required this.totalTime,
+    this.maxAttempts = 10,
   });
 
   @override
@@ -71,7 +73,7 @@ class ChallengeStatsCard extends StatelessWidget {
                   const SizedBox(height: 2),
 
                   BlocSelector<SoloGameCubit, SoloGameState, int>(
-                    selector: (state) => state.timeElapsed ?? 0,
+                    selector: (state) => state.timeElapsed,
                     builder: (context, timeElapsed) {
                       final String elapsedFormattedTime = GameUtils.getTime(
                         timeElapsed,
@@ -115,7 +117,7 @@ class ChallengeStatsCard extends StatelessWidget {
                   return Expanded(
                     child: _buildBentoCard(
                       label: 'ATTEMPTS LEFT',
-                      value: '10 / $attemptsLeft',
+                      value: '$maxAttempts / $attemptsLeft',
                       valueColor: SoloChallengeTheme.secondaryContainer,
                       icon: Icons.refresh,
                     ),
