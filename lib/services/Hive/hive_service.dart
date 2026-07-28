@@ -2,6 +2,7 @@ import 'package:guess_duel/models/Attempts/attempts_type_adabter.dart';
 import 'package:guess_duel/models/History/history_adabter.dart';
 import 'package:guess_duel/models/Players/players_type_adabter.dart';
 import 'package:guess_duel/models/Rooms/rooms_type_adabter.dart';
+import 'package:guess_duel/models/offline/offline_game_adabter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService {
@@ -14,6 +15,7 @@ class HiveService {
     Hive.registerAdapter(RoomPlayerCacheAdapter());
     Hive.registerAdapter(HistoryAdabter());
     Hive.registerAdapter(StatsAdapter());
+    Hive.registerAdapter(OfflineGameAdapter());
 
     // remove old boxes
     await Hive.deleteBoxFromDisk(HiveBoxes.rooms);
@@ -21,11 +23,12 @@ class HiveService {
     await Hive.deleteBoxFromDisk(HiveBoxes.attempts);
 
     // open boxes
-    await Hive.openBox(HiveBoxes.players);
     await Hive.openBox(HiveBoxes.rooms);
+    await Hive.openBox(HiveBoxes.players);
     await Hive.openBox(HiveBoxes.attempts);
     await Hive.openBox(HiveBoxes.gameHistory);
     await Hive.openBox(HiveBoxes.stats);
+    await Hive.openBox(HiveBoxes.offlineGame);
   }
 
   static Box get playersBox => Hive.box(HiveBoxes.players);
@@ -33,6 +36,7 @@ class HiveService {
   static Box get attemptsBox => Hive.box(HiveBoxes.attempts);
   static Box get gameHistoryBox => Hive.box(HiveBoxes.gameHistory);
   static Box get statsBox => Hive.box(HiveBoxes.stats);
+  static Box get offlineGameBox => Hive.box(HiveBoxes.offlineGame);
 
   static Future<void> clearStoragePlayers(String roomID) async {
     await playersBox.delete(roomID);
@@ -69,6 +73,7 @@ class HiveBoxes {
   static const attempts = 'Attempts';
   static const gameHistory = 'GameHistory';
   static const stats = 'Stats';
+  static const offlineGame = 'OfflineGame';
 }
 
 class HiveBoxPlayers {

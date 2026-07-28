@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guess_duel/Functions/game_utils.dart';
+import 'package:guess_duel/Functions/random_f.dart';
 import 'package:guess_duel/cubit/Solo%20Game/solo_game_state.dart';
 
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
-import 'package:guess_duel/models/offline_game_model.dart';
+import 'package:guess_duel/models/offline/offline_game_model.dart';
+import 'package:guess_duel/services/Hive/hive_service.dart';
 
 class SoloGameCubit extends Cubit<SoloGameState> {
   final OfflineGameModel offlineGameModel;
@@ -15,8 +17,7 @@ class SoloGameCubit extends Cubit<SoloGameState> {
     : super(
         SoloGameState(
           offlineGameModel: offlineGameModel,
-          timeElapsed: 0,
-          attemptLeft: offlineGameModel.attempts,
+
           gameState: GameState.playing,
           isWin: false,
         ),
@@ -26,7 +27,7 @@ class SoloGameCubit extends Cubit<SoloGameState> {
     String currentInput,
     OfflineGameModel offlineGameModel,
   ) async {
-    if (offlineGameModel.attempts == 0) {
+    if (offlineGameModel.usedAttmeps == offlineGameModel.maxAttempts) {
       return offlineGameModel;
     }
 
@@ -44,20 +45,15 @@ class SoloGameCubit extends Cubit<SoloGameState> {
       );
 
       offlineGameModel = offlineGameModel.copyWith(
-        attempts: offlineGameModel.attempts - 1,
+        usedAttmeps: offlineGameModel.usedAttmeps + 1,
         history: [...offlineGameModel.history ?? [], attemptModel],
       );
 
-      emit(
-        state.copyWith(
-          offlineGameModel: offlineGameModel,
-          attemptLeft: offlineGameModel.attempts,
-        ),
-      );
+      emit(state.copyWith(offlineGameModel: offlineGameModel));
       if (result['correctPlaces'] == offlineGameModel.digits) {
         _timer?.cancel();
         emit(state.copyWith(gameState: GameState.gameover, isWin: true));
-      } else if (offlineGameModel.attempts == 0) {
+      } else if (offlineGameModel.usedAttmeps == offlineGameModel.maxAttempts) {
         emit(state.copyWith(gameState: GameState.gameover, isWin: false));
         _timer?.cancel();
       }
@@ -69,32 +65,52 @@ class SoloGameCubit extends Cubit<SoloGameState> {
   }
 
   void soloRestartAction() {
+    // generate new Code and id
+    final newSecretNumber = RandomF.generateSecretCode(
+      state.offlineGameModel.digits,
+      state.offlineGameModel.allowRepeatedDigits,
+    );
+
+    final newGameId = RandomF.getRandomRoomID(6);
+
+    // reset
     emit(
       state.copyWith(
-        offlineGameModel: offlineGameModel,
-        timeElapsed: 0,
-        attemptLeft: offlineGameModel.attempts,
+        offlineGameModel: offlineGameModel.copyWith(
+          secretCode: newSecretNumber,
+          id: newGameId,
+        ),
+
         gameState: GameState.playing,
         isWin: false,
       ),
     );
     _timer?.cancel();
+    startTimer();
   }
 
   Timer? _timer;
 
   void startTimer() {
-    int timeElapsed = state.timeElapsed;
+    int totalTimeInSecs = offlineGameModel.duration.timeInSecs;
+    int timeElabsed = offlineGameModel.timeElapsed;
 
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (offlineGameModel.timer != TimerType.unlimited &&
-          timeElapsed == offlineGameModel.timer.timeInSecs) {
+      if (offlineGameModel.duration != TimerType.unlimited &&
+          timeElabsed == totalTimeInSecs) {
         emit(state.copyWith(gameState: GameState.gameover, isWin: false));
         _timer?.cancel();
       }
+      timeElabsed++;
 
-      emit(state.copyWith(timeElapsed: timeElapsed++));
+      emit(
+        state.copyWith(
+          offlineGameModel: state.offlineGameModel.copyWith(
+            timeElapsed: timeElabsed,
+          ),
+        ),
+      );
     });
   }
 

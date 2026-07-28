@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/create_offline_game/widgets/attempts_slider.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/create_offline_game/widgets/segmented_selector.dart';
-import 'package:guess_duel/models/offline_game_model.dart';
+import 'package:guess_duel/models/offline/offline_game_model.dart';
 
 class CustomSetupPanel extends StatelessWidget {
   final int selectedDigits;

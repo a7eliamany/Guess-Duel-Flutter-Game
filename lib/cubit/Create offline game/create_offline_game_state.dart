@@ -1,4 +1,4 @@
-import 'package:guess_duel/models/offline_game_model.dart';
+import 'package:guess_duel/models/offline/offline_game_model.dart';
 
 class CreateOfflineGameState {
   final bool isCreated;

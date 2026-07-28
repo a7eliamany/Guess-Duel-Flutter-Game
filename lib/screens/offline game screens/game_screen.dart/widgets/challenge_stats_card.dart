@@ -73,7 +73,7 @@ class ChallengeStatsCard extends StatelessWidget {
                   const SizedBox(height: 2),
 
                   BlocSelector<SoloGameCubit, SoloGameState, int>(
-                    selector: (state) => state.timeElapsed,
+                    selector: (state) => state.offlineGameModel.timeElapsed,
                     builder: (context, timeElapsed) {
                       final String elapsedFormattedTime = GameUtils.getTime(
                         timeElapsed,
@@ -113,7 +113,9 @@ class ChallengeStatsCard extends StatelessWidget {
               // Energy Left Card
               BlocBuilder<SoloGameCubit, SoloGameState>(
                 builder: (context, state) {
-                  final attemptsLeft = state.attemptLeft;
+                  final attemptsLeft =
+                      state.offlineGameModel.maxAttempts -
+                      state.offlineGameModel.usedAttmeps;
                   return Expanded(
                     child: _buildBentoCard(
                       label: 'ATTEMPTS LEFT',

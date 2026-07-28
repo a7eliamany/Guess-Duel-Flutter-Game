@@ -2,10 +2,13 @@ import 'package:equatable/equatable.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
 
 class OfflineGameModel extends Equatable {
+  final String id;
   final DifficultyLevel difficultyLevel;
   final int digits;
-  final int attempts;
-  final TimerType timer;
+  final int maxAttempts;
+  final int usedAttmeps;
+  final TimerType duration;
+  final int timeElapsed;
   final bool allowRepeatedDigits;
   final String secretCode;
   final List<AttemptModel>? history;
@@ -13,30 +16,40 @@ class OfflineGameModel extends Equatable {
   const OfflineGameModel({
     this.difficultyLevel = DifficultyLevel.normal,
     this.digits = 4,
-    this.attempts = 10,
-    this.timer = TimerType.unlimited,
+
+    this.duration = TimerType.unlimited,
     this.allowRepeatedDigits = false,
     this.secretCode = '1234',
     this.history = const [],
+    this.id = '',
+    this.maxAttempts = 10,
+    this.usedAttmeps = 0,
+    this.timeElapsed = 0,
   });
 
   OfflineGameModel copyWith({
     DifficultyLevel? difficultyLevel,
     int? digits,
-    int? attempts,
-    TimerType? timer,
+    TimerType? duration,
     bool? allowRepeatedDigits,
     String? secretCode,
     List<AttemptModel>? history,
+    String? id,
+    int? maxAttempts,
+    int? usedAttmeps,
+    int? timeElapsed,
   }) {
     return OfflineGameModel(
       difficultyLevel: difficultyLevel ?? this.difficultyLevel,
       digits: digits ?? this.digits,
-      attempts: attempts ?? this.attempts,
-      timer: timer ?? this.timer,
+      maxAttempts: maxAttempts ?? this.maxAttempts,
+      duration: duration ?? this.duration,
       allowRepeatedDigits: allowRepeatedDigits ?? this.allowRepeatedDigits,
       secretCode: secretCode ?? this.secretCode,
       history: history ?? this.history,
+      id: id ?? this.id,
+      usedAttmeps: usedAttmeps ?? this.usedAttmeps,
+      timeElapsed: timeElapsed ?? this.timeElapsed,
     );
   }
 
@@ -44,11 +57,15 @@ class OfflineGameModel extends Equatable {
   List<Object?> get props => [
     difficultyLevel,
     digits,
-    attempts,
-    timer,
+
+    duration,
     allowRepeatedDigits,
     secretCode,
     history,
+    id,
+    maxAttempts,
+    usedAttmeps,
+    timeElapsed,
   ];
 }
 
@@ -85,6 +102,10 @@ extension TimerTypeExtension on TimerType {
       case TimerType.twoMinutes:
         return 2 * 60;
     }
+  }
+
+  TimerType fromSecs(int secs) {
+    return TimerType.values.firstWhere((e) => e.timeInSecs == secs);
   }
 
   static TimerType fromName(String name) {

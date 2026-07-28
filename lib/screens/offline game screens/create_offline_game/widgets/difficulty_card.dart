@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/create_offline_game/widgets/difficulty_badge_info.dart';
-import 'package:guess_duel/models/offline_game_model.dart';
+import 'package:guess_duel/models/offline/offline_game_model.dart';
 import 'package:remixicon/remixicon.dart';
 
 class DifficultyCard extends StatelessWidget {
@@ -100,16 +100,18 @@ class DifficultyCard extends StatelessWidget {
                               ),
                               DifficultyBadgeInfo(
                                 icon: Icons.track_changes,
-                                label: '${offlineGameModel.attempts} attempts',
+                                label:
+                                    '${offlineGameModel.maxAttempts} attempts',
                               ),
                             ],
                           ),
                           const SizedBox(height: 4),
                           DifficultyBadgeInfo(
-                            icon: offlineGameModel.timer == TimerType.unlimited
+                            icon:
+                                offlineGameModel.duration == TimerType.unlimited
                                 ? RemixIcons.infinity_fill
                                 : Icons.timer_outlined,
-                            label: offlineGameModel.timer.label,
+                            label: offlineGameModel.duration.label,
                           ),
                         ],
                       ),

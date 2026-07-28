@@ -7,7 +7,7 @@ import 'package:guess_duel/screens/offline%20game%20screens/create_offline_game/
 import 'package:guess_duel/Widgets/glow_button.dart';
 import 'package:guess_duel/cubit/Create%20offline%20game/create_offline_game_cubit.dart';
 import 'package:guess_duel/cubit/Create%20offline%20game/create_offline_game_state.dart';
-import 'package:guess_duel/models/offline_game_model.dart';
+import 'package:guess_duel/models/offline/offline_game_model.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/solo_challenge_screen.dart';
 
 class OfflineCreateBs extends StatefulWidget {
@@ -44,8 +44,8 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
         case DifficultyLevel.easy:
           gameModel = gameModel.copyWith(
             digits: 4,
-            attempts: 15,
-            timer: TimerType.unlimited,
+            maxAttempts: 15,
+            duration: TimerType.unlimited,
             allowRepeatedDigits: false,
           );
           break;
@@ -53,8 +53,8 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
         case DifficultyLevel.normal:
           gameModel = gameModel.copyWith(
             digits: 4,
-            attempts: 10,
-            timer: TimerType.unlimited,
+            maxAttempts: 10,
+            duration: TimerType.unlimited,
             allowRepeatedDigits: false,
           );
 
@@ -62,8 +62,8 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
         case DifficultyLevel.hard:
           gameModel = gameModel.copyWith(
             digits: 4,
-            attempts: 8,
-            timer: TimerType.fiveMinutes,
+            maxAttempts: 8,
+            duration: TimerType.fiveMinutes,
             allowRepeatedDigits: false,
           );
 
@@ -71,8 +71,8 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
         case DifficultyLevel.extreme:
           gameModel = gameModel.copyWith(
             digits: 5,
-            attempts: 9,
-            timer: TimerType.twoMinutes,
+            maxAttempts: 9,
+            duration: TimerType.twoMinutes,
             allowRepeatedDigits: false,
           );
 
@@ -170,8 +170,8 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
                     offlineGameModel: const OfflineGameModel(
                       difficultyLevel: DifficultyLevel.easy,
                       digits: 4,
-                      attempts: 15,
-                      timer: TimerType.unlimited,
+                      maxAttempts: 15,
+                      duration: TimerType.unlimited,
                     ),
                     onTap: () => _selectDifficulty(DifficultyLevel.easy),
                   ),
@@ -182,8 +182,8 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
                     offlineGameModel: const OfflineGameModel(
                       difficultyLevel: DifficultyLevel.normal,
                       digits: 4,
-                      attempts: 10,
-                      timer: TimerType.unlimited,
+                      maxAttempts: 10,
+                      duration: TimerType.unlimited,
                     ),
                     accentColor: const Color(0xFFDAB9FF),
                     onTap: () => _selectDifficulty(DifficultyLevel.normal),
@@ -197,8 +197,8 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
                     offlineGameModel: const OfflineGameModel(
                       difficultyLevel: DifficultyLevel.hard,
                       digits: 4,
-                      attempts: 8,
-                      timer: TimerType.fiveMinutes,
+                      maxAttempts: 8,
+                      duration: TimerType.fiveMinutes,
                     ),
                   ),
                   DifficultyCard(
@@ -208,8 +208,8 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
                     offlineGameModel: const OfflineGameModel(
                       difficultyLevel: DifficultyLevel.extreme,
                       digits: 5,
-                      attempts: 9,
-                      timer: TimerType.twoMinutes,
+                      maxAttempts: 9,
+                      duration: TimerType.twoMinutes,
                     ),
                     accentColor: const Color(0xFFFFB4AB),
 
@@ -288,14 +288,14 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
                       onDigitsChanged: (val) => setState(
                         () => gameModel = gameModel.copyWith(digits: val),
                       ),
-                      maxAttempts: gameModel.attempts,
+                      maxAttempts: gameModel.maxAttempts,
                       onAttemptsChanged: (val) => setState(
-                        () => gameModel = gameModel.copyWith(attempts: val),
+                        () => gameModel = gameModel.copyWith(maxAttempts: val),
                       ),
-                      selectedTimer: gameModel.timer.label,
+                      selectedTimer: gameModel.duration.label,
                       onTimerChanged: (val) => setState(() {
                         gameModel = gameModel.copyWith(
-                          timer: TimerTypeExtension.fromName(val),
+                          duration: TimerTypeExtension.fromName(val),
                         );
                       }),
                       allowRepeatedDigits: gameModel.allowRepeatedDigits,
@@ -339,7 +339,7 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
                 if (state.isCreated) {
                   Get.to(
                     () => SoloChallengeScreen(
-                      offlineGameModel: state.offlineGameModel,
+                      oldOfflineGameModel: state.offlineGameModel,
                     ),
                   );
                 }

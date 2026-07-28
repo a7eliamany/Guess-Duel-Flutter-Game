@@ -1,4 +1,4 @@
-import 'package:guess_duel/models/offline_game_model.dart';
+import 'package:guess_duel/models/offline/offline_game_model.dart';
 
 // class SoloGameState {}
 
@@ -20,30 +20,27 @@ import 'package:guess_duel/models/offline_game_model.dart';
 
 class SoloGameState {
   final OfflineGameModel offlineGameModel;
-  final int timeElapsed;
-  final int attemptLeft;
+
   final GameState gameState;
   final bool isWin;
 
   SoloGameState({
     required this.offlineGameModel,
-    required this.timeElapsed,
-    required this.attemptLeft,
+
     required this.gameState,
     required this.isWin,
   });
 
   SoloGameState copyWith({
     OfflineGameModel? offlineGameModel,
-    int? timeElapsed,
+
     int? attemptLeft,
     GameState? gameState,
     bool? isWin,
   }) {
     return SoloGameState(
       offlineGameModel: offlineGameModel ?? this.offlineGameModel,
-      timeElapsed: timeElapsed ?? this.timeElapsed,
-      attemptLeft: attemptLeft ?? this.attemptLeft,
+
       gameState: gameState ?? this.gameState,
       isWin: isWin ?? this.isWin,
     );

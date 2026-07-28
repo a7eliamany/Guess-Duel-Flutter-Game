@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:guess_duel/models/offline_game_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:guess_duel/cubit/History/history_cubit.dart';
+
+import 'package:guess_duel/models/offline/offline_game_model.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/failed_action_suite.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/failed_header.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/failed_performance_stats.dart';
@@ -8,37 +12,42 @@ import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widg
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/success_status_header.dart';
 
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/target_reveal_card.dart';
+import 'package:guess_duel/services/Hive/hive_service.dart';
 
-class SoloResultScreen extends StatelessWidget {
-  final OfflineGameModel? offlineGameModel;
+class SoloResultScreen extends HookWidget {
+  final OfflineGameModel? resultData;
   final bool isWin;
-
-  final int? attempts;
-  final int maxAttempts;
-  final int? timeTakenInSeconds;
+  final VoidCallback? onRetryPressed;
 
   final VoidCallback? onModifyDifficulty;
   final VoidCallback? onBackPressed;
-  final VoidCallback? onRetryPressed;
 
   const SoloResultScreen({
     super.key,
-    this.offlineGameModel,
-
-    this.attempts,
-    this.maxAttempts = 10,
-
+    this.resultData,
     this.onModifyDifficulty,
     this.onBackPressed,
-    this.onRetryPressed,
-    this.timeTakenInSeconds,
     required this.isWin,
+    required this.onRetryPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    final String secretCode = offlineGameModel?.secretCode ?? '1234';
-    final int attemptsUsed = maxAttempts - (offlineGameModel?.attempts ?? 10);
+    useEffect(() {
+      if (resultData != null) {
+        context.read<HistoryCubit>().addToHistory(
+          roomID: resultData!.id,
+          attempts: resultData?.history ?? [],
+          isWin: isWin,
+          players: ["me", "Solo"],
+        );
+
+        HiveService.offlineGameBox.put(resultData!.id, resultData!);
+      }
+      return null;
+    });
+    final String secretCode = resultData?.secretCode ?? '1234';
+    final int attemptsUsed = resultData?.usedAttmeps ?? 0;
 
     return Scaffold(
       backgroundColor: const Color(0xFF131313),
@@ -69,10 +78,10 @@ class SoloResultScreen extends StatelessWidget {
                           const SizedBox(height: 24),
                           FailedPerformanceStats(
                             attemptsUsed: attemptsUsed,
-                            maxAttempts: maxAttempts,
-                            timeTakenInSeconds: timeTakenInSeconds ?? 300,
+                            maxAttempts: resultData?.maxAttempts ?? 10,
+                            timeTakenInSeconds: resultData?.timeElapsed ?? 300,
                             totalTimeInSeconds:
-                                offlineGameModel?.timer.timeInSecs ?? 600,
+                                resultData?.duration.timeInSecs ?? 600,
                           ),
                           const SizedBox(height: 24),
                           ResultActionSuite(

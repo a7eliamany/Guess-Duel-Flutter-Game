@@ -13,9 +13,9 @@ class KeypadCubit extends Cubit<KeypadState> {
         ),
       );
 
-  void onNumberPressed(String digit, [int? targetIndex, int? attempLeft]) {
+  void onNumberPressed({required String digit, int? targetIndex}) {
     final idx = targetIndex ?? state.index;
-    if (idx < 0 || idx >= state.maxDigits || attempLeft == 0) {
+    if (idx < 0 || idx >= state.maxDigits) {
       return;
     }
 
@@ -36,8 +36,7 @@ class KeypadCubit extends Cubit<KeypadState> {
 
     int nextIndex = (idx + 1 < state.maxDigits) ? idx + 1 : idx;
 
-    if (newInput.replaceAll('_', '').length == state.maxDigits &&
-        attempLeft != 0) {
+    if (newInput.replaceAll('_', '').length == state.maxDigits) {
       emit(
         state.copyWith(
           input: newInput,

@@ -4,13 +4,12 @@ import '../../../../theme/solo_challenge_theme.dart';
 
 class SoloHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBackPressed;
-  final VoidCallback? onRestartPressed;
   final String title;
 
   const SoloHeader({
     super.key,
     this.onBackPressed,
-    this.onRestartPressed,
+
     this.title = 'SOLO CHALLENGE',
   });
 
@@ -73,29 +72,8 @@ class SoloHeader extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ],
               ),
+
               // Right: Restart & User Avatar
-              Row(
-                children: [
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: onRestartPressed,
-                      borderRadius: BorderRadius.circular(4),
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        alignment: Alignment.center,
-                        child: const Icon(
-                          Icons.restart_alt,
-                          color: SoloChallengeTheme.onSurfaceVariant,
-                          size: 22,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                ],
-              ),
             ],
           ),
         ),

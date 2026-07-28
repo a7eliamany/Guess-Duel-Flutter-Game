@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:guess_duel/Widgets/gradient_button.dart';
 import 'package:guess_duel/Widgets/keypad.dart';
 import 'package:guess_duel/cubit/Solo%20Game/solo_game_cubit.dart';
 import 'package:guess_duel/cubit/Solo%20Game/solo_game_state.dart';
 import 'package:guess_duel/cubit/keypad/keypad_cubit.dart';
 import 'package:guess_duel/cubit/keypad/keypad_state.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
-import 'package:guess_duel/models/offline_game_model.dart';
+import 'package:guess_duel/models/offline/offline_game_model.dart';
 import 'package:guess_duel/pageview.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/solo_result_screen.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/create_offline_game/offline_create_bs.dart';
@@ -20,9 +21,9 @@ import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/wid
 import 'package:guess_duel/theme/solo_challenge_theme.dart';
 
 class SoloChallengeScreen extends StatefulWidget {
-  final OfflineGameModel offlineGameModel;
+  final OfflineGameModel oldOfflineGameModel;
 
-  const SoloChallengeScreen({super.key, required this.offlineGameModel});
+  const SoloChallengeScreen({super.key, required this.oldOfflineGameModel});
 
   @override
   State<SoloChallengeScreen> createState() => _SoloChallengeScreenState();
@@ -32,16 +33,19 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
   late KeypadCubit _keypadCubit;
   late SoloGameCubit _soloGameCubit;
   late OfflineGameModel updatedData;
+  bool isWin = false;
 
   @override
   void initState() {
     super.initState();
     _keypadCubit = KeypadCubit(
-      maxDigits: widget.offlineGameModel.digits,
-      allowDuplicates: widget.offlineGameModel.allowRepeatedDigits,
+      maxDigits: widget.oldOfflineGameModel.digits,
+      allowDuplicates: widget.oldOfflineGameModel.allowRepeatedDigits,
     );
-    _soloGameCubit = SoloGameCubit(offlineGameModel: widget.offlineGameModel);
-    updatedData = widget.offlineGameModel;
+    _soloGameCubit = SoloGameCubit(
+      offlineGameModel: widget.oldOfflineGameModel,
+    );
+    updatedData = widget.oldOfflineGameModel;
     _soloGameCubit.startTimer();
   }
 
@@ -54,9 +58,9 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
 
   void _handleNumberPress(String digit) {
     _keypadCubit.onNumberPressed(
-      digit,
-      _keypadCubit.state.index,
-      updatedData.attempts,
+      digit: digit,
+
+      targetIndex: _keypadCubit.state.index,
     );
   }
 
@@ -75,11 +79,9 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
   void _handleRestart() {
     _keypadCubit.clearInput();
     setState(() {
-      updatedData = widget.offlineGameModel;
+      updatedData = widget.oldOfflineGameModel;
     });
   }
-
-  //add can pop
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +107,6 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
           extendBodyBehindAppBar: true,
 
           appBar: SoloHeader(
-            onRestartPressed: _handleRestart,
             onBackPressed: () async {
               bool shouldPop = await soloExitDialog(context: context);
               if (shouldPop) {
@@ -130,11 +131,10 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                       children: [
                         // Header Stats Rail & Status Bento
                         ChallengeStatsCard(
-                          modeName:
-                              widget.offlineGameModel.difficultyLevel.name,
-                          digitCount: widget.offlineGameModel.digits,
-                          totalTime: widget.offlineGameModel.timer.timeInSecs,
-                          maxAttempts: widget.offlineGameModel.attempts,
+                          modeName: updatedData.difficultyLevel.name,
+                          digitCount: updatedData.digits,
+                          totalTime: updatedData.duration.timeInSecs,
+                          maxAttempts: updatedData.maxAttempts,
                         ),
 
                         // Active Input Field & Legend Chips
@@ -148,7 +148,7 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                               BlocBuilder<KeypadCubit, KeypadState>(
                                 builder: (context, state) {
                                   return NumberDisplay(
-                                    digits: widget.offlineGameModel.digits,
+                                    digits: widget.oldOfflineGameModel.digits,
                                     value: state.input,
                                     selectedIndex: state.index,
                                     onDigitTap: (index) {
@@ -169,54 +169,41 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                           ),
                           child: BlocListener<SoloGameCubit, SoloGameState>(
                             listener: (context, state) {
+                              updatedData = state.offlineGameModel;
                               if (state.gameState == GameState.gameover &&
                                   state.isWin) {
+                                isWin = true;
                                 Get.to(
                                   () => SoloResultScreen(
                                     isWin: true,
-                                    offlineGameModel: state.offlineGameModel,
-                                    maxAttempts:
-                                        widget.offlineGameModel.attempts,
-                                    timeTakenInSeconds: state.timeElapsed,
-                                    onRetryPressed: () {
-                                      _soloGameCubit.soloRestartAction();
-                                      Get.offAll(
-                                        () => SoloChallengeScreen(
-                                          offlineGameModel:
-                                              widget.offlineGameModel,
-                                        ),
-                                      );
-                                    },
+                                    resultData: state.offlineGameModel,
 
                                     onModifyDifficulty: () {
                                       Get.offAll(() => const Pages());
                                       OfflineCreateBs.show(context);
+                                    },
+                                    onRetryPressed: () {
+                                      _soloGameCubit.soloRestartAction();
+                                      Get.back();
                                     },
                                   ),
                                 );
                               } else if (state.gameState ==
                                       GameState.gameover &&
                                   !state.isWin) {
+                                isWin = false;
                                 Get.to(
                                   () => SoloResultScreen(
                                     isWin: false,
-                                    offlineGameModel: state.offlineGameModel,
-                                    maxAttempts:
-                                        widget.offlineGameModel.attempts,
-                                    timeTakenInSeconds: state.timeElapsed,
+                                    resultData: state.offlineGameModel,
 
-                                    onRetryPressed: () {
-                                      _soloGameCubit.soloRestartAction();
-                                      Get.offAll(
-                                        () => SoloChallengeScreen(
-                                          offlineGameModel:
-                                              widget.offlineGameModel,
-                                        ),
-                                      );
-                                    },
                                     onModifyDifficulty: () {
                                       Get.offAll(() => const Pages());
                                       OfflineCreateBs.show(context);
+                                    },
+                                    onRetryPressed: () {
+                                      _soloGameCubit.soloRestartAction();
+                                      Get.back();
                                     },
                                   ),
                                 );
@@ -240,7 +227,7 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                                               .toList()[val]
                                               .attempt,
                                           updatedData.digits,
-                                          updatedData.attempts,
+                                          updatedData.maxAttempts,
                                         );
                                       },
                                     );
@@ -273,25 +260,61 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                       top: 16,
                       bottom: MediaQuery.of(context).padding.bottom + 16,
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Keypad(
-                          onNumberPressed: _handleNumberPress,
-                          onBackspacePressed: _handleBackspace,
-                        ),
-                        const SizedBox(height: 16),
-
-                        BlocBuilder<KeypadCubit, KeypadState>(
+                    child:
+                        BlocSelector<SoloGameCubit, SoloGameState, GameState>(
+                          selector: (state) => state.gameState,
                           builder: (context, state) {
-                            return SubmitButton(
-                              onSubmitPressed: _handleSubmit,
-                              isComplete: state.isReadyToSubmit,
-                            );
+                            if (state == GameState.playing) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Keypad(
+                                    onNumberPressed: _handleNumberPress,
+                                    onBackspacePressed: _handleBackspace,
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  BlocBuilder<KeypadCubit, KeypadState>(
+                                    builder: (context, state) {
+                                      return SubmitButton(
+                                        onSubmitPressed: _handleSubmit,
+                                        isComplete: state.isReadyToSubmit,
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            } else if (state == GameState.gameover) {
+                              return GradientButton(
+                                text: "Result",
+                                gradientColors: const [
+                                  Colors.white70,
+                                  Colors.teal,
+                                  Colors.teal,
+                                ],
+                                icon: Icons.forward,
+                                onPressed: () {
+                                  Get.to(
+                                    () => SoloResultScreen(
+                                      isWin: isWin,
+                                      resultData: updatedData,
+                                      onRetryPressed: () {
+                                        _soloGameCubit.soloRestartAction();
+                                        Get.back();
+                                      },
+                                      onModifyDifficulty: () {
+                                        Get.offAll(() => const Pages());
+                                        OfflineCreateBs.show(context);
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
                           },
                         ),
-                      ],
-                    ),
                   ),
                 ),
               ],
