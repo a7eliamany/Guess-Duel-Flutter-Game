@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-
 import 'package:guess_duel/Widgets/keypad.dart';
 import 'package:guess_duel/cubit/Solo%20Game/solo_game_cubit.dart';
 import 'package:guess_duel/cubit/Solo%20Game/solo_game_state.dart';
@@ -10,6 +9,7 @@ import 'package:guess_duel/cubit/keypad/keypad_state.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
 import 'package:guess_duel/models/offline_game_model.dart';
 import 'package:guess_duel/pageview.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/Failed%20Screen/failed_screen.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/create_offline_game/offline_create_bs.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/attempt_history_item.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/challenge_stats_card.dart';
@@ -175,6 +175,29 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                               } else if (state.gameState ==
                                       GameState.gameover &&
                                   !state.isWin) {
+                                Get.to(
+                                  () => FailedScreen(
+                                    offlineGameModel: state.offlineGameModel,
+                                    maxAttempts:
+                                        widget.offlineGameModel.attempts,
+                                    timeTakenInSeconds: state.timeElapsed,
+
+                                    onRetryPressed: () {
+                                      _soloGameCubit.soloRestartAction();
+                                      Get.offAll(
+                                        () => SoloChallengeScreen(
+                                          offlineGameModel:
+                                              widget.offlineGameModel,
+                                        ),
+                                      );
+                                    },
+                                    onModifyDifficulty: () {
+                                      Get.offAll(() => const Pages());
+                                      OfflineCreateBs.show(context);
+                                    },
+                                  ),
+                                );
+
                                 //TODO: Show loss Dialog
                                 //TODO: Navigate to Failure Screen
                               }

@@ -68,17 +68,33 @@ class SoloGameCubit extends Cubit<SoloGameState> {
     }
   }
 
+  void soloRestartAction() {
+    emit(
+      state.copyWith(
+        offlineGameModel: offlineGameModel,
+        timeElapsed: 0,
+        attemptLeft: offlineGameModel.attempts,
+        gameState: GameState.playing,
+        isWin: false,
+      ),
+    );
+    _timer?.cancel();
+  }
+
   Timer? _timer;
 
   void startTimer() {
-    int timeElapsed = state.timeElapsed!;
+    int timeElapsed = state.timeElapsed;
+
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      emit(state.copyWith(timeElapsed: timeElapsed++));
-      if (timeElapsed == offlineGameModel.timer.timeInSecs) {
-        _timer?.cancel();
+      if (offlineGameModel.timer != TimerType.unlimited &&
+          timeElapsed == offlineGameModel.timer.timeInSecs) {
         emit(state.copyWith(gameState: GameState.gameover, isWin: false));
+        _timer?.cancel();
       }
+
+      emit(state.copyWith(timeElapsed: timeElapsed++));
     });
   }
 

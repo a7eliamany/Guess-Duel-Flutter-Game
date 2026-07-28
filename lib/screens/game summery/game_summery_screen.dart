@@ -16,7 +16,9 @@ class GameSummeryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final attemptsAcurracy = accuracyCalculator(gameHistoryModel.attemptsModel);
+    final attemptsAcurracy = (gameHistoryModel.attemptsModel.isNotEmpty)
+        ? accuracyCalculator(gameHistoryModel.attemptsModel)
+        : 0;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,7 +41,7 @@ class GameSummeryScreen extends StatelessWidget {
         child: ListView(
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 24),
 

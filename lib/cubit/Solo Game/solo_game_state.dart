@@ -20,7 +20,7 @@ import 'package:guess_duel/models/offline_game_model.dart';
 
 class SoloGameState {
   final OfflineGameModel offlineGameModel;
-  final int? timeElapsed;
+  final int timeElapsed;
   final int attemptLeft;
   final GameState gameState;
   final bool isWin;
