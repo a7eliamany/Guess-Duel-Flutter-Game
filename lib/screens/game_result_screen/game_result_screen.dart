@@ -41,6 +41,7 @@ class GameResultScreen extends HookWidget {
         attempts: attempts,
         isWin: isWin,
         players: players,
+        secretCode: opponentSecretCode,
       );
       return null;
     }, []);

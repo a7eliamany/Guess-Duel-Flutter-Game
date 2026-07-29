@@ -38,11 +38,12 @@ class HistoryScreen extends HookWidget {
                 final fakeHistory = List.generate(
                   2,
                   (index) => GameHistoryModel(
-                    roomID: 'ROOM-0000',
+                    gameId: 'ROOM-0000',
                     isWin: index == 1 ? false : true,
                     dateTime: DateTime.now(),
                     attemptsModel: [],
                     players: [],
+                    secretCode: '0000',
                   ),
                 );
 
@@ -103,7 +104,7 @@ class HistoryScreen extends HookWidget {
                                 attempts: gameHistoryModel.attemptsModel.length
                                     .toString(),
 
-                                gameId: gameHistoryModel.roomID,
+                                gameId: gameHistoryModel.gameId,
                               ),
                               const SizedBox(height: 12),
                             ],

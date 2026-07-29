@@ -40,6 +40,8 @@ class SoloResultScreen extends HookWidget {
           attempts: resultData?.history ?? [],
           isWin: isWin,
           players: ["me", "Solo"],
+          secretCode: resultData?.secretCode ?? '1234',
+          offlineGameModel: resultData,
         );
 
         HiveService.offlineGameBox.put(resultData!.id, resultData!);

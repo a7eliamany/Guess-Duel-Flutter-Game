@@ -1,33 +1,42 @@
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
+import 'package:guess_duel/models/offline/offline_game_model.dart';
 
 class GameHistoryModel {
   final DateTime dateTime;
-  final String roomID;
+  final String gameId;
+  final String secretCode;
   final List<AttemptModel> attemptsModel;
   final bool isWin;
   final List<String> players;
+  final OfflineGameModel? offlineGameModel;
 
   GameHistoryModel({
     required this.dateTime,
-    required this.roomID,
+    required this.gameId,
     required this.attemptsModel,
     required this.isWin,
     required this.players,
+    this.offlineGameModel,
+    required this.secretCode,
   });
 
   GameHistoryModel copyWith({
     DateTime? dateTime,
-    String? roomID,
+    String? gameId,
     List<AttemptModel>? attemptsModel,
     bool? isWin,
     List<String>? players,
+    OfflineGameModel? offlineGameModel,
+    String? secretCode,
   }) {
     return GameHistoryModel(
       dateTime: dateTime ?? this.dateTime,
-      roomID: roomID ?? this.roomID,
+      gameId: gameId ?? this.gameId,
       attemptsModel: attemptsModel ?? this.attemptsModel,
       isWin: isWin ?? this.isWin,
       players: players ?? this.players,
+      offlineGameModel: offlineGameModel ?? this.offlineGameModel,
+      secretCode: secretCode ?? this.secretCode,
     );
   }
 }

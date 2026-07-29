@@ -10,20 +10,24 @@ class HistoryAdabter extends TypeAdapter<GameHistoryModel> {
   GameHistoryModel read(BinaryReader reader) {
     return GameHistoryModel(
       dateTime: DateTime.fromMillisecondsSinceEpoch(reader.readInt()),
-      roomID: reader.readString(),
+      gameId: reader.readString(),
       attemptsModel: reader.readList().cast<AttemptModel>(),
       isWin: reader.readBool(),
       players: reader.readList().cast<String>(),
+      offlineGameModel: reader.read(),
+      secretCode: reader.readString(),
     );
   }
 
   @override
   void write(BinaryWriter writer, GameHistoryModel obj) {
     writer.writeInt(obj.dateTime.millisecondsSinceEpoch);
-    writer.writeString(obj.roomID);
+    writer.writeString(obj.gameId);
     writer.writeList(obj.attemptsModel);
     writer.writeBool(obj.isWin);
     writer.writeList(obj.players);
+    writer.write(obj.offlineGameModel);
+    writer.writeString(obj.secretCode);
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:guess_duel/cubit/History/historty_state.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
 import 'package:guess_duel/models/History/history_model.dart';
+import 'package:guess_duel/models/offline/offline_game_model.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -30,6 +31,8 @@ class HistoryCubit extends Cubit<HistortyState> {
     required List<AttemptModel> attempts,
     required bool isWin,
     required List<String> players,
+    required String secretCode,
+    OfflineGameModel? offlineGameModel,
   }) async {
     emit(HistoryLoading());
     try {
@@ -47,12 +50,18 @@ class HistoryCubit extends Cubit<HistortyState> {
 
       final GameHistoryModel gameHistoryModel = GameHistoryModel(
         dateTime: DateTime.now(),
-        roomID: roomID,
+        gameId: roomID,
         attemptsModel: attempts,
         isWin: isWin,
         players: players,
+        secretCode: secretCode,
+        offlineGameModel: offlineGameModel,
       );
-      await HiveService.gameHistoryBox.add(gameHistoryModel);
+
+      await HiveService.gameHistoryBox.put(
+        offlineGameModel?.id ?? roomID,
+        gameHistoryModel,
+      );
     } catch (e) {
       emit(HistortyError(error: e.toString()));
     }

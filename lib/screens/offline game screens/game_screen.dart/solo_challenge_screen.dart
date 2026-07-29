@@ -76,13 +76,6 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
     }
   }
 
-  void _handleRestart() {
-    _keypadCubit.clearInput();
-    setState(() {
-      updatedData = widget.oldOfflineGameModel;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
