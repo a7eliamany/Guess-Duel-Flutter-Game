@@ -102,10 +102,7 @@ class GameSummeryScreen extends HookWidget {
                                       ),
                                     ),
                                   ),
-                                  const Align(
-                                    alignment: Alignment.centerRight,
-                                    child: FeedbackLegend(),
-                                  ),
+                                  const FeedbackLegend(),
                                 ],
                               ),
 

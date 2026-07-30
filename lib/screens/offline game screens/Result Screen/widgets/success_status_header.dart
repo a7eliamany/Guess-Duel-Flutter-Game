@@ -17,7 +17,7 @@ class SuccessStatusHeader extends StatelessWidget {
             child: Text(
               'SUCCESS',
               style: GoogleFonts.spaceGrotesk(
-                fontSize: MediaQuery.of(context).size.width > 500 ? 100 : 85,
+                fontSize: MediaQuery.of(context).size.width > 500 ? 100 : 80,
                 fontWeight: FontWeight.w900,
                 color: const Color(0xFF78F186),
                 letterSpacing: -4,
@@ -42,9 +42,10 @@ class SuccessStatusHeader extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 'CHALLENGE SUCCESSED',
+                textAlign: TextAlign.center,
                 style: GoogleFonts.spaceGrotesk(
-                  color: const Color(0xFF78F186),
-                  fontSize: 32,
+                  color: Colors.white,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.5,
                 ),

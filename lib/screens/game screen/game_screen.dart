@@ -30,7 +30,13 @@ class GameScreen extends HookWidget {
           children: [
             const SizedBox(height: 24),
             // Status Indicator
-            const Row(children: [Spacer(), GameHeader(), Spacer()]),
+            Row(
+              children: [
+                const Spacer(),
+                GameHeader(roomID: roomID),
+                const Spacer(),
+              ],
+            ),
 
             const Center(
               child: Column(

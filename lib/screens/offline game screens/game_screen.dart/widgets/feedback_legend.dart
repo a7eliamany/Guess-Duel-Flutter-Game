@@ -34,7 +34,7 @@ class FeedbackLegend extends StatelessWidget {
     required Color textColor,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
         color: SoloChallengeTheme.surfaceContainerHighest.withValues(
           alpha: 0.5,

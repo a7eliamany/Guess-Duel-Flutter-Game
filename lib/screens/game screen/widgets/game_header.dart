@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guess_duel/cubit/Player%20turn/player_turn_cubit.dart';
+import 'package:guess_duel/screens/game%20screen/widgets/turn_timer.dart';
 
 class GameHeader extends StatelessWidget {
-  const GameHeader({super.key});
+  final String roomID;
+  const GameHeader({super.key, required this.roomID});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,12 @@ class GameHeader extends StatelessWidget {
                         letterSpacing: 2,
                       ),
                     ),
+
+              const SizedBox(width: 7),
+
+              (state)
+                  ? TurnTimer(isYourTurn: state, roomID: roomID)
+                  : const Text(""),
             ],
           ),
         );
