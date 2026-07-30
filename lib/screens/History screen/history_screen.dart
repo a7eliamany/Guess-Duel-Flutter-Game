@@ -7,6 +7,7 @@ import 'package:guess_duel/cubit/History/history_cubit.dart';
 import 'package:guess_duel/models/History/history_model.dart';
 import 'package:guess_duel/screens/game%20summery/game_summery_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'widgets/history_header.dart';
 import 'widgets/stats_row.dart';
@@ -22,6 +23,20 @@ class HistoryScreen extends HookWidget {
       context.read<HistoryCubit>().getHistory();
       return null;
     }, []);
+    final fakeHistory = useMemoized(() {
+      return List.generate(
+        3,
+        (index) => GameHistoryModel(
+          gameId: 'ROOM-0000',
+          isWin: index == 1 ? false : true,
+          dateTime: DateTime.now(),
+          attemptsModel: [],
+          players: [],
+          secretCode: '0000',
+        ),
+      );
+    });
+
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -35,18 +50,6 @@ class HistoryScreen extends HookWidget {
             // — Stats Row
             BlocBuilder<HistoryCubit, HistortyState>(
               builder: (context, state) {
-                final fakeHistory = List.generate(
-                  2,
-                  (index) => GameHistoryModel(
-                    gameId: 'ROOM-0000',
-                    isWin: index == 1 ? false : true,
-                    dateTime: DateTime.now(),
-                    attemptsModel: [],
-                    players: [],
-                    secretCode: '0000',
-                  ),
-                );
-
                 final bool isLoading = state is HistoryLoading;
 
                 final history = isLoading
@@ -117,80 +120,6 @@ class HistoryScreen extends HookWidget {
                     ],
                   ),
                 );
-
-                // if (state is HistoryLoading) {
-                //   return const Center(child: LoadingWidget());
-                // } else if (state is HistortyLoaded) {
-                //   return ListView(
-                //     padding: const EdgeInsets.symmetric(
-                //       horizontal: 16,
-                //       vertical: 16,
-                //     ),
-                //     children: [
-                //       // — Header
-                //       const HistoryHeader(),
-
-                //       const SizedBox(height: 28),
-
-                //       // — Stats Row
-                //       StatsRow(
-                //         gamesPlayed: state.status.gamesPlayed,
-                //         wins: state.status.wins,
-                //         winRate: ('${state.status.winRate} %'),
-                //       ),
-
-                //       const SizedBox(height: 32),
-
-                //       // — Section Title
-                //       _buildSectionTitle(context),
-
-                //       const SizedBox(height: 16),
-
-                //       // — Game History List
-                //       ListView.builder(
-                //         physics: const NeverScrollableScrollPhysics(),
-                //         shrinkWrap: true,
-                //         itemCount: state.history.length,
-                //         itemBuilder: (context, index) {
-                //           final GameHistoryModel gameHistoryModel =
-                //               state.history[index];
-                //           GameResult gameResult = (gameHistoryModel.isWin)
-                //               ? GameResult.victory
-                //               : GameResult.defeat;
-
-                //           return Column(
-                //             children: [
-                //               GameHistoryTile(
-                //                 onTap: () {
-                //                   Get.to(
-                //                     GameSummeryScreen(
-                //                       gameHistoryModel: gameHistoryModel,
-                //                     ),
-                //                   );
-                //                 },
-                //                 result: gameResult,
-                //                 date: DateFormat.yMd().format(
-                //                   gameHistoryModel.dateTime,
-                //                 ),
-                //                 attempts: gameHistoryModel.attemptsModel.length
-                //                     .toString(),
-
-                //                 gameId: gameHistoryModel.roomID,
-                //               ),
-                //               const SizedBox(height: 12),
-                //             ],
-                //           );
-                //         },
-                //       ),
-
-                //       // — End of Records
-                //       const EndOfRecords(),
-                //     ],
-                //   );
-                // } else if (state is HistortyError) {
-                //   return Center(child: Text(state.error));
-                // }
-                // return const SizedBox.shrink();
               },
             ),
           ],
@@ -236,7 +165,7 @@ class HistoryScreen extends HookWidget {
               onPressed: () {
                 context.read<HistoryCubit>().clearGameHistory();
               },
-              icon: const Icon(Icons.delete, color: Colors.red),
+              icon: const Icon(RemixIcons.delete_bin_line, color: Colors.red),
             ),
           ],
         ),

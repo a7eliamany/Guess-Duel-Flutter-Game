@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 
 enum GameResult { victory, defeat }
 
@@ -34,31 +35,28 @@ class GameHistoryTile extends StatelessWidget {
       onTap: onTap,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFF2A2A2A).withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(16),
-              border: Border(
-                top: BorderSide(
-                  color: const Color(0xFF4D4356).withValues(alpha: 0.15),
-                ),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color(0xFF2A2A2A).withValues(alpha: 0.6),
+            borderRadius: BorderRadius.circular(16),
+            border: Border(
+              top: BorderSide(
+                color: const Color(0xFF4D4356).withValues(alpha: 0.15),
               ),
             ),
-            child: Row(
-              children: [
-                _buildResultBadge(),
-                const SizedBox(width: 16),
-                Expanded(child: _buildDetails(theme)),
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                  size: 22,
-                ),
-              ],
-            ),
+          ),
+          child: Row(
+            children: [
+              _buildResultBadge(),
+              const SizedBox(width: 16),
+              Expanded(child: _buildDetails(theme)),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                size: 22,
+              ),
+            ],
           ),
         ),
       ),
@@ -77,7 +75,7 @@ class GameHistoryTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
-            _isVictory ? Icons.check_circle_rounded : Icons.cancel_rounded,
+            _isVictory ? RemixIcons.trophy_line : RemixIcons.skull_2_line,
             color: _accentColor,
             size: 24,
           ),
