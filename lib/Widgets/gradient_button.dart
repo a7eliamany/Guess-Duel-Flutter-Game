@@ -6,6 +6,7 @@ class GradientButton extends StatelessWidget {
   final List<Color> gradientColors;
   final IconData icon;
   final VoidCallback onPressed;
+  final bool isLoading;
 
   const GradientButton({
     super.key,
@@ -13,20 +14,24 @@ class GradientButton extends StatelessWidget {
     required this.gradientColors,
     required this.icon,
     required this.onPressed,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: isLoading ? null : onPressed,
       borderRadius: BorderRadius.circular(4),
-      child: Container(
+      child: AnimatedContainer(
         height: 56,
         width: double.infinity,
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: gradientColors),
-          borderRadius: BorderRadius.circular(4),
+          gradient: isLoading
+              ? const LinearGradient(colors: [Colors.grey, Colors.grey])
+              : LinearGradient(colors: gradientColors),
+          borderRadius: BorderRadius.circular(9),
         ),
+        duration: const Duration(milliseconds: 300),
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -48,11 +53,16 @@ class GradientButton extends StatelessWidget {
               right: 16,
               child: Opacity(
                 opacity: 0.7,
-                child: Icon(
-                  icon,
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  size: 24,
-                ),
+                child: isLoading
+                    ? const CircularProgressIndicator(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        strokeWidth: 3,
+                      )
+                    : Icon(
+                        icon,
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        size: 24,
+                      ),
               ),
             ),
           ],
