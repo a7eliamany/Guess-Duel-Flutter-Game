@@ -3,67 +3,64 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guess_duel/Functions/random_f.dart';
 import 'package:guess_duel/cubit/SignIn/signin_state.dart';
 import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
-
+import 'package:guess_duel/extensions/player_role_extension.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
+import 'package:guess_duel/models/Players/room_player_cache.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
+import 'package:guess_duel/services/Hive/hive_service.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class SigninCubit extends Cubit<SigninState> {
   final InternetCubit internetCubit;
-  SigninCubit(this.internetCubit) : super(SigninLoading());
+  SigninCubit(this.internetCubit) : super(SigninInitial());
 
-  void checkSignin() async {
-    final hasNet = await internetCubit.hasInternet();
-    if (!hasNet) {
-      emit(SigninFailure("Please check your internet connection"));
-      return;
-    }
-    bool isA = FirebaseService.isUserSignedIn();
-    if (isA) {
-      emit(SigninSuccess());
-    } else {
-      emit(SignOut("No user signed in"));
-    }
-  }
+  // void checkSignin() async {
+  //   final hasNet = await internetCubit.hasInternet();
+  //   if (!hasNet) {
+  //     emit(SigninFailure("Please check your internet connection"));
+  //     return;
+  //   }
+  //   bool isA = FirebaseService.isUserSignedIn();
+  //   if (isA) {
+  //     emit(SigninSuccess());
+  //   } else {
+  //     emit(SignOut("No user signed in"));
+  //   }
+  // }
 
-  void signIn(String username) async {
-    final hasNet = await internetCubit.hasInternet();
-    if (!hasNet) {
-      emit(SigninFailure("Please check your internet connection"));
-      return;
-    }
+  void getStarted(String username) async {
     final String uniqueUsername = "${username}_${RandomF.getUniqueID(5)}";
-    final String uniqueID = "1${RandomF.getUniqueID(9)}";
+    final String uniqueID = "1${RandomF.getUniqueID(14)}";
 
     emit(SigninLoading());
+    await Future.delayed(const Duration(seconds: 2));
+    await SharedPrefService.setId(uniqueID);
+    await SharedPrefService.setUsername(uniqueUsername);
 
+    final RoomPlayerCache roomPlayerCache = RoomPlayerCache(
+      firebaseID: uniqueID,
+      username: uniqueUsername,
+      lvl: 1,
+      playerRole: PlayerRole.player.toFirestore(),
+      roomPlayerStatus: RoomPlayerStatus.idle.toFireStore(),
+      lastSeen: Timestamp.now().millisecondsSinceEpoch,
+      createdAt: Timestamp.now().millisecondsSinceEpoch,
+    );
+
+    final PlayerModel playerModel = RoomPlayerCache.toPlayerModel(
+      roomPlayerCache,
+    );
+    await HiveService.playersBox.put(uniqueID, roomPlayerCache);
     try {
-      await FirebaseService.signInAnonymously();
-      await FirebaseService.updateDisplayName(uniqueUsername);
-      final String firebaseID = FirebaseService.getCurrentUserFirebaseID()!;
       await FirebaseFirestore.instance
           .collection(FirebaseCollections.players)
-          .doc(firebaseID)
-          .set(
-            PlayerModel(
-              id: uniqueID,
-              firebaseID: firebaseID,
-              lvl: 1,
+          .doc(uniqueID)
+          .set(playerModel.toFirestore());
 
-              username: uniqueUsername,
-              createdAt: Timestamp.now(),
-              lastSeen: Timestamp.now(),
-            ).toFirestore(),
-          );
       emit(SigninSuccess());
-    } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "operation-not-allowed":
-          emit(SigninFailure("Anonymous sign-in is not enabled."));
-          break;
-        default:
-          emit(SigninFailure(e.code.toString()));
-      }
+    } on FirebaseException catch (e) {
+      emit(SigninFailure(e.message ?? "Error"));
     }
   }
 
@@ -77,6 +74,7 @@ class SigninCubit extends Cubit<SigninState> {
     });
   }
 
+  // for debugging
   void signOut() async {
     emit(SigninLoading());
     try {

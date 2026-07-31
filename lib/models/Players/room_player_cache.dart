@@ -57,4 +57,15 @@ class RoomPlayerCache {
       secretCode: c.secretCode,
     );
   }
+
+  static PlayerModel toPlayerModel(RoomPlayerCache c) {
+    return PlayerModel(
+      firebaseID: c.firebaseID,
+      username: c.username,
+      lvl: c.lvl,
+      id: c.firebaseID,
+      lastSeen: Timestamp.fromMillisecondsSinceEpoch(c.lastSeen),
+      createdAt: Timestamp.fromMillisecondsSinceEpoch(c.createdAt),
+    );
+  }
 }

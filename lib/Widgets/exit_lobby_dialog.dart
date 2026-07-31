@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:guess_duel/Widgets/app_dialog.dart';
 import 'package:guess_duel/models/Rooms/rooms_model.dart';
-import 'package:guess_duel/services/Firebase/firebase_service.dart';
+
 import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:guess_duel/cubit/start game/game_status_cubit.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 Future<bool> showExitLobbyDialog(
   BuildContext context,
@@ -12,7 +13,7 @@ Future<bool> showExitLobbyDialog(
 ) async {
   // 1. Get host status synchronously from local Hive cache to prevent UI lag
   final RoomModel room = HiveService.roomsBox.get(roomID);
-  final currentUserId = FirebaseService.getCurrentUserFirebaseID();
+  final currentUserId = SharedPrefService.getId();
   final bool isHost = room.hostId == currentUserId;
 
   // 2. Show the stylized premium AppDialog

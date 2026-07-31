@@ -8,7 +8,6 @@ import 'package:guess_duel/cubit/Solo%20Game/solo_game_state.dart';
 
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
 import 'package:guess_duel/models/offline/offline_game_model.dart';
-import 'package:guess_duel/services/Hive/hive_service.dart';
 
 class SoloGameCubit extends Cubit<SoloGameState> {
   final OfflineGameModel offlineGameModel;

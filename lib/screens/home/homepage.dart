@@ -19,7 +19,7 @@ class Homepage extends HookWidget {
       //   actions: [
       //     IconButton(
       //       onPressed: () {
-      //         context.read<SigninCubit>().signOut();
+      //         SharedPrefService.clear();
       //       },
       //       icon: const Icon(Icons.logout),
       //     ),

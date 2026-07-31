@@ -8,10 +8,12 @@ import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
 import 'package:guess_duel/extensions/game_status_extension.dart';
 import 'package:guess_duel/extensions/player_role_extension.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
+import 'package:guess_duel/models/Players/room_player_cache.dart';
 import 'package:guess_duel/models/Rooms/rooms_model.dart';
 import 'package:guess_duel/models/room_settings_model.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class CreateRoomCubit extends Cubit<CreateRoomState> {
   final InternetCubit internetCubit;
@@ -27,26 +29,28 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
         return;
       }
       final roomID = RandomF.getRandomRoomID(6);
-      final firebaseID = FirebaseService.getCurrentUserFirebaseID();
-      if (firebaseID == null) {
+      final userId = SharedPrefService.getId();
+
+      if (userId == null) {
         emit(CreateRoomError(error: "User not logged in"));
         return;
       }
-      final playerData = await FirebaseService.getPlayerData(firebaseID);
+
+      final PlayerModel playerData = RoomPlayerCache.toPlayerModel(
+        HiveService.playersBox.get(userId),
+      );
+
       final RoomPlayer roomPlayer = RoomPlayer(
         roomPlayerStatus: RoomPlayerStatus.ready,
         playerModel: playerData,
         playerRole: PlayerRole.host,
       );
-      final room = FirebaseFirestore.instance
-          .collection(FirebaseCollections.rooms)
-          .doc(roomID);
 
-      final roomModel = RoomModel(
+      final RoomModel roomModel = RoomModel(
         roomName: roomName,
         roomId: roomID,
-        hostId: firebaseID,
-        currentTurnPlayerId: firebaseID,
+        hostId: userId,
+        currentTurnPlayerId: userId,
         maxPlayers: 2,
         playersCount: 1,
         winnerId: '',
@@ -55,6 +59,10 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
         secretnumbers: {},
         isPrivate: settings.isPrivate ?? false,
       );
+
+      final room = FirebaseFirestore.instance
+          .collection(FirebaseCollections.rooms)
+          .doc(roomID);
 
       await room.set(roomModel.toFirestore());
       await FirebaseFirestore.instance

@@ -11,6 +11,7 @@ import 'package:guess_duel/models/lobby_model.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class LobbyCubit extends Cubit<LobbyDataState> {
   LobbyCubit() : super(LobbyInitial());
@@ -53,7 +54,7 @@ class LobbyCubit extends Cubit<LobbyDataState> {
           final List<RoomPlayer> p = players.docs
               .map((e) => RoomPlayer.fromFirestore(e.data()))
               .toList();
-          final String? myID = FirebaseService.getCurrentUserFirebaseID();
+          final String? myID = SharedPrefService.getId();
           final RoomPlayer? opponentPlayer = _getOpponent(myID, p);
           final RoomPlayer? currentPlayer = _getMe(myID, p);
 

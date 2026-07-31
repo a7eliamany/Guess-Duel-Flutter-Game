@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:guess_duel/extensions/game_status_extension.dart';
-import 'package:guess_duel/services/Firebase/firebase_service.dart';
+
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class RoomModel {
   final String roomId;
@@ -50,8 +51,7 @@ class RoomModel {
 
       createdAt: data['createdAt'] as Timestamp? ?? Timestamp.now(),
       currentTurnPlayerId:
-          data['currentTurnPlayerId'] ??
-          FirebaseService.getCurrentUserFirebaseID(),
+          data['currentTurnPlayerId'] ?? SharedPrefService.getId(),
       winnerId: data["winner_id"] ?? '',
       secretnumbers: data["secret_numbers"] ?? {},
       isPrivate: data['isPrivate'] ?? false,

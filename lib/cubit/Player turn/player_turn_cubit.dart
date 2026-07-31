@@ -6,6 +6,7 @@ import 'package:guess_duel/models/Players/room_player_cache.dart';
 import 'package:guess_duel/models/Rooms/rooms_model.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class PlayerTurnCubit extends Cubit<bool> {
   PlayerTurnCubit() : super(true);
@@ -23,8 +24,7 @@ class PlayerTurnCubit extends Cubit<bool> {
         return;
       }
       final RoomModel room = RoomModel.fromFirestore(snapshot, null);
-      if (room.currentTurnPlayerId ==
-          FirebaseService.getCurrentUserFirebaseID()!) {
+      if (room.currentTurnPlayerId == SharedPrefService.getId()) {
         emit(true);
       } else {
         emit(false);

@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_duel/screens/Splash%20Screen/splash_screen.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/create_offline_game/offline_create_bs.dart';
 
 class InternetDialog extends StatelessWidget {
   const InternetDialog({super.key});
@@ -64,6 +65,12 @@ class InternetDialog extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              OfflineCreateBs.show(context);
+            },
+            child: const Text("Play offline"),
           ),
         ],
       ),

@@ -15,6 +15,7 @@ import 'package:guess_duel/services/Firebase/firebase_service.dart';
 
 import 'package:guess_duel/cubit/App%20Config/app_config_cubit.dart';
 import 'package:guess_duel/pageview.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -80,13 +81,17 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToNextScreen() {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
+    final userId = SharedPrefService.getId();
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (userId != null && user != null) {
       FirebaseFirestore.instance
           .collection(FirebaseCollections.players)
-          .doc(user.uid)
+          .doc(userId)
           .update({"lastSeen": FieldValue.serverTimestamp()});
 
+      Get.offAll(() => const Pages());
+    } else if (userId != null) {
+      // TODO : navigate to offline screen
       Get.offAll(() => const Pages());
     } else {
       Get.offAll(() => const SignInScreen());

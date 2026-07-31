@@ -48,7 +48,7 @@ class SignInScreen extends StatelessWidget {
                         SignInForm(
                           isLoading: isLoading,
                           onSignIn: (username) {
-                            context.read<SigninCubit>().signIn(username);
+                            context.read<SigninCubit>().getStarted(username);
                           },
                         ),
                         const SizedBox(height: 48),

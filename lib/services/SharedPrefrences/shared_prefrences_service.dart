@@ -20,6 +20,18 @@ class SharedPrefService {
     return _prefs.getString(key);
   }
 
+  static Future<void> setId(String id) async {
+    await setString("id", id);
+  }
+
+  static String? getId() => getString('id');
+
+  static Future<void> setUsername(String username) async {
+    await setString("username", username);
+  }
+
+  static String? getUsername() => getString('username');
+
   // ==================== Int ====================
 
   static Future<bool> setInt(String key, int value) async {

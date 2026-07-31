@@ -1,5 +1,7 @@
 class SigninState {}
 
+class SigninInitial extends SigninState {}
+
 class SignOut extends SigninState {
   final String message;
   SignOut(this.message);

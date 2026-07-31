@@ -4,7 +4,10 @@ import 'package:guess_duel/cubit/Join%20Room/join_room_state.dart';
 import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
 import 'package:guess_duel/extensions/player_role_extension.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
+import 'package:guess_duel/models/Players/room_player_cache.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
+import 'package:guess_duel/services/Hive/hive_service.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class JoinRoomCubit extends Cubit<JoinRoomState> {
   JoinRoomCubit(this.internetCubit) : super(JoinRoomInitial());
@@ -29,13 +32,13 @@ class JoinRoomCubit extends Cubit<JoinRoomState> {
         emit(JoinRoomFailure(errorM: "Room is full"));
         return;
       }
-      final userID = FirebaseService.getCurrentUserFirebaseID();
+      final userID = SharedPrefService.getId();
       if (userID == null) {
         emit(JoinRoomFailure(errorM: "User not logged in"));
         return;
       }
-      final PlayerModel playerData = await FirebaseService.getPlayerData(
-        userID,
+      final PlayerModel playerData = RoomPlayerCache.toPlayerModel(
+        HiveService.playersBox.get(userID),
       );
       final RoomPlayer roomPlayerData = RoomPlayer(
         roomPlayerStatus: RoomPlayerStatus.idle,

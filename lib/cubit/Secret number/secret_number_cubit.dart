@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guess_duel/cubit/Secret%20number/secret_number_state.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class SecretNumberCubit extends Cubit<SecretNumberState> {
   SecretNumberCubit() : super(SecretNumberState.initial());
@@ -39,16 +40,15 @@ class SecretNumberCubit extends Cubit<SecretNumberState> {
 
         await room
             .collection(FirebaseCollections.roomPeople)
-            .doc(FirebaseService.getCurrentUserFirebaseID())
+            .doc(SharedPrefService.getId())
             .update({"secretCode": secretCode ?? state.digits});
 
         await room.update({
-          'secret_numbers.${FirebaseService.getCurrentUserFirebaseID()}':
+          'secret_numbers.${SharedPrefService.getId()}':
               secretCode ?? state.digits,
         });
-        print("=========================done");
       } catch (e) {
-        print("=========================error$e");
+        print(e);
       }
       if (secretCode == null) {
         if (isClosed) return;

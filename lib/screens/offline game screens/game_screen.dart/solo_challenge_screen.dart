@@ -9,7 +9,7 @@ import 'package:guess_duel/cubit/keypad/keypad_cubit.dart';
 import 'package:guess_duel/cubit/keypad/keypad_state.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
 import 'package:guess_duel/models/offline/offline_game_model.dart';
-import 'package:guess_duel/pageview.dart';
+
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/solo_result_screen.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/create_offline_game/offline_create_bs.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/attempt_history_item.dart';
@@ -92,7 +92,7 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
           bool shouldPop = await soloExitDialog(context: context);
 
           if (shouldPop) {
-            Get.offAll(() => const Pages());
+            Get.until((route) => route.isFirst);
           }
         },
         child: Scaffold(
@@ -103,9 +103,7 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
             onBackPressed: () async {
               bool shouldPop = await soloExitDialog(context: context);
               if (shouldPop) {
-                // show BS again and return to that screen
-                Get.offAll(() => const Pages());
-                OfflineCreateBs.show(context);
+                Get.back();
               }
             },
           ),
@@ -172,7 +170,6 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                                     resultData: state.offlineGameModel,
 
                                     onModifyDifficulty: () {
-                                      Get.offAll(() => const Pages());
                                       OfflineCreateBs.show(context);
                                     },
                                     onRetryPressed: () {
@@ -191,8 +188,7 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                                     resultData: state.offlineGameModel,
 
                                     onModifyDifficulty: () {
-                                      Get.offAll(() => const Pages());
-                                      OfflineCreateBs.show(context);
+                                      Get.back();
                                     },
                                     onRetryPressed: () {
                                       _soloGameCubit.soloRestartAction();
@@ -296,7 +292,6 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                                         Get.back();
                                       },
                                       onModifyDifficulty: () {
-                                        Get.offAll(() => const Pages());
                                         OfflineCreateBs.show(context);
                                       },
                                     ),

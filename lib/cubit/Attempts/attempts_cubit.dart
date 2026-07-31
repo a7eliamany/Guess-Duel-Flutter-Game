@@ -11,6 +11,7 @@ import 'package:guess_duel/cubit/Attempts/attempts_state.dart';
 import 'package:guess_duel/screens/game_result_screen/game_result_screen.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class AttemptsCubit extends Cubit<AttemptsState> {
   AttemptsCubit() : super(AttemptsInitial());
@@ -102,7 +103,7 @@ class AttemptsCubit extends Cubit<AttemptsState> {
 
     await room
         .collection(FirebaseCollections.roomPeople)
-        .doc(FirebaseService.getCurrentUserFirebaseID())
+        .doc(SharedPrefService.getId())
         .update({"secretCode": ''});
   }
 
@@ -158,7 +159,7 @@ class AttemptsCubit extends Cubit<AttemptsState> {
 
     // game result screen specific data
 
-    final String myID = FirebaseService.getCurrentUserFirebaseID()!;
+    final String myID = SharedPrefService.getId()!;
 
     final List<AttemptModel> yourAttempts = attempts
         .where((attempt) => attempt.userId == myID)
@@ -177,10 +178,7 @@ class AttemptsCubit extends Cubit<AttemptsState> {
           attempts: yourAttempts,
           opponentSecretCode: opponentSecretCode!,
           isWin: isWin,
-          players: [
-            FirebaseService.getCurrentUserDisplayName()!,
-            opponentPlayer.username,
-          ],
+          players: [SharedPrefService.getUsername()!, opponentPlayer.username],
         ),
       ),
     );

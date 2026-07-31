@@ -4,7 +4,8 @@ import 'package:guess_duel/Widgets/text.dart';
 import 'package:guess_duel/cubit/Attempts/attempts_cubit.dart';
 import 'package:guess_duel/cubit/Attempts/attempts_state.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
-import 'package:guess_duel/services/Firebase/firebase_service.dart';
+
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class AttemptsHistory extends StatelessWidget {
   const AttemptsHistory({super.key});
@@ -23,7 +24,7 @@ class AttemptsHistory extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: state.attempts.length,
                 itemBuilder: (context, index) {
-                  final userID = FirebaseService.getCurrentUserFirebaseID();
+                  final userID = SharedPrefService.getId();
                   AttemptModel attempt = state.attempts[index];
                   bool isYourAttempt = attempt.userId == userID;
 

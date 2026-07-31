@@ -9,6 +9,7 @@ import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/models/Rooms/rooms_model.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class GameStatusCubit extends Cubit<GameStatusState> {
@@ -95,7 +96,7 @@ class GameStatusCubit extends Cubit<GameStatusState> {
   }
 
   Future<void> closeLobby(String roomID) async {
-    final firebaseID = FirebaseService.getCurrentUserFirebaseID();
+    final userId = SharedPrefService.getId();
     final room = await FirebaseFirestore.instance
         .collection(FirebaseCollections.rooms)
         .doc(roomID)
@@ -105,7 +106,7 @@ class GameStatusCubit extends Cubit<GameStatusState> {
     }
     final RoomModel roomModel = RoomModel.fromFirestore(room, null);
 
-    if (roomModel.hostId == firebaseID) {
+    if (roomModel.hostId == userId) {
       final roomRef = FirebaseFirestore.instance
           .collection(FirebaseCollections.rooms)
           .doc(roomID);
@@ -138,7 +139,7 @@ class GameStatusCubit extends Cubit<GameStatusState> {
           .doc(roomID);
       await room
           .collection(FirebaseCollections.roomPeople)
-          .doc(firebaseID)
+          .doc(userId)
           .delete();
 
       final List? players = HiveService.playersBox.get(roomID) as List?;

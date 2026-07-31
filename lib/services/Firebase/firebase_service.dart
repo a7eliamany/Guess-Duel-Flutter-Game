@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/models/Rooms/rooms_model.dart';
 import 'package:guess_duel/models/app_config_model.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class FirebaseService {
   static Future<void> initialize(FirebaseOptions options) async {
@@ -16,14 +17,6 @@ class FirebaseService {
 
   static Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
-  }
-
-  static String? getCurrentUserDisplayName() {
-    return FirebaseAuth.instance.currentUser?.displayName;
-  }
-
-  static String? getCurrentUserFirebaseID() {
-    return FirebaseAuth.instance.currentUser?.uid;
   }
 
   static bool isUserSignedIn() {
@@ -42,17 +35,6 @@ class FirebaseService {
     final CollectionReference<Map<String, dynamic>> collectionReference =
         FirebaseFirestore.instance.collection(collectionName);
     return collectionReference;
-  }
-
-  static Future<PlayerModel> getPlayerData(String firebaseID) async {
-    final playerData = await FirebaseFirestore.instance
-        .collection(FirebaseCollections.players)
-        .doc(firebaseID)
-        .get();
-    final PlayerModel playerModel = PlayerModel.fromFirestore(
-      playerData.data()!,
-    );
-    return playerModel;
   }
 
   static Future<RoomModel?> getRoomData(String roomID) async {
@@ -93,16 +75,25 @@ class FirebaseService {
     return roomPlayer;
   }
 
-  static Future<bool> checkUserHost(String roomID, String firebaseID) async {
-    final RoomModel? roomData = await FirebaseService.getRoomData(roomID);
-    final PlayerModel playerModel = await FirebaseService.getPlayerData(
-      firebaseID,
+  static Future<PlayerModel> getPlayerData(String userId) async {
+    final playerData = await FirebaseFirestore.instance
+        .collection(FirebaseCollections.players)
+        .doc(userId)
+        .get();
+    final PlayerModel playerModel = PlayerModel.fromFirestore(
+      playerData.data()!,
     );
-    return (playerModel.firebaseID == roomData!.hostId) ? true : false;
+    return playerModel;
+  }
+
+  static Future<bool> checkUserHost(String roomID) async {
+    final RoomModel? roomData = await FirebaseService.getRoomData(roomID);
+    final String userId = SharedPrefService.getId()!;
+    return (userId == roomData!.hostId) ? true : false;
   }
 
   static Future<String> getSecretNumber(String roomID) async {
-    final String userID = FirebaseService.getCurrentUserFirebaseID()!;
+    final String userID = SharedPrefService.getId()!;
 
     final players = await FirebaseService.getPeopleRoomData(roomID);
 

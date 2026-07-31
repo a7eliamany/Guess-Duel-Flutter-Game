@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FailedHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -27,8 +29,7 @@ class FailedHeader extends StatelessWidget implements PreferredSizeWidget {
               child: Row(
                 children: [
                   IconButton(
-                    onPressed:
-                        onBackPressed ?? () => Navigator.maybePop(context),
+                    onPressed: onBackPressed ?? () => Get.back(),
                     icon: const Icon(
                       Icons.arrow_back_ios_new,
                       color: Color(0xFFDAB9FF),

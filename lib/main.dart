@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => InternetCubit()..startListening()),
         BlocProvider(
           create: (context) =>
-              SigninCubit(ServiceLocator.getIt<InternetCubit>())..checkSignin(),
+              SigninCubit(ServiceLocator.getIt<InternetCubit>()),
         ),
 
         BlocProvider(

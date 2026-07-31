@@ -19,7 +19,7 @@ class HiveService {
 
     // remove old boxes
     await Hive.deleteBoxFromDisk(HiveBoxes.rooms);
-    await Hive.deleteBoxFromDisk(HiveBoxes.players);
+
     await Hive.deleteBoxFromDisk(HiveBoxes.attempts);
 
     // open boxes
