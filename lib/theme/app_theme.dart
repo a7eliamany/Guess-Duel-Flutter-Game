@@ -50,52 +50,51 @@ class AppTheme {
       canvasColor: neutralLight,
       cardColor: surfaceLight,
       dividerColor: outlineLight,
-      textTheme: base.textTheme.apply(
-        bodyColor: textPrimaryLight,
-        displayColor: textPrimaryLight,
-      ).copyWith(
-        headlineLarge: const TextStyle(
-          fontSize: 46,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -1.6,
-          height: 0.95,
-        ),
-        headlineMedium: const TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.8,
-        ),
-        titleLarge: const TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
-          letterSpacing: -0.2,
-        ),
-        titleMedium: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.1,
-        ),
-        bodyLarge: const TextStyle(
-          fontSize: 16,
-          color: textMutedLight,
-          height: 1.45,
-        ),
-        bodyMedium: const TextStyle(
-          fontSize: 14,
-          color: textMutedLight,
-          height: 1.4,
-        ),
-        labelLarge: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.4,
-        ),
-        labelMedium: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-        ),
-      ),
+      textTheme: base.textTheme
+          .apply(bodyColor: textPrimaryLight, displayColor: textPrimaryLight)
+          .copyWith(
+            headlineLarge: const TextStyle(
+              fontSize: 46,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -1.6,
+              height: 0.95,
+            ),
+            headlineMedium: const TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.8,
+            ),
+            titleLarge: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.2,
+            ),
+            titleMedium: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.1,
+            ),
+            bodyLarge: const TextStyle(
+              fontSize: 16,
+              color: textMutedLight,
+              height: 1.45,
+            ),
+            bodyMedium: const TextStyle(
+              fontSize: 14,
+              color: textMutedLight,
+              height: 1.4,
+            ),
+            labelLarge: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.4,
+            ),
+            labelMedium: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
+            ),
+          ),
       appBarTheme: const AppBarTheme(
         backgroundColor: neutralLight,
         foregroundColor: textPrimaryLight,
@@ -105,9 +104,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: surfaceLight,
         elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(36),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36)),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -136,10 +133,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(999),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          textStyle: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -151,10 +145,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(999),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          textStyle: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
         ),
       ),
       chipTheme: base.chipTheme.copyWith(
@@ -163,9 +154,7 @@ class AppTheme {
         secondarySelectedColor: secondaryLight,
         labelStyle: const TextStyle(color: textPrimaryLight),
         secondaryLabelStyle: const TextStyle(color: Colors.white),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
         side: BorderSide.none,
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -195,56 +184,55 @@ class AppTheme {
 
     return base.copyWith(
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: neutral,
+      scaffoldBackgroundColor: const Color(0xFF0F131E),
       canvasColor: neutral,
       cardColor: surface,
       dividerColor: outline,
-      textTheme: base.textTheme.apply(
-        bodyColor: textPrimary,
-        displayColor: textPrimary,
-      ).copyWith(
-        headlineLarge: const TextStyle(
-          fontSize: 46,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -1.6,
-          height: 0.95,
-        ),
-        headlineMedium: const TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.8,
-        ),
-        titleLarge: const TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
-          letterSpacing: -0.2,
-        ),
-        titleMedium: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.1,
-        ),
-        bodyLarge: const TextStyle(
-          fontSize: 16,
-          color: textMuted,
-          height: 1.45,
-        ),
-        bodyMedium: const TextStyle(
-          fontSize: 14,
-          color: textMuted,
-          height: 1.4,
-        ),
-        labelLarge: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.4,
-        ),
-        labelMedium: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-        ),
-      ),
+      textTheme: base.textTheme
+          .apply(bodyColor: textPrimary, displayColor: textPrimary)
+          .copyWith(
+            headlineLarge: const TextStyle(
+              fontSize: 46,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -1.6,
+              height: 0.95,
+            ),
+            headlineMedium: const TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.8,
+            ),
+            titleLarge: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.2,
+            ),
+            titleMedium: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.1,
+            ),
+            bodyLarge: const TextStyle(
+              fontSize: 16,
+              color: textMuted,
+              height: 1.45,
+            ),
+            bodyMedium: const TextStyle(
+              fontSize: 14,
+              color: textMuted,
+              height: 1.4,
+            ),
+            labelLarge: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.4,
+            ),
+            labelMedium: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
+            ),
+          ),
       appBarTheme: const AppBarTheme(
         backgroundColor: neutral,
         foregroundColor: textPrimary,
@@ -254,9 +242,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: surface,
         elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(36),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36)),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -285,10 +271,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(999),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          textStyle: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -300,10 +283,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(999),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          textStyle: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
         ),
       ),
       chipTheme: base.chipTheme.copyWith(
@@ -312,9 +292,7 @@ class AppTheme {
         secondarySelectedColor: secondary,
         labelStyle: const TextStyle(color: textPrimary),
         secondaryLabelStyle: const TextStyle(color: Colors.white),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
         side: BorderSide.none,
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(

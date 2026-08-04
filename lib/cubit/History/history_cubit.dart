@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:guess_duel/cubit/History/historty_state.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
 import 'package:guess_duel/models/History/history_model.dart';
@@ -11,7 +12,7 @@ class HistoryCubit extends Cubit<HistortyState> {
   Future<void> getHistory() async {
     emit(HistoryLoading());
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(500.milliseconds);
       final StatsModel? statsModel = HiveService.statsBox.get("Stats");
 
       final List<GameHistoryModel> history = HiveService.gameHistoryBox.values

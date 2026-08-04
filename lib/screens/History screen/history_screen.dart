@@ -38,6 +38,7 @@ class HistoryScreen extends HookWidget {
     });
 
     return Scaffold(
+      backgroundColor: const Color(0xFF0F131E),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

@@ -75,17 +75,6 @@ class FirebaseService {
     return roomPlayer;
   }
 
-  static Future<PlayerModel> getPlayerData(String userId) async {
-    final playerData = await FirebaseFirestore.instance
-        .collection(FirebaseCollections.players)
-        .doc(userId)
-        .get();
-    final PlayerModel playerModel = PlayerModel.fromFirestore(
-      playerData.data()!,
-    );
-    return playerModel;
-  }
-
   static Future<bool> checkUserHost(String roomID) async {
     final RoomModel? roomData = await FirebaseService.getRoomData(roomID);
     final String userId = SharedPrefService.getId()!;

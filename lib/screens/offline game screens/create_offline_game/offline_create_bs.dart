@@ -8,7 +8,7 @@ import 'package:guess_duel/Widgets/glow_button.dart';
 import 'package:guess_duel/cubit/Create%20offline%20game/create_offline_game_cubit.dart';
 import 'package:guess_duel/cubit/Create%20offline%20game/create_offline_game_state.dart';
 import 'package:guess_duel/models/offline/offline_game_model.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/solo_challenge_screen.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/game_screen/solo_challenge_screen.dart';
 
 class OfflineCreateBs extends StatefulWidget {
   const OfflineCreateBs({super.key});
@@ -95,6 +95,7 @@ class _OfflineCreateBsState extends State<OfflineCreateBs> {
 
   void _startGame() async {
     await context.read<CreateOfflineGameCubit>().createOfflineGame(gameModel);
+    Get.back();
   }
 
   @override

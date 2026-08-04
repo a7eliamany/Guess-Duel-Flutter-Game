@@ -29,6 +29,7 @@ class RoomsScreen extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF0F131E),
         elevation: 0,
         title: Text(
           'Game Rooms',

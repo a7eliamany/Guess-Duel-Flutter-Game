@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:guess_duel/cubit/History/history_cubit.dart';
-
+import 'package:get/route_manager.dart';
+import 'package:get/utils.dart';
 import 'package:guess_duel/models/offline/offline_game_model.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/failed_action_suite.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/failed_header.dart';
@@ -10,50 +8,34 @@ import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widg
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/failed_status_header.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/hud_particles_background.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/success_status_header.dart';
-
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/target_reveal_card.dart';
-import 'package:guess_duel/services/Hive/hive_service.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/create_offline_game/offline_create_bs.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/exit_dialog_solo.dart';
 
-class SoloResultScreen extends HookWidget {
+class SoloResultScreen extends StatelessWidget {
   final OfflineGameModel? resultData;
   final bool isWin;
   final VoidCallback? onRetryPressed;
 
-  final VoidCallback? onModifyDifficulty;
-  final VoidCallback? onBackPressed;
-
   const SoloResultScreen({
     super.key,
     this.resultData,
-    this.onModifyDifficulty,
-    this.onBackPressed,
     required this.isWin,
     required this.onRetryPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    useEffect(() {
-      if (resultData != null) {
-        context.read<HistoryCubit>().addToHistory(
-          roomID: resultData!.id,
-          attempts: resultData?.history ?? [],
-          isWin: isWin,
-          players: ["me", "Solo"],
-          secretCode: resultData?.secretCode ?? '1234',
-          offlineGameModel: resultData,
-        );
-
-        HiveService.offlineGameBox.put(resultData!.id, resultData!);
-      }
-      return null;
-    });
     final String secretCode = resultData?.secretCode ?? '1234';
     final int attemptsUsed = resultData?.usedAttmeps ?? 0;
 
     return Scaffold(
       backgroundColor: const Color(0xFF131313),
-      appBar: FailedHeader(onBackPressed: onBackPressed),
+      appBar: FailedHeader(
+        onBackPressed: () {
+          Get.back();
+        },
+      ),
       body: Stack(
         children: [
           // Background ambient HUD particles
@@ -88,7 +70,15 @@ class SoloResultScreen extends HookWidget {
                           const SizedBox(height: 24),
                           ResultActionSuite(
                             onRetryPressed: onRetryPressed,
-                            onModifyDifficultyPressed: onModifyDifficulty,
+                            onModifyDifficultyPressed: () async {
+                              final bool canPop = await soloExitDialog(
+                                context: context,
+                              );
+                              if (canPop == true) {
+                                Get.until((route) => route.isFirst);
+                                OfflineCreateBs.show(context);
+                              }
+                            },
                           ),
                         ],
                       ),

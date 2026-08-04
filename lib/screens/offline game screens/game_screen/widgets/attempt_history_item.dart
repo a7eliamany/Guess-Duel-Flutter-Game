@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/feedback_legend.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/feedback_legend.dart';
 import '../../../../theme/solo_challenge_theme.dart';
 
 class AttemptHistoryItem extends StatelessWidget {

@@ -3,21 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:guess_duel/Widgets/gradient_button.dart';
 import 'package:guess_duel/Widgets/keypad.dart';
+import 'package:guess_duel/cubit/History/history_cubit.dart';
 import 'package:guess_duel/cubit/Solo%20Game/solo_game_cubit.dart';
 import 'package:guess_duel/cubit/Solo%20Game/solo_game_state.dart';
 import 'package:guess_duel/cubit/keypad/keypad_cubit.dart';
 import 'package:guess_duel/cubit/keypad/keypad_state.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
 import 'package:guess_duel/models/offline/offline_game_model.dart';
-
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/solo_result_screen.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/create_offline_game/offline_create_bs.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/attempt_history_item.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/challenge_stats_card.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/exit_dialog_solo.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/number_display.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/solo_header.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/submit_button.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/attempt_history_item.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/challenge_stats_card.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/exit_dialog_solo.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/number_display.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/solo_header.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/submit_button.dart';
+import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:guess_duel/theme/solo_challenge_theme.dart';
 
 class SoloChallengeScreen extends StatefulWidget {
@@ -33,7 +33,6 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
   late KeypadCubit _keypadCubit;
   late SoloGameCubit _soloGameCubit;
   late OfflineGameModel updatedData;
-  bool isWin = false;
 
   @override
   void initState() {
@@ -92,7 +91,7 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
           bool shouldPop = await soloExitDialog(context: context);
 
           if (shouldPop) {
-            Get.until((route) => route.isFirst);
+            Get.back();
           }
         },
         child: Scaffold(
@@ -114,7 +113,6 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                 // Scrollable top content
                 Expanded(
                   child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
                     padding: EdgeInsets.only(
                       top: MediaQuery.of(context).padding.top + 64,
                     ),
@@ -161,41 +159,46 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                           child: BlocListener<SoloGameCubit, SoloGameState>(
                             listener: (context, state) {
                               updatedData = state.offlineGameModel;
-                              if (state.gameState == GameState.gameover &&
-                                  state.isWin) {
-                                isWin = true;
-                                Get.to(
-                                  () => SoloResultScreen(
-                                    isWin: true,
-                                    resultData: state.offlineGameModel,
-
-                                    onModifyDifficulty: () {
-                                      OfflineCreateBs.show(context);
-                                    },
-                                    onRetryPressed: () {
-                                      _soloGameCubit.soloRestartAction();
-                                      Get.back();
-                                    },
-                                  ),
+                              if (state.gameState == GameState.gameover) {
+                                context.read<HistoryCubit>().addToHistory(
+                                  roomID: updatedData.id,
+                                  attempts: updatedData.history ?? [],
+                                  isWin: state.isWin,
+                                  players: ["me", "Solo"],
+                                  secretCode: updatedData.secretCode,
+                                  offlineGameModel: updatedData,
                                 );
-                              } else if (state.gameState ==
-                                      GameState.gameover &&
-                                  !state.isWin) {
-                                isWin = false;
-                                Get.to(
-                                  () => SoloResultScreen(
-                                    isWin: false,
-                                    resultData: state.offlineGameModel,
-
-                                    onModifyDifficulty: () {
-                                      Get.back();
-                                    },
-                                    onRetryPressed: () {
-                                      _soloGameCubit.soloRestartAction();
-                                      Get.back();
-                                    },
-                                  ),
+                                HiveService.offlineGameBox.put(
+                                  updatedData.id,
+                                  updatedData,
                                 );
+
+                                if (state.isWin) {
+                                  Get.to(
+                                    () => SoloResultScreen(
+                                      isWin: true,
+
+                                      resultData: state.offlineGameModel,
+
+                                      onRetryPressed: () {
+                                        _soloGameCubit.soloRestartAction();
+                                        Get.back();
+                                      },
+                                    ),
+                                  );
+                                } else if (!state.isWin) {
+                                  Get.to(
+                                    () => SoloResultScreen(
+                                      isWin: state.isWin,
+                                      resultData: state.offlineGameModel,
+
+                                      onRetryPressed: () {
+                                        _soloGameCubit.soloRestartAction();
+                                        Get.back();
+                                      },
+                                    ),
+                                  );
+                                }
                               }
                             },
                             child:
@@ -249,60 +252,57 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                       top: 16,
                       bottom: MediaQuery.of(context).padding.bottom + 16,
                     ),
-                    child:
-                        BlocSelector<SoloGameCubit, SoloGameState, GameState>(
-                          selector: (state) => state.gameState,
-                          builder: (context, state) {
-                            if (state == GameState.playing) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Keypad(
-                                    onNumberPressed: _handleNumberPress,
-                                    onBackspacePressed: _handleBackspace,
-                                  ),
-                                  const SizedBox(height: 16),
+                    child: BlocBuilder<SoloGameCubit, SoloGameState>(
+                      buildWhen: (previous, current) =>
+                          current.gameState != previous.gameState,
+                      builder: (context, state) {
+                        if (state.gameState == GameState.playing) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Keypad(
+                                onNumberPressed: _handleNumberPress,
+                                onBackspacePressed: _handleBackspace,
+                              ),
+                              const SizedBox(height: 16),
 
-                                  BlocBuilder<KeypadCubit, KeypadState>(
-                                    builder: (context, state) {
-                                      return SubmitButton(
-                                        onSubmitPressed: _handleSubmit,
-                                        isComplete: state.isReadyToSubmit,
-                                      );
-                                    },
-                                  ),
-                                ],
-                              );
-                            } else if (state == GameState.gameover) {
-                              return GradientButton(
-                                text: "Result",
-                                gradientColors: const [
-                                  Colors.white70,
-                                  Colors.teal,
-                                  Colors.teal,
-                                ],
-                                icon: Icons.forward,
-                                onPressed: () {
-                                  Get.to(
-                                    () => SoloResultScreen(
-                                      isWin: isWin,
-                                      resultData: updatedData,
-                                      onRetryPressed: () {
-                                        _soloGameCubit.soloRestartAction();
-                                        Get.back();
-                                      },
-                                      onModifyDifficulty: () {
-                                        OfflineCreateBs.show(context);
-                                      },
-                                    ),
+                              BlocBuilder<KeypadCubit, KeypadState>(
+                                builder: (context, state) {
+                                  return SubmitButton(
+                                    onSubmitPressed: _handleSubmit,
+                                    isComplete: state.isReadyToSubmit,
                                   );
                                 },
+                              ),
+                            ],
+                          );
+                        } else if (state.gameState == GameState.gameover) {
+                          return GradientButton(
+                            text: "Result",
+                            gradientColors: const [
+                              Colors.white70,
+                              Colors.teal,
+                              Colors.teal,
+                            ],
+                            icon: Icons.forward,
+                            onPressed: () {
+                              Get.to(
+                                () => SoloResultScreen(
+                                  isWin: state.isWin,
+                                  resultData: updatedData,
+                                  onRetryPressed: () {
+                                    _soloGameCubit.soloRestartAction();
+                                    Get.back();
+                                  },
+                                ),
                               );
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                          },
-                        ),
+                            },
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                    ),
                   ),
                 ),
               ],

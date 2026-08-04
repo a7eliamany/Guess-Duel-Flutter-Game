@@ -7,9 +7,9 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
-import 'package:guess_duel/screens/Splash%20Screen/Widgets/internet_dialog.dart';
 import 'package:guess_duel/screens/Splash%20Screen/Widgets/maintenance_dialog.dart';
 import 'package:guess_duel/screens/Splash%20Screen/Widgets/update_dialog.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/offline%20home/offline_home_screen.dart';
 import 'package:guess_duel/screens/sign_in/sign_in_screen.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 
@@ -29,6 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
+    context.read<InternetCubit>().retryConnection();
 
     _startSimulatedProgress();
   }
@@ -54,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // check for internet connection
 
     if (!await context.read<InternetCubit>().hasInternet()) {
-      _showNoInternetDialog();
+      Get.offAll(() => const OfflineHomeScreen());
       return;
     }
     if (!mounted) return;
@@ -118,15 +120,15 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void _showNoInternetDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const InternetDialog();
-      },
-    );
-  }
+  // void _showNoInternetDialog() {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (context) {
+  //       return const InternetDialog();
+  //     },
+  //   );
+  // }
 
   @override
   void dispose() {

@@ -9,7 +9,7 @@ import 'package:guess_duel/screens/game%20summery/widgets/guess_card.dart';
 import 'package:guess_duel/screens/game%20summery/widgets/performance_insight.dart';
 import 'package:guess_duel/screens/game%20summery/widgets/players_indicator.dart';
 import 'package:guess_duel/screens/game%20summery/widgets/share_result_button.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/game_screen.dart/widgets/feedback_legend.dart';
+import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/feedback_legend.dart';
 import 'package:screenshot/screenshot.dart';
 
 class GameSummeryScreen extends HookWidget {
@@ -25,8 +25,8 @@ class GameSummeryScreen extends HookWidget {
         : 0;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF131313),
       appBar: AppBar(
+        backgroundColor: const Color(0xFF0F131E),
         surfaceTintColor: Colors.transparent,
         scrolledUnderElevation: 0,
         title: Text(
