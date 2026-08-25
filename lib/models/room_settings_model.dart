@@ -15,6 +15,21 @@ extension RoundTimeToInt on RoundTime {
         return 60;
     }
   }
+
+  static RoundTime fromInt(int roundTime) {
+    switch (roundTime) {
+      case 15:
+        return RoundTime.s15;
+      case 30:
+        return RoundTime.s30;
+      case 45:
+        return RoundTime.s45;
+      case 60:
+        return RoundTime.s60;
+      default:
+        return RoundTime.s45;
+    }
+  }
 }
 
 class RoomSettingsModel {
@@ -40,6 +55,16 @@ class RoomSettingsModel {
       'isPrivate': isPrivate ?? false,
       'roundTime': roundTime?.toInt() ?? RoundTime.s45.toInt(),
     };
+  }
+
+  factory RoomSettingsModel.fromFirestore(Map<String, dynamic> data) {
+    return RoomSettingsModel(
+      roomName: data['roomName'] ?? 'global',
+      roomID: data['roomID'],
+      roomPassword: data['roomPassword'] ?? '',
+      isPrivate: data['isPrivate'] ?? false,
+      roundTime: RoundTimeToInt.fromInt(data['roundTime'] ?? 45),
+    );
   }
 
   RoomSettingsModel copyWith({

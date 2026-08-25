@@ -31,7 +31,9 @@ class Numpad extends StatelessWidget {
       crossAxisCount: 3,
       mainAxisSpacing: 12,
       crossAxisSpacing: 12,
-      physics: NeverScrollableScrollPhysics(),
+      childAspectRatio: 1.5,
+      mainAxisExtent: 80,
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
 
       children: [

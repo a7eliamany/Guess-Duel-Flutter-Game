@@ -43,7 +43,7 @@ class RoomCodeField extends StatelessWidget {
         style: const TextStyle(
           color: Colors.white,
           fontSize: 24,
-          letterSpacing: 25,
+          letterSpacing: 12,
         ),
         decoration: InputDecoration(
           counterStyle: const TextStyle(fontWeight: FontWeight.bold),

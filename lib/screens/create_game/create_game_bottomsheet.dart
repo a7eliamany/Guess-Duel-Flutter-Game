@@ -185,34 +185,3 @@ class _CreateGameBottomsheetState extends State<CreateGameBottomsheet> {
     );
   }
 }
-
-class ScaleOnPressButton extends StatefulWidget {
-  final VoidCallback? onPressed;
-  final Widget child;
-  const ScaleOnPressButton({
-    super.key,
-    required this.onPressed,
-    required this.child,
-  });
-  @override
-  State<ScaleOnPressButton> createState() => _ScaleOnPressButtonState();
-}
-
-class _ScaleOnPressButtonState extends State<ScaleOnPressButton> {
-  bool _isPressed = false;
-  @override
-  Widget build(BuildContext context) {
-    final enabled = widget.onPressed != null;
-    return GestureDetector(
-      onTapDown: enabled ? (_) => setState(() => _isPressed = true) : null,
-      onTapUp: enabled ? (_) => setState(() => _isPressed = false) : null,
-      onTapCancel: enabled ? () => setState(() => _isPressed = false) : null,
-      onTap: widget.onPressed,
-      child: AnimatedScale(
-        scale: _isPressed ? 0.96 : 1.0,
-        duration: const Duration(milliseconds: 100),
-        child: widget.child,
-      ),
-    );
-  }
-}

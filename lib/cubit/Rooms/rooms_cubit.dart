@@ -26,7 +26,11 @@ class RoomsCubit extends Cubit<RoomsState> {
                 .map((doc) => RoomModel.fromFirestore(doc, null))
                 .toList();
 
-            emit(RoomsLoaded(rooms));
+            emit(
+              RoomsLoaded(
+                rooms.where((room) => room.isPrivate == false).toList(),
+              ),
+            );
           });
     } catch (e) {
       Get.snackbar("Error", "something Wrong");

@@ -10,7 +10,7 @@ import 'package:guess_duel/cubit/Rooms/rooms_cubit.dart';
 import 'package:guess_duel/cubit/SignIn/signin_cubit.dart';
 import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
 import 'package:guess_duel/cubit/navigation%20bottom%20bar/navigation_bottombar_cubit.dart';
-import 'package:guess_duel/screens/offline%20game%20screens/offline%20home/offline_home_screen.dart';
+import 'package:guess_duel/screens/Splash%20Screen/splash_screen.dart';
 import 'package:guess_duel/services/Firebase/firebase_options.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Get%20It/service_locater.dart';
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.dark,
         debugShowCheckedModeBanner: false,
 
-        home: const OfflineHomeScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

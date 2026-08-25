@@ -9,6 +9,8 @@ import 'package:guess_duel/cubit/start%20game/game_status_cubit.dart';
 import 'package:guess_duel/screens/game_flow_screen.dart';
 import 'package:remixicon/remixicon.dart';
 
+import 'package:guess_duel/screens/home/widgets/room_password_dialog.dart';
+
 class JoinGameButton extends StatelessWidget {
   final TextEditingController codeController;
   final GlobalKey<FormState> gameCodeKey;
@@ -22,6 +24,18 @@ class JoinGameButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<JoinRoomCubit, JoinRoomState>(
       listener: (context, state) {
+        if (state is CheckingRoomPassword) {
+          RoomPasswordDialog.showBottomSheet(
+            context,
+            expectedPassword: state.password,
+            roomCode: codeController.text.toUpperCase(),
+            onSuccess: (value) {
+              context.read<JoinRoomCubit>().joinRoom(
+                codeController.text.toUpperCase(),
+              );
+            },
+          );
+        }
         if (state is JoinRoomLoaded) {
           Get.to(
             BlocProvider(
@@ -46,26 +60,12 @@ class JoinGameButton extends StatelessWidget {
 
           onPressed: () async {
             if (gameCodeKey.currentState!.validate()) {
-              context.read<JoinRoomCubit>().roomCodeCheck(
+              await context.read<JoinRoomCubit>().checkRoomStatus(
                 codeController.text.toUpperCase(),
               );
             }
           },
         );
-
-        // AnimatedButton(
-        //   pressEvent: (state is JoinRoomLoading)
-        //       ? () {}
-        //       : () async {
-        //           if (gameCodeKey.currentState!.validate()) {
-        //             context.read<JoinRoomCubit>().roomCodeCheck(
-        //               codeController.text.toUpperCase(),
-        //             );
-        //           }
-        //         },
-        //   text: (state is JoinRoomLoading) ? "JOINING....." : "JOIN GAME",
-        //   buttonTextStyle: const TextStyle(),
-        // );
       },
     );
   }

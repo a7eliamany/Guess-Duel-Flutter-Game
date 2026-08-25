@@ -35,25 +35,5 @@ class CreateGameButton extends StatelessWidget {
         );
       },
     );
-
-    //  AnimatedButton(
-    //   pressEvent: () async {
-    //     showModalBottomSheet(
-    //       isDismissible: true,
-    //       isScrollControlled: true,
-    //       backgroundColor: Colors.transparent,
-    //       elevation: 0,
-    //       context: context,
-    //       builder: (_) => BlocProvider(
-    //         create: (context) =>
-    //             CreateRoomCubit(ServiceLocator.getIt<InternetCubit>()),
-
-    //         child: const CreateGameBottomsheet(),
-    //       ),
-    //     );
-    //   },
-    //   text: "CREATE NEW GAME",
-    //   color: Theme.of(context).colorScheme.secondary,
-    // );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:guess_duel/screens/create_game/create_game_bottomsheet.dart';
+import 'package:guess_duel/Widgets/scale_on_press_button.dart';
 
 class CreateGameBottomsheetCreateButton extends StatelessWidget {
   final bool isLoading;

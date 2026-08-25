@@ -15,19 +15,19 @@ class InternetCubit extends Cubit<InternetCheckState> {
   final InternetConnection _connection = InternetConnection();
   StreamSubscription? _subscription;
 
-  Future<void> _init() async {
-    emit(state.copyWith(isLoading: true));
-    final hasNet = await _connection.hasInternetAccess;
+  // Future<void> _init() async {
+  //   emit(state.copyWith(isLoading: true));
+  //   final hasNet = await _connection.hasInternetAccess;
 
-    emit(
-      state.copyWith(
-        internetConnectionState: hasNet
-            ? InternetConnectionState.connected
-            : InternetConnectionState.disconnected,
-        isLoading: false,
-      ),
-    );
-  }
+  //   emit(
+  //     state.copyWith(
+  //       internetConnectionState: hasNet
+  //           ? InternetConnectionState.connected
+  //           : InternetConnectionState.disconnected,
+  //       isLoading: false,
+  //     ),
+  //   );
+  // }
 
   // void startListening() {
   //   if (_isListening) return;

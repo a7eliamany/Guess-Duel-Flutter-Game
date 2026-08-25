@@ -27,7 +27,6 @@ class GameFlowScreen extends StatelessWidget {
         BlocProvider(create: (_) => LobbyCubit()..getRoomData(roomID)),
         BlocProvider(create: (_) => AttemptsCubit()),
         BlocProvider(create: (_) => PlayerTurnCubit()),
-
         BlocProvider(create: (_) => NumpadCubit()),
       ],
       child: PopScope(
@@ -61,13 +60,10 @@ class GameFlowScreen extends StatelessWidget {
                 return SecretNumberScreen(roomID: roomID);
               case PlayingState():
                 return GameScreen(roomID: roomID);
-
               case GameStateFailure():
                 return FailureScreen(message: state.errorM);
               case GameStateDissmissed():
                 return const FailureScreen(message: "Room is Dismissed");
-              // case GameStateFinished():
-              //   return GameResultScreen(roomID: roomID);
               default:
                 return LobbyScreen(roomId: roomID);
             }

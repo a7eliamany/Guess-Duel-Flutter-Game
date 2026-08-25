@@ -35,7 +35,6 @@ class HistoryCubit extends Cubit<HistortyState> {
     required String secretCode,
     OfflineGameModel? offlineGameModel,
   }) async {
-    emit(HistoryLoading());
     try {
       final StatsModel? oldStatsModel = HiveService.statsBox.get('Stats');
 

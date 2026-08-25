@@ -12,10 +12,12 @@ class SecretNumberKeypad extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
       child: GridView.count(
         crossAxisCount: 3,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
         mainAxisSpacing: 24,
         crossAxisSpacing: 24,
+        mainAxisExtent: 60,
+        childAspectRatio: 2,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           for (int i = 1; i <= 9; i++)
             ElevatedButton(

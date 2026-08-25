@@ -98,7 +98,12 @@ class _ParticlesPainter extends CustomPainter {
 
     for (var particle in particles) {
       paint.color = isWin
-          ? const Color(0xFF8AB4FF).withValues(alpha: particle.opacity)
+          ? const Color.fromARGB(
+              255,
+              53,
+              227,
+              9,
+            ).withValues(alpha: particle.opacity)
           : const Color(0xFFFFB4AB).withValues(alpha: particle.opacity);
       canvas.drawCircle(
         Offset(particle.x * size.width, particle.y * size.height),
