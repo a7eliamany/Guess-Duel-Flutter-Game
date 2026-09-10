@@ -18,7 +18,7 @@ class RoomsList extends StatelessWidget {
         return RoomCard(
           roomModel: room,
           onJoin: () async {
-            await context.read<JoinRoomCubit>().joinRoom(room.roomId);
+            await context.read<JoinRoomCubit>().checkRoomStatus(room.roomId);
           },
         );
       },

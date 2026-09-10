@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/models/Rooms/rooms_model.dart';
 import 'package:guess_duel/models/app_config_model.dart';
+import 'package:guess_duel/models/Room%20Settings/room_settings_model.dart';
 import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class FirebaseService {
@@ -99,6 +100,23 @@ class FirebaseService {
         .get();
 
     return AppConfig.fromFirestore(appConfig.data()!);
+  }
+
+  static Future<RoomSettingsModel?> getRoomSettings(String roomId) async {
+    try {
+      final roomSettings = await FirebaseFirestore.instance
+          .collection(FirebaseCollections.rooms)
+          .doc(roomId)
+          .collection(FirebaseCollections.roomSettings)
+          .doc(roomId)
+          .get();
+
+      final RoomSettingsModel roomSettingsModel =
+          RoomSettingsModel.fromFirestore(roomSettings.data()!);
+      return roomSettingsModel;
+    } catch (e) {
+      return null;
+    }
   }
 }
 

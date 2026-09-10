@@ -1,31 +1,35 @@
 // enum RoomType { global, private }
 
-enum RoundTime { s15, s30, s45, s60 }
+enum RoundTime { s30, s45, s60, s75, s90 }
 
 extension RoundTimeToInt on RoundTime {
   int? toInt() {
     switch (this) {
-      case RoundTime.s15:
-        return 15;
       case RoundTime.s30:
         return 30;
       case RoundTime.s45:
         return 45;
       case RoundTime.s60:
         return 60;
+      case RoundTime.s75:
+        return 75;
+      case RoundTime.s90:
+        return 90;
     }
   }
 
   static RoundTime fromInt(int roundTime) {
     switch (roundTime) {
-      case 15:
-        return RoundTime.s15;
       case 30:
         return RoundTime.s30;
       case 45:
         return RoundTime.s45;
       case 60:
         return RoundTime.s60;
+      case 75:
+        return RoundTime.s75;
+      case 90:
+        return RoundTime.s90;
       default:
         return RoundTime.s45;
     }
@@ -37,6 +41,7 @@ class RoomSettingsModel {
   final String? roomID;
   final String? roomPassword;
   final bool? isPrivate;
+  final bool? isTimeEnabled;
   final RoundTime? roundTime;
 
   RoomSettingsModel({
@@ -45,6 +50,7 @@ class RoomSettingsModel {
     this.roomPassword,
     this.isPrivate,
     this.roundTime,
+    this.isTimeEnabled,
   });
 
   Map<String, dynamic> toFirestore() {
@@ -53,6 +59,7 @@ class RoomSettingsModel {
       'roomID': roomID,
       'roomPassword': roomPassword ?? '',
       'isPrivate': isPrivate ?? false,
+      'isTimeEnabled': isTimeEnabled ?? false,
       'roundTime': roundTime?.toInt() ?? RoundTime.s45.toInt(),
     };
   }
@@ -63,6 +70,7 @@ class RoomSettingsModel {
       roomID: data['roomID'],
       roomPassword: data['roomPassword'] ?? '',
       isPrivate: data['isPrivate'] ?? false,
+      isTimeEnabled: data['isTimeEnabled'] ?? false,
       roundTime: RoundTimeToInt.fromInt(data['roundTime'] ?? 45),
     );
   }
@@ -72,6 +80,7 @@ class RoomSettingsModel {
     String? roomID,
     String? roomPassword,
     bool? isPrivate,
+    bool? isTimeEnabled,
     RoundTime? roundTime,
   }) {
     return RoomSettingsModel(
@@ -79,6 +88,7 @@ class RoomSettingsModel {
       roomID: roomID ?? this.roomID,
       roomPassword: roomPassword ?? this.roomPassword,
       isPrivate: isPrivate ?? this.isPrivate,
+      isTimeEnabled: isTimeEnabled ?? this.isTimeEnabled,
       roundTime: roundTime ?? this.roundTime,
     );
   }

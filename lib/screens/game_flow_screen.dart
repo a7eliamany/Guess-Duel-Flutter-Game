@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/utils.dart';
 import 'package:guess_duel/Widgets/exit_lobby_dialog.dart';
@@ -16,7 +17,7 @@ import 'package:guess_duel/screens/game%20screen/game_screen.dart';
 import 'package:guess_duel/screens/lobby%20Screen/lobby_screen.dart';
 import 'package:guess_duel/screens/Secret%20Number%20Screen/secret_number_screen.dart';
 
-class GameFlowScreen extends StatelessWidget {
+class GameFlowScreen extends HookWidget {
   final String roomID;
   const GameFlowScreen({super.key, required this.roomID});
 

@@ -30,7 +30,7 @@ class SalmonNavigationBar extends StatelessWidget {
               /// Likes
               SalomonBottomBarItem(
                 icon: const Icon(RemixIcons.gamepad_line),
-                title: const Text("Lobby"),
+                title: const Text("Rooms"),
                 selectedColor: Colors.pink,
               ),
 

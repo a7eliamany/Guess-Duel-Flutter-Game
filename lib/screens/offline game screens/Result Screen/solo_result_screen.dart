@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:get/utils.dart';
 import 'package:guess_duel/models/offline/offline_game_model.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/failed_action_suite.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/Result%20Screen/widgets/failed_header.dart';

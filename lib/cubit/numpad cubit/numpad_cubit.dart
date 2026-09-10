@@ -6,13 +6,11 @@ class NumpadCubit extends Cubit<NumpadState> {
 
   void onKeyPress(String key) {
     if (key == 'backspace') {
-      if (state.index == 0) return;
-
-      final newIndex = state.index - 1;
+      final newIndex = state.index - 1 < 0 ? 0 : state.index - 1;
 
       emit(
         NumpadState(
-          code: state.code.replaceRange(newIndex, newIndex + 1, '_'),
+          code: state.code.replaceRange(state.index, state.index + 1, '_'),
           index: newIndex,
         ),
       );
@@ -20,7 +18,7 @@ class NumpadCubit extends Cubit<NumpadState> {
       return;
     }
 
-    if (state.index == 4) return;
+    if (state.index >= 4) return;
 
     // منع تكرار الرقم
     if (state.code.contains(key)) return;
@@ -28,7 +26,7 @@ class NumpadCubit extends Cubit<NumpadState> {
     emit(
       NumpadState(
         code: state.code.replaceRange(state.index, state.index + 1, key),
-        index: state.index + 1,
+        index: state.index == 3 ? 3 : state.index + 1,
       ),
     );
   }

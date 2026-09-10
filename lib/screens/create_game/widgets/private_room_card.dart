@@ -4,12 +4,18 @@ import 'custom_toggle_switch.dart';
 
 class PrivateRoomCard extends StatelessWidget {
   final bool isPrivate;
+  final IconData icon;
+  final String title;
+  final String subtitle;
   final ValueChanged<bool> onChanged;
 
   const PrivateRoomCard({
     super.key,
     required this.isPrivate,
     required this.onChanged,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
   });
 
   @override
@@ -33,11 +39,7 @@ class PrivateRoomCard extends StatelessWidget {
               color: const Color(0xFF582A9F).withOpacity(0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
-              Icons.lock,
-              color: Color(0xFFD4BBFF),
-              size: 24,
-            ),
+            child: Icon(icon, color: const Color(0xFFD4BBFF), size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -46,7 +48,7 @@ class PrivateRoomCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Private Room",
+                  title,
                   style: GoogleFonts.inter(
                     color: const Color(0xFFE5E2E1),
                     fontSize: 16,
@@ -55,7 +57,7 @@ class PrivateRoomCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  "Require a password to join",
+                  subtitle,
                   style: GoogleFonts.inter(
                     color: const Color(0xFFBAC9CC),
                     fontSize: 14,
@@ -64,10 +66,7 @@ class PrivateRoomCard extends StatelessWidget {
               ],
             ),
           ),
-          CustomToggleSwitch(
-            value: isPrivate,
-            onChanged: onChanged,
-          ),
+          CustomToggleSwitch(value: isPrivate, onChanged: onChanged),
         ],
       ),
     );

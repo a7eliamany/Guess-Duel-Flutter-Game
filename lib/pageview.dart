@@ -7,7 +7,8 @@ import 'package:guess_duel/packages/salmon_navigation_bar.dart';
 import 'package:guess_duel/screens/rooms/rooms_screen.dart';
 
 class Pages extends StatefulWidget {
-  const Pages({super.key});
+  final int? index;
+  const Pages({super.key, this.index});
 
   @override
   State<Pages> createState() => _PagesState();
@@ -17,7 +18,8 @@ class _PagesState extends State<Pages> {
   late PageController controller;
   @override
   void initState() {
-    controller = PageController();
+    controller = PageController(initialPage: widget.index ?? 0);
+    context.read<NavigationBottombarCubit>().changePage(widget.index ?? 0);
     super.initState();
   }
 

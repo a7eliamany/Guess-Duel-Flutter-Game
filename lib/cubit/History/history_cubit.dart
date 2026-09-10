@@ -58,10 +58,7 @@ class HistoryCubit extends Cubit<HistortyState> {
         offlineGameModel: offlineGameModel,
       );
 
-      await HiveService.gameHistoryBox.put(
-        offlineGameModel?.id ?? roomID,
-        gameHistoryModel,
-      );
+      await HiveService.gameHistoryBox.add(gameHistoryModel);
     } catch (e) {
       emit(HistortyError(error: e.toString()));
     }

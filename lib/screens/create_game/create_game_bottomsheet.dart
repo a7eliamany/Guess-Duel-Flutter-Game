@@ -5,10 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_duel/cubit/Create%20game/create_game_cubit.dart';
 import 'package:guess_duel/cubit/Create%20game/create_game_state.dart';
 import 'package:guess_duel/cubit/start%20game/game_status_cubit.dart';
-import 'package:guess_duel/models/room_settings_model.dart';
+import 'package:guess_duel/models/Room%20Settings/room_settings_model.dart';
 import 'package:guess_duel/screens/create_game/widgets/create_game_bottomsheet_cancel_button.dart';
 import 'package:guess_duel/screens/create_game/widgets/create_game_bottomsheet_create_button.dart';
+import 'package:guess_duel/screens/create_game/widgets/round_time_selector.dart';
 import 'package:guess_duel/screens/game_flow_screen.dart';
+import 'package:guess_duel/Widgets/segmented_selector.dart';
 import 'widgets/room_name_input.dart';
 import 'widgets/private_room_card.dart';
 import 'widgets/password_input_card.dart';
@@ -47,7 +49,7 @@ class _CreateGameBottomsheetState extends State<CreateGameBottomsheet> {
       padding: EdgeInsets.only(bottom: mediaQuery.viewInsets.bottom),
       child: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           children: [
             const SizedBox(height: 12),
             Container(
@@ -98,6 +100,9 @@ class _CreateGameBottomsheetState extends State<CreateGameBottomsheet> {
                   RoomNameInput(controller: roomNameController),
                   const SizedBox(height: 24),
                   PrivateRoomCard(
+                    icon: Icons.lock,
+                    title: "Private Room",
+                    subtitle: "Require a password to join",
                     isPrivate: roomSettingsModel.isPrivate ?? false,
                     onChanged: (val) {
                       setState(() {
@@ -107,6 +112,7 @@ class _CreateGameBottomsheetState extends State<CreateGameBottomsheet> {
                       });
                     },
                   ),
+
                   AnimatedSize(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
@@ -131,6 +137,25 @@ class _CreateGameBottomsheetState extends State<CreateGameBottomsheet> {
                           : const SizedBox.shrink(),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  RoundTimeSelector(
+                    selectedItem: roomSettingsModel.roundTime?.toInt() ?? 30,
+                    onSelected: (value) {
+                      setState(() {
+                        roomSettingsModel = roomSettingsModel.copyWith(
+                          roundTime: RoundTimeToInt.fromInt(value),
+                        );
+                      });
+                    },
+                    isEnabled: roomSettingsModel.isTimeEnabled ?? false,
+                    onChanged: (value) {
+                      roomSettingsModel = roomSettingsModel.copyWith(
+                        isTimeEnabled: value,
+                      );
+                      setState(() {});
+                    },
+                  ),
+
                   const SizedBox(height: 48),
                   BlocConsumer<CreateRoomCubit, CreateRoomState>(
                     listener: (context, state) {

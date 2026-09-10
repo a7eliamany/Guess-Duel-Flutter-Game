@@ -5,7 +5,7 @@ import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
 import 'package:guess_duel/extensions/player_role_extension.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/models/Players/room_player_cache.dart';
-import 'package:guess_duel/models/room_settings_model.dart';
+import 'package:guess_duel/models/Room%20Settings/room_settings_model.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
@@ -40,7 +40,7 @@ class JoinRoomCubit extends Cubit<JoinRoomState> {
         return;
       }
       final PlayerModel playerData = RoomPlayerCache.toPlayerModel(
-        HiveService.playersBox.get(userID),
+        HiveService.userData.get(userID),
       );
       final RoomPlayer roomPlayerData = RoomPlayer(
         roomPlayerStatus: RoomPlayerStatus.idle,
@@ -122,7 +122,13 @@ class JoinRoomCubit extends Cubit<JoinRoomState> {
       if (!roomSettings.exists) {
         return null;
       } else {
-        return RoomSettingsModel.fromFirestore(roomSettings.data()!);
+        //save settings in Hive
+
+        final RoomSettingsModel roomSettingsModel =
+            RoomSettingsModel.fromFirestore(roomSettings.data()!);
+        await HiveService.roomSettings.put(roomId, roomSettingsModel);
+
+        return roomSettingsModel;
       }
     } catch (e) {
       emit(JoinRoomFailure(errorM: "Something Wrong"));

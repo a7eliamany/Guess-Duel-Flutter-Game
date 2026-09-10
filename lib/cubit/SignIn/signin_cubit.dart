@@ -51,7 +51,7 @@ class SigninCubit extends Cubit<SigninState> {
     final PlayerModel playerModel = RoomPlayerCache.toPlayerModel(
       roomPlayerCache,
     );
-    await HiveService.playersBox.put(uniqueID, roomPlayerCache);
+    await HiveService.userData.put(uniqueID, roomPlayerCache);
     try {
       await FirebaseFirestore.instance
           .collection(FirebaseCollections.players)

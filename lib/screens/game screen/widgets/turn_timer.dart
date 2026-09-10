@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_duel/Functions/game_utils.dart';
 import 'package:guess_duel/cubit/Player%20turn/player_turn_cubit.dart';
+import 'package:guess_duel/models/Room%20Settings/room_settings_model.dart';
+import 'package:guess_duel/services/Hive/hive_service.dart';
 
 class TurnTimer extends StatefulWidget {
   final bool isYourTurn;
@@ -16,12 +18,15 @@ class TurnTimer extends StatefulWidget {
 }
 
 class _TurnTimerState extends State<TurnTimer> {
-  int remainingTime = 40;
+  late int remainingTime;
   Timer? timer;
+  late RoomSettingsModel roomSettingsModel;
 
   @override
   void initState() {
-    if (widget.isYourTurn) {
+    roomSettingsModel = HiveService.roomSettings.get(widget.roomID);
+    if (widget.isYourTurn && roomSettingsModel.isTimeEnabled == true) {
+      remainingTime = roomSettingsModel.roundTime?.toInt() ?? 30;
       updateTimer();
     }
     super.initState();
@@ -38,7 +43,7 @@ class _TurnTimerState extends State<TurnTimer> {
     timer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (remainingTime == 0) {
         context.read<PlayerTurnCubit>().changeTurn(widget.roomID);
-        remainingTime = 40;
+        remainingTime = roomSettingsModel.roundTime?.toInt() ?? 30;
         timer?.cancel();
         return;
       } else {
@@ -53,19 +58,21 @@ class _TurnTimerState extends State<TurnTimer> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(Icons.timer, size: 20),
-        const SizedBox(width: 4),
-        Text(
-          GameUtils.getTime(remainingTime),
-          style: GoogleFonts.spaceGrotesk(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
+    return (roomSettingsModel.isTimeEnabled ?? false)
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.timer, size: 20),
+              const SizedBox(width: 4),
+              Text(
+                GameUtils.getTime(remainingTime),
+                style: GoogleFonts.spaceGrotesk(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          )
+        : const SizedBox.shrink();
   }
 }
