@@ -10,7 +10,6 @@ import 'package:guess_duel/screens/create_game/widgets/create_game_bottomsheet_c
 import 'package:guess_duel/screens/create_game/widgets/create_game_bottomsheet_create_button.dart';
 import 'package:guess_duel/screens/create_game/widgets/round_time_selector.dart';
 import 'package:guess_duel/screens/game_flow_screen.dart';
-import 'package:guess_duel/Widgets/segmented_selector.dart';
 import 'widgets/room_name_input.dart';
 import 'widgets/private_room_card.dart';
 import 'widgets/password_input_card.dart';

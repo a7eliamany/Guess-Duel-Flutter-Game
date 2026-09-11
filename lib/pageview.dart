@@ -4,6 +4,7 @@ import 'package:guess_duel/cubit/navigation%20bottom%20bar/navigation_bottombar_
 import 'package:guess_duel/screens/History%20screen/history_screen.dart';
 import 'package:guess_duel/screens/home/homepage.dart';
 import 'package:guess_duel/packages/salmon_navigation_bar.dart';
+import 'package:guess_duel/screens/profile/profile_screen.dart';
 import 'package:guess_duel/screens/rooms/rooms_screen.dart';
 
 class Pages extends StatefulWidget {
@@ -37,7 +38,12 @@ class _PagesState extends State<Pages> {
         onPageChanged: (val) {
           context.read<NavigationBottombarCubit>().changePage(val);
         },
-        children: const [Homepage(), RoomsScreen(), HistoryScreen()],
+        children: const [
+          Homepage(),
+          RoomsScreen(),
+          HistoryScreen(),
+          ProfileScreen(),
+        ],
       ),
       bottomNavigationBar: SalmonNavigationBar(pageController: controller),
     );
