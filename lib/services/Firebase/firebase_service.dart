@@ -127,4 +127,5 @@ class FirebaseCollections {
   static const String attempts = "Attempts";
   static const String roomSettings = "RoomSettings";
   static const String appConfig = "Config";
+  static const String stats = "Stats";
 }

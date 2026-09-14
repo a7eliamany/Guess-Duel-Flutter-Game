@@ -45,7 +45,7 @@ class SalmonNavigationBar extends StatelessWidget {
               SalomonBottomBarItem(
                 icon: const Icon(RemixIcons.user_line),
                 title: const Text("Profile"),
-                selectedColor: Colors.grey,
+                selectedColor: const Color(0xFF00F0FF),
               ),
             ],
           );

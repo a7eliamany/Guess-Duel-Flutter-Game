@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#cba6f7" />
+  <g transform="translate(60, 60)">
+    
+      <circle cx="0" cy="0" r="38" fill="#11111b" />
+      <ellipse cx="0" cy="8" rx="24" ry="22" fill="#ffffff" />
+      <circle cx="-12" cy="-8" r="8" fill="#89b4fa" />
+      <circle cx="12" cy="-8" r="8" fill="#89b4fa" />
+      <circle cx="-12" cy="-8" r="4" fill="#11111b" />
+      <circle cx="12" cy="-8" r="4" fill="#11111b" />
+      <!-- Toucan Beak -->
+      <path d="M -14,4 C -14,30 14,30 14,4 Z" fill="#f8c43a" />
+      <path d="M -10,16 C -10,30 10,30 10,16 Z" fill="#ef7c36" />
+    
+  </g>
+</svg>

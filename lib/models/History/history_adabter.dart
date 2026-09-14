@@ -9,7 +9,7 @@ class HistoryAdabter extends TypeAdapter<GameHistoryModel> {
   @override
   GameHistoryModel read(BinaryReader reader) {
     return GameHistoryModel(
-      dateTime: DateTime.fromMillisecondsSinceEpoch(reader.readInt()),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(reader.readInt()),
       gameId: reader.readString(),
       attemptsModel: reader.readList().cast<AttemptModel>(),
       isWin: reader.readBool(),
@@ -21,7 +21,7 @@ class HistoryAdabter extends TypeAdapter<GameHistoryModel> {
 
   @override
   void write(BinaryWriter writer, GameHistoryModel obj) {
-    writer.writeInt(obj.dateTime.millisecondsSinceEpoch);
+    writer.writeInt(obj.createdAt.millisecondsSinceEpoch);
     writer.writeString(obj.gameId);
     writer.writeList(obj.attemptsModel);
     writer.writeBool(obj.isWin);
@@ -37,12 +37,21 @@ class StatsAdapter extends TypeAdapter<StatsModel> {
 
   @override
   StatsModel read(BinaryReader reader) {
-    return StatsModel(gamesPlayed: reader.readInt(), wins: reader.readInt());
+    return StatsModel(
+      gamesPlayed: reader.readInt(),
+      wins: reader.readInt(),
+      bestWinStreak: reader.readInt(),
+      winStreak: reader.readInt(),
+      experiences: reader.readInt(),
+    );
   }
 
   @override
   void write(BinaryWriter writer, StatsModel obj) {
     writer.writeInt(obj.gamesPlayed);
     writer.writeInt(obj.wins);
+    writer.writeInt(obj.bestWinStreak);
+    writer.writeInt(obj.winStreak);
+    writer.writeInt(obj.experiences);
   }
 }

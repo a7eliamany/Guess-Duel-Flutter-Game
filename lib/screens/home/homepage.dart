@@ -5,6 +5,7 @@ import 'package:guess_duel/screens/home/widgets/game_code_section.dart';
 import 'package:guess_duel/screens/home/widgets/home_header.dart';
 import 'package:guess_duel/screens/home/widgets/join_game_button.dart';
 import 'package:guess_duel/screens/home/widgets/offline_button.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class Homepage extends HookWidget {
   const Homepage({super.key});
@@ -20,6 +21,7 @@ class Homepage extends HookWidget {
       //     IconButton(
       //       onPressed: () {
       //         SharedPrefService.clear();
+      //         // HiveService.playersBox.clear();
       //       },
       //       icon: const Icon(Icons.logout),
       //     ),

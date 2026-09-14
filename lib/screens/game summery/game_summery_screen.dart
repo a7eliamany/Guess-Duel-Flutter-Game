@@ -53,7 +53,7 @@ class GameSummeryScreen extends HookWidget {
                       // ── Result Hero Section ──
                       ResultHeroSection(
                         isWin: gameHistoryModel.isWin,
-                        dateTime: gameHistoryModel.dateTime,
+                        dateTime: gameHistoryModel.createdAt,
                         attemptCount: gameHistoryModel.attemptsModel.length,
                         accuracy: attemptsAccuracy,
                         secretCode: gameHistoryModel.secretCode,

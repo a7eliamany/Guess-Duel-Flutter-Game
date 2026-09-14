@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#89dceb" />
+  <g transform="translate(60, 60)">
+    
+      <circle cx="0" cy="-2" r="38" fill="#f8c43a" />
+      <circle cx="-14" cy="-8" r="4.5" fill="#11111b" />
+      <circle cx="14" cy="-8" r="4.5" fill="#11111b" />
+      <circle cx="-12" cy="-10" r="1.5" fill="#ffffff" />
+      <circle cx="16" cy="-10" r="1.5" fill="#ffffff" />
+      <!-- Bill -->
+      <ellipse cx="0" cy="8" rx="16" ry="10" fill="#ef7c36" />
+      <circle cx="-18" cy="2" r="6" fill="#f38ba8" opacity="0.6" />
+      <circle cx="18" cy="2" r="6" fill="#f38ba8" opacity="0.6" />
+    
+  </g>
+</svg>

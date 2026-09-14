@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -71,66 +70,60 @@ class RecentFormChartWidget extends StatelessWidget {
         const SizedBox(height: 12),
 
         // Chart Panel
-        ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-            child: Container(
-              height: 128,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-              decoration: BoxDecoration(
-                color: surfaceContainerLow.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: List.generate(barHeights.length, (index) {
-                  final heightFactor = barHeights[index].clamp(0.1, 1.0);
-                  final isWin =
-                      index < isWinList.length ? isWinList[index] : true;
-
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 3),
-                      child: TweenAnimationBuilder<double>(
-                        tween: Tween<double>(begin: 0.0, end: heightFactor),
-                        duration: Duration(milliseconds: 400 + (index * 60)),
-                        curve: Curves.easeOutCubic,
-                        builder: (context, animatedFactor, child) {
-                          return FractionallySizedBox(
-                            heightFactor: animatedFactor,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: isWin
-                                    ? primaryCyan
-                                    : errorColor.withValues(alpha: 0.4),
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(999),
-                                ),
-                                boxShadow: isWin
-                                    ? [
-                                        BoxShadow(
-                                          color: primaryCyan
-                                              .withValues(alpha: 0.45),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, -1),
-                                        ),
-                                      ]
-                                    : null,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                }),
-              ),
+        Container(
+          height: 128,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+          decoration: BoxDecoration(
+            color: surfaceContainerLow.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.05),
+              width: 1,
             ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: List.generate(barHeights.length, (index) {
+              final heightFactor = barHeights[index].clamp(0.1, 1.0);
+              final isWin = index < isWinList.length ? isWinList[index] : true;
+
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween<double>(begin: 0.0, end: heightFactor),
+                    duration: Duration(milliseconds: 2000 + (index * 60)),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, animatedFactor, child) {
+                      return FractionallySizedBox(
+                        heightFactor: animatedFactor,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: isWin
+                                ? primaryCyan
+                                : errorColor.withValues(alpha: 0.4),
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(999),
+                            ),
+                            boxShadow: isWin
+                                ? [
+                                    BoxShadow(
+                                      color: primaryCyan.withValues(
+                                        alpha: 0.45,
+                                      ),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, -1),
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              );
+            }),
           ),
         ),
       ],

@@ -73,7 +73,7 @@ class GameScreen extends HookWidget {
                   Divider(
                     color: const Color(0xFF767575).withValues(alpha: 0.1),
                   ),
-                  const AttemptsHistory(),
+                  AttemptsHistory(roomId: roomID),
                 ],
               ),
             ),

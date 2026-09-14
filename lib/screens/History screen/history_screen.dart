@@ -29,7 +29,7 @@ class HistoryScreen extends HookWidget {
         (index) => GameHistoryModel(
           gameId: 'ROOM-0000',
           isWin: index == 1 ? false : true,
-          dateTime: DateTime.now(),
+          createdAt: DateTime.now(),
           attemptsModel: [],
           players: [],
           secretCode: '0000',
@@ -103,7 +103,7 @@ class HistoryScreen extends HookWidget {
                                 },
                                 result: gameResult,
                                 date: DateFormat.yMd().format(
-                                  gameHistoryModel.dateTime,
+                                  gameHistoryModel.createdAt,
                                 ),
                                 attempts: gameHistoryModel.attemptsModel.length
                                     .toString(),

@@ -2,7 +2,7 @@ import 'package:guess_duel/models/Attempts/attempts_model.dart';
 import 'package:guess_duel/models/offline/offline_game_model.dart';
 
 class GameHistoryModel {
-  final DateTime dateTime;
+  final DateTime createdAt;
   final String gameId;
   final String secretCode;
   final List<AttemptModel> attemptsModel;
@@ -11,7 +11,7 @@ class GameHistoryModel {
   final OfflineGameModel? offlineGameModel;
 
   GameHistoryModel({
-    required this.dateTime,
+    required this.createdAt,
     required this.gameId,
     required this.attemptsModel,
     required this.isWin,
@@ -21,7 +21,7 @@ class GameHistoryModel {
   });
 
   GameHistoryModel copyWith({
-    DateTime? dateTime,
+    DateTime? createdAt,
     String? gameId,
     List<AttemptModel>? attemptsModel,
     bool? isWin,
@@ -30,7 +30,7 @@ class GameHistoryModel {
     String? secretCode,
   }) {
     return GameHistoryModel(
-      dateTime: dateTime ?? this.dateTime,
+      createdAt: createdAt ?? this.createdAt,
       gameId: gameId ?? this.gameId,
       attemptsModel: attemptsModel ?? this.attemptsModel,
       isWin: isWin ?? this.isWin,
@@ -42,15 +42,57 @@ class GameHistoryModel {
 }
 
 class StatsModel {
+  final int experiences;
   final int gamesPlayed;
   final int wins;
-  String get winRate => ((wins / gamesPlayed) * 100).toStringAsFixed(1);
-  StatsModel({this.gamesPlayed = 0, this.wins = 0});
+  final int winStreak;
+  final int bestWinStreak;
 
-  StatsModel copyWith({int? gamesPlayed, int? wins}) {
+  String get winRate => ((wins / gamesPlayed) * 100).toStringAsFixed(1);
+  int get losess => gamesPlayed - wins;
+  int get currentLevel => (experiences / 200).floor();
+
+  StatsModel({
+    this.gamesPlayed = 0,
+    this.wins = 0,
+    this.experiences = 0,
+    this.bestWinStreak = 0,
+    this.winStreak = 0,
+  });
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      "experiences": experiences,
+      "gamesPlayed": gamesPlayed,
+      "wins": wins,
+      "winStreak": winStreak,
+      "bestWinStreak": bestWinStreak,
+    };
+  }
+
+  factory StatsModel.fromFirestore(Map<String, dynamic> map) {
+    return StatsModel(
+      experiences: map["experiences"] ?? 0,
+      gamesPlayed: map["gamesPlayed"] ?? 0,
+      wins: map["wins"] ?? 0,
+      winStreak: map["winStreak"] ?? 0,
+      bestWinStreak: map["bestWinStreak"] ?? 0,
+    );
+  }
+
+  StatsModel copyWith({
+    int? gamesPlayed,
+    int? wins,
+    int? winStreak,
+    int? bestWinStreak,
+    int? experiences,
+  }) {
     return StatsModel(
       gamesPlayed: gamesPlayed ?? this.gamesPlayed,
       wins: wins ?? this.wins,
+      winStreak: winStreak ?? this.winStreak,
+      bestWinStreak: bestWinStreak ?? this.bestWinStreak,
+      experiences: experiences ?? this.experiences,
     );
   }
 }

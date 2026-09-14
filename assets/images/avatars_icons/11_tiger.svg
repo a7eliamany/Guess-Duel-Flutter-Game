@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#fab387" />
+  <g transform="translate(60, 60)">
+    
+      <circle cx="-28" cy="-28" r="12" fill="#ef7c36" />
+      <circle cx="-28" cy="-28" r="7" fill="#f5c2e7" />
+      <circle cx="28" cy="-28" r="12" fill="#ef7c36" />
+      <circle cx="28" cy="-28" r="7" fill="#f5c2e7" />
+      <circle cx="0" cy="0" r="40" fill="#ef7c36" />
+      <path d="M 0,-38 L -6,-28 L 6,-28 Z" fill="#11111b" />
+      <path d="M -38,0 L -26,-5 L -26,5 Z" fill="#11111b" />
+      <path d="M 38,0 L 26,-5 L 26,5 Z" fill="#11111b" />
+      <ellipse cx="0" cy="12" rx="18" ry="14" fill="#ffffff" />
+      <circle cx="-15" cy="-6" r="4.5" fill="#11111b" />
+      <circle cx="15" cy="-6" r="4.5" fill="#11111b" />
+      <polygon points="0,5 -5,1 5,1" fill="#f5c2e7" />
+      <path d="M -4,10 Q 0,14 4,10" fill="none" stroke="#11111b" stroke-width="3" stroke-linecap="round" />
+    
+  </g>
+</svg>

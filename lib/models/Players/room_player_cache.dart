@@ -6,7 +6,7 @@ class RoomPlayerCache {
   final String firebaseID;
   final String username;
   final int lvl;
-
+  final String avatarID;
   final String playerRole;
   final String roomPlayerStatus;
   final String? secretCode;
@@ -23,6 +23,7 @@ class RoomPlayerCache {
     this.secretCode,
     required this.lastSeen,
     required this.createdAt,
+    required this.avatarID,
   });
 
   factory RoomPlayerCache.fromModel(RoomPlayer p) {
@@ -36,6 +37,7 @@ class RoomPlayerCache {
       secretCode: p.secretCode,
       lastSeen: p.playerModel.lastSeen.millisecondsSinceEpoch,
       createdAt: p.playerModel.createdAt.millisecondsSinceEpoch,
+      avatarID: p.playerModel.avatarID,
     );
   }
 
@@ -45,7 +47,7 @@ class RoomPlayerCache {
         firebaseID: c.firebaseID,
         username: c.username,
         lvl: c.lvl,
-
+        avatarID: c.avatarID,
         id: c.firebaseID,
         lastSeen: Timestamp.fromMillisecondsSinceEpoch(c.lastSeen),
         createdAt: Timestamp.fromMillisecondsSinceEpoch(c.createdAt),
@@ -64,8 +66,34 @@ class RoomPlayerCache {
       username: c.username,
       lvl: c.lvl,
       id: c.firebaseID,
+      avatarID: c.avatarID,
       lastSeen: Timestamp.fromMillisecondsSinceEpoch(c.lastSeen),
       createdAt: Timestamp.fromMillisecondsSinceEpoch(c.createdAt),
+    );
+  }
+
+  //copy with
+  RoomPlayerCache copyWith({
+    String? firebaseID,
+    String? username,
+    int? lvl,
+    String? avatarID,
+    String? playerRole,
+    String? roomPlayerStatus,
+    String? secretCode,
+    int? lastSeen,
+    int? createdAt,
+  }) {
+    return RoomPlayerCache(
+      firebaseID: firebaseID ?? this.firebaseID,
+      username: username ?? this.username,
+      lvl: lvl ?? this.lvl,
+      avatarID: avatarID ?? this.avatarID,
+      playerRole: playerRole ?? this.playerRole,
+      roomPlayerStatus: roomPlayerStatus ?? this.roomPlayerStatus,
+      secretCode: secretCode ?? this.secretCode,
+      lastSeen: lastSeen ?? this.lastSeen,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 }

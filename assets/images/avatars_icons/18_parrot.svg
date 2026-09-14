@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#94e2d5" />
+  <g transform="translate(60, 60)">
+    
+      <circle cx="0" cy="0" r="38" fill="#a6e3a1" />
+      <path d="M -20,-20 Q 0,-40 20,-20" stroke="#f8c43a" stroke-width="8" fill="none" stroke-linecap="round" />
+      <!-- Eye patches -->
+      <circle cx="-14" cy="-6" r="10" fill="#ffffff" />
+      <circle cx="14" cy="-6" r="10" fill="#ffffff" />
+      <circle cx="-14" cy="-6" r="4" fill="#11111b" />
+      <circle cx="14" cy="-6" r="4" fill="#11111b" />
+      <!-- Big Beak -->
+      <path d="M 0,2 Q -12,10 0,22 Q 12,10 0,2 Z" fill="#11111b" />
+    
+  </g>
+</svg>

@@ -11,7 +11,7 @@ class RoomPlayerCacheAdapter extends TypeAdapter<RoomPlayerCache> {
       firebaseID: reader.readString(),
       username: reader.readString(),
       lvl: reader.readInt(),
-
+      avatarID: reader.readString(),
       playerRole: reader.readString(),
       roomPlayerStatus: reader.readString(),
       secretCode: reader.readString(),
@@ -25,7 +25,7 @@ class RoomPlayerCacheAdapter extends TypeAdapter<RoomPlayerCache> {
     writer.writeString(obj.firebaseID);
     writer.writeString(obj.username);
     writer.writeInt(obj.lvl);
-
+    writer.writeString(obj.avatarID);
     writer.writeString(obj.playerRole);
     writer.writeString(obj.roomPlayerStatus);
     writer.writeString(obj.secretCode ?? "");

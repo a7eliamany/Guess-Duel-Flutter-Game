@@ -26,8 +26,8 @@ class PerformanceSnippetsWidget extends StatelessWidget {
   const PerformanceSnippetsWidget({
     super.key,
     this.items,
-    this.currentStreak = 7,
-    this.bestStreak = 12,
+    this.currentStreak = 0,
+    this.bestStreak = 0,
   });
 
   @override
@@ -35,7 +35,8 @@ class PerformanceSnippetsWidget extends StatelessWidget {
     const primaryFixed = Color(0xFF7DF4FF);
     const onSurface = Color(0xFFDFE2F2);
 
-    final snippetList = items ??
+    final snippetList =
+        items ??
         [
           PerformanceSnippetItem(
             value: currentStreak.toString(),

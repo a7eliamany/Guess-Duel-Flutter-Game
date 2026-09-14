@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:guess_duel/cubit/SignIn/signin_cubit.dart';
-import 'package:guess_duel/cubit/SignIn/signin_state.dart';
+import 'package:guess_duel/cubit/get%20started/get_started_cubit.dart';
+import 'package:guess_duel/cubit/get%20started/get_started_state.dart';
 import 'package:guess_duel/pageview.dart';
 import 'package:guess_duel/screens/sign_in/widgets/atmospheric_background.dart';
 import 'package:guess_duel/screens/sign_in/widgets/feature_item.dart';
@@ -16,16 +16,16 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF131313),
-      body: BlocConsumer<SigninCubit, SigninState>(
+      body: BlocConsumer<GetStartedCubit, GetStartedState>(
         listener: (context, state) {
-          if (state is SigninSuccess) {
+          if (state is GetStartedSuccess) {
             Get.offAll(() => const Pages());
-          } else if (state is SigninFailure) {
+          } else if (state is GetStartedFailure) {
             Get.snackbar("Error", state.errorMessage);
           }
         },
         builder: (context, state) {
-          final bool isLoading = state is SigninLoading;
+          final bool isLoading = state is GetStartedLoading;
           return Stack(
             children: [
               // Atmospheric Background
@@ -48,7 +48,9 @@ class SignInScreen extends StatelessWidget {
                         SignInForm(
                           isLoading: isLoading,
                           onSignIn: (username) {
-                            context.read<SigninCubit>().getStarted(username);
+                            context.read<GetStartedCubit>().getStarted(
+                              username,
+                            );
                           },
                         ),
                         const SizedBox(height: 48),

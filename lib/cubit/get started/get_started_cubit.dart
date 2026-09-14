@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guess_duel/Functions/random_f.dart';
-import 'package:guess_duel/cubit/SignIn/signin_state.dart';
+import 'package:guess_duel/constants/app_avatars.dart';
+import 'package:guess_duel/cubit/get%20started/get_started_state.dart';
 import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
 import 'package:guess_duel/extensions/player_role_extension.dart';
+import 'package:guess_duel/models/History/history_model.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/models/Players/room_player_cache.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
@@ -11,9 +13,9 @@ import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class SigninCubit extends Cubit<SigninState> {
+class GetStartedCubit extends Cubit<GetStartedState> {
   final InternetCubit internetCubit;
-  SigninCubit(this.internetCubit) : super(SigninInitial());
+  GetStartedCubit(this.internetCubit) : super(GetStartedInitial());
 
   // void checkSignin() async {
   //   final hasNet = await internetCubit.hasInternet();
@@ -30,17 +32,16 @@ class SigninCubit extends Cubit<SigninState> {
   // }
 
   void getStarted(String username) async {
-    final String uniqueUsername = "${username}_${RandomF.getUniqueID(5)}";
+    emit(GetStartedLoading());
     final String uniqueID = "1${RandomF.getUniqueID(14)}";
 
-    emit(SigninLoading());
-    await Future.delayed(const Duration(seconds: 2));
     await SharedPrefService.setId(uniqueID);
-    await SharedPrefService.setUsername(uniqueUsername);
+    await SharedPrefService.setUsername(username);
 
     final RoomPlayerCache roomPlayerCache = RoomPlayerCache(
       firebaseID: uniqueID,
-      username: uniqueUsername,
+      avatarID: AppAvatars.getRandomAvatar().id,
+      username: username,
       lvl: 1,
       playerRole: PlayerRole.player.toFirestore(),
       roomPlayerStatus: RoomPlayerStatus.idle.toFireStore(),
@@ -52,15 +53,23 @@ class SigninCubit extends Cubit<SigninState> {
       roomPlayerCache,
     );
     await HiveService.userData.put(uniqueID, roomPlayerCache);
+    await HiveService.statsBox.put("Stats", StatsModel());
     try {
       await FirebaseFirestore.instance
           .collection(FirebaseCollections.players)
           .doc(uniqueID)
           .set(playerModel.toFirestore());
 
-      emit(SigninSuccess());
+      await FirebaseFirestore.instance
+          .collection(FirebaseCollections.players)
+          .doc(uniqueID)
+          .collection(FirebaseCollections.stats)
+          .doc(uniqueID)
+          .set(StatsModel().toFirestore());
+
+      emit(GetStartedSuccess());
     } on FirebaseException catch (e) {
-      emit(SigninFailure(e.message ?? "Error"));
+      emit(GetStartedFailure(e.message ?? "Error"));
     }
   }
 
@@ -75,13 +84,13 @@ class SigninCubit extends Cubit<SigninState> {
   }
 
   // for debugging
-  void signOut() async {
-    emit(SigninLoading());
+  void getOut() async {
+    emit(GetStartedLoading());
     try {
       await FirebaseService.signOut();
-      emit(SignOut("Signed out successfully"));
+      emit(GetStartedOut("Signed out successfully"));
     } on FirebaseAuthException catch (e) {
-      emit(SigninFailure(e.code.toString()));
+      emit(GetStartedFailure(e.code.toString()));
     }
   }
 }

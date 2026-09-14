@@ -1,37 +1,44 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:guess_duel/constants/app_avatars.dart';
+import 'package:guess_duel/cubit/profile/profile_cubit.dart';
+import 'package:guess_duel/screens/profile/widgets/user_name_text_field.dart';
+import 'package:intl/intl.dart';
 
 /// Profile Header Widget displaying user avatar with gradient glow border,
 /// online status indicator, name, handle, join date, and rank badge.
-class ProfileHeaderWidget extends StatelessWidget {
-  final String name;
+class ProfileHeaderWidget extends HookWidget {
   final String username;
-  final String joinDate;
-  final String rank;
-  final bool isOnline;
-  final String? avatarUrl;
+  final int createdAt;
+  final String avatarID;
+  final String firebaseID;
+  final bool isLoading;
+  final bool isEditing;
 
   const ProfileHeaderWidget({
     super.key,
-    this.name = 'Ahmed',
-    this.username = '@ahmed123',
-    this.joinDate = 'Player since Aug 2026',
-    this.rank = 'Duel Master',
-    this.isOnline = true,
-    this.avatarUrl,
+    required this.username,
+    required this.createdAt,
+    required this.avatarID,
+    required this.firebaseID,
+    required this.isEditing,
+    required this.isLoading,
   });
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController usernameController = useTextEditingController(
+      text: username,
+    );
+
     const primaryCyan = Color(0xFF00F0FF);
-    const primaryFixed = Color(0xFF7DF4FF);
-    const onSurface = Color(0xFFDFE2F2);
+
     const onSurfaceVariant = Color(0xFFB9CACB);
-    const surfaceContainer = Color(0xFF1B1F2B);
-    const surfaceContainerHighest = Color(0xFF313441);
+
     const surfaceBg = Color(0xFF0F131E);
-    const outlineVariant = Color(0xFF3B494B);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -45,82 +52,60 @@ class ProfileHeaderWidget extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               // Gradient outer ring
-              Container(
-                width: 112,
-                height: 112,
-                padding: const EdgeInsets.all(2.5),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      primaryCyan,
-                      primaryCyan.withValues(alpha: 0.2),
-                      Colors.transparent,
-                    ],
-                  ),
-                ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: surfaceContainerHighest,
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: avatarUrl != null
-                      ? Image.network(
-                          avatarUrl!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Center(
-                            child: Icon(
-                              Icons.person_rounded,
-                              size: 48,
-                              color: primaryCyan,
-                            ),
-                          ),
-                        )
-                      : const Center(
-                          child: Icon(
-                            Icons.person_rounded,
-                            size: 48,
-                            color: primaryCyan,
-                          ),
+              GestureDetector(
+                onTap: () {
+                  context.read<ProfileCubit>().avatarOnTap();
+                },
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Center(
+                        child: SvgPicture.asset(
+                          AppAvatars.getAvatarById(avatarID).assetPath,
                         ),
-                ),
+                      ),
+                // .animate(
+                //   autoPlay: true,
+                //   onPlay: (controller) {
+                //     controller.repeat(reverse: true);
+                //   },
+                // )
+                // .shimmer(
+                //   duration: 2.seconds,
+                //   delay: 1.seconds,
+                //   curve: Curves.easeInCubic,
+                // ),
               ),
 
               // Online status indicator dot
-              if (isOnline)
-                Positioned(
-                  bottom: 4,
-                  right: 4,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: surfaceBg,
-                    ),
-                    child: Center(
-                      child: Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: primaryCyan,
-                          boxShadow: [
-                            BoxShadow(
-                              color: primaryCyan.withValues(alpha: 0.85),
-                              blurRadius: 8,
-                              spreadRadius: 1,
-                            ),
-                          ],
-                        ),
+              Positioned(
+                bottom: 4,
+                right: 4,
+                child: Container(
+                  width: 20,
+                  height: 20,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: surfaceBg,
+                  ),
+                  child: Center(
+                    child: Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: primaryCyan,
+                        boxShadow: [
+                          BoxShadow(
+                            color: primaryCyan.withValues(alpha: 0.85),
+                            blurRadius: 8,
+                            spreadRadius: 1,
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
+              ),
             ],
           ),
         ),
@@ -128,97 +113,61 @@ class ProfileHeaderWidget extends StatelessWidget {
         const SizedBox(height: 16),
 
         // User Display Name
-        Text(
-          name,
-          style: GoogleFonts.spaceGrotesk(
-            fontSize: 26,
-            fontWeight: FontWeight.w700,
-            color: onSurface,
-            letterSpacing: -0.5,
-          ),
+        UserNameHandlerWidget(
+          isEditing: isEditing,
+          usernameController: usernameController,
+          username: username,
         ),
-
-        const SizedBox(height: 4),
-
-        // Handle & Join Date
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        // ID & Join Date
+        Column(
           children: [
-            Text(
-              username,
-              style: GoogleFonts.inter(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: onSurfaceVariant,
+            RichText(
+              text: TextSpan(
+                text: 'ID  ',
+                style: GoogleFonts.inter(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: onSurfaceVariant,
+                ),
+                children: [
+                  TextSpan(
+                    text: firebaseID,
+                    style: GoogleFonts.inter(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: primaryCyan,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              width: 4,
-              height: 4,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: outlineVariant,
-              ),
-            ),
-            Text(
-              joinDate,
-              style: GoogleFonts.inter(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: onSurfaceVariant,
+            const SizedBox(height: 10),
+            RichText(
+              text: TextSpan(
+                text: 'Player since ',
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  color: onSurfaceVariant,
+                ),
+                children: [
+                  TextSpan(
+                    text: DateFormat.yMMMMd().format(
+                      DateTime.fromMillisecondsSinceEpoch(createdAt),
+                    ),
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
 
         const SizedBox(height: 16),
-
-        // Rank Badge
-        ClipRRect(
-          borderRadius: BorderRadius.circular(999),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: surfaceContainer.withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: primaryCyan.withValues(alpha: 0.2),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: primaryCyan.withValues(alpha: 0.15),
-                    blurRadius: 15,
-                    spreadRadius: -3,
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.shield_outlined,
-                    size: 18,
-                    color: primaryFixed,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    rank.toUpperCase(),
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.8,
-                      color: primaryFixed,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }

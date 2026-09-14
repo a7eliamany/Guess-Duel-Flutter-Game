@@ -103,7 +103,6 @@ class JoinRoomCubit extends Cubit<JoinRoomState> {
       } else {
         // 2: room is not private
 
-        emit(JoinRoomLoading());
         await joinRoom(roomId);
       }
     } catch (e) {

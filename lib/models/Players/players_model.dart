@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:guess_duel/constants/app_avatars.dart';
 import 'package:guess_duel/extensions/player_role_extension.dart';
 
 class PlayerModel {
@@ -6,6 +7,7 @@ class PlayerModel {
   final String firebaseID;
   final String id;
   final int lvl;
+  final String avatarID;
 
   final Timestamp lastSeen;
   final Timestamp createdAt;
@@ -18,6 +20,7 @@ class PlayerModel {
     required this.username,
     required this.lastSeen,
     required this.createdAt,
+    required this.avatarID,
   });
 
   factory PlayerModel.fromFirestore(Map<String, dynamic> data) {
@@ -29,6 +32,7 @@ class PlayerModel {
       username: data['username'] ?? '',
       lastSeen: data['lastSeen'] ?? Timestamp.now(),
       createdAt: data['createdAt'] ?? Timestamp.now(),
+      avatarID: data['avatarID'] ?? AppAvatars.list.first.id,
     );
   }
 
@@ -37,7 +41,7 @@ class PlayerModel {
       'id': id,
       'lvl': lvl,
       'firebaseID': firebaseID,
-
+      'avatarID': avatarID,
       'username': username,
       'createdAt': createdAt,
       'lastSeen': lastSeen,

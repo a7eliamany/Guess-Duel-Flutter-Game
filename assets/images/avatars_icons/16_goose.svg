@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#a6e3a1" />
+  <g transform="translate(60, 60)">
+    
+      <circle cx="0" cy="0" r="38" fill="#ffffff" />
+      <circle cx="-14" cy="-8" r="4.5" fill="#11111b" />
+      <circle cx="14" cy="-8" r="4.5" fill="#11111b" />
+      <!-- Knob & Bill -->
+      <ellipse cx="0" cy="-2" rx="8" ry="6" fill="#ef7c36" />
+      <polygon points="0,2 -12,18 12,18" fill="#ef7c36" />
+      <circle cx="-18" cy="0" r="5" fill="#f38ba8" opacity="0.5" />
+      <circle cx="18" cy="0" r="5" fill="#f38ba8" opacity="0.5" />
+    
+  </g>
+</svg>

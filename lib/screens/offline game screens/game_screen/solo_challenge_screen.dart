@@ -167,6 +167,7 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                                   players: ["me", "Solo"],
                                   secretCode: updatedData.secretCode,
                                   offlineGameModel: updatedData,
+                                  isOffline: true,
                                 );
                                 HiveService.offlineGameBox.put(
                                   updatedData.id,

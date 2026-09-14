@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#fab387" />
+  <g transform="translate(60, 60)">
+    
+      <circle cx="0" cy="0" r="46" fill="#ef7c36" />
+      <circle cx="0" cy="0" r="32" fill="#f8c43a" />
+      <circle cx="-24" cy="-22" r="8" fill="#f8c43a" />
+      <circle cx="24" cy="-22" r="8" fill="#f8c43a" />
+      <circle cx="-11" cy="-6" r="3.5" fill="#11111b" />
+      <circle cx="11" cy="-6" r="3.5" fill="#11111b" />
+      <ellipse cx="0" cy="8" rx="12" ry="9" fill="#ffffff" />
+      <polygon points="0,4 -4,0 4,0" fill="#11111b" />
+      <path d="M -3,9 Q 0,12 3,9" fill="none" stroke="#11111b" stroke-width="3" stroke-linecap="round" />
+    
+  </g>
+</svg>

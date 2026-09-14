@@ -1,22 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guess_duel/models/History/history_model.dart';
 
 /// 2x2 Grid displaying user statistics:
 /// Games Played, Wins, Losses, and Win Rate (highlighted).
 class StatsGridWidget extends StatelessWidget {
-  final int gamesPlayed;
-  final int wins;
-  final int losses;
-  final String winRate;
+  final StatsModel statsModel;
 
-  const StatsGridWidget({
-    super.key,
-    this.gamesPlayed = 128,
-    this.wins = 76,
-    this.losses = 52,
-    this.winRate = '59.4%',
-  });
+  const StatsGridWidget({super.key, required this.statsModel});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +32,7 @@ class StatsGridWidget extends StatelessWidget {
               width: cardWidth,
               icon: Icons.sports_esports_outlined,
               iconColor: primaryFixed,
-              value: gamesPlayed.toString(),
+              value: statsModel.gamesPlayed.toString(),
               label: 'GAMES PLAYED',
               glowColor: primaryCyan,
               valueColor: onSurface,
@@ -52,7 +44,7 @@ class StatsGridWidget extends StatelessWidget {
               width: cardWidth,
               icon: Icons.emoji_events_outlined,
               iconColor: tertiaryFixed,
-              value: wins.toString(),
+              value: statsModel.wins.toString(),
               label: 'WINS',
               glowColor: tertiaryFixed,
               valueColor: onSurface,
@@ -64,7 +56,7 @@ class StatsGridWidget extends StatelessWidget {
               width: cardWidth,
               icon: Icons.close_rounded,
               iconColor: errorColor,
-              value: losses.toString(),
+              value: statsModel.losess.toString(),
               label: 'LOSSES',
               glowColor: errorColor,
               valueColor: onSurface,
@@ -76,7 +68,7 @@ class StatsGridWidget extends StatelessWidget {
               width: cardWidth,
               icon: Icons.bar_chart_rounded,
               iconColor: primaryCyan,
-              value: winRate,
+              value: "${statsModel.winRate} %",
               label: 'WIN RATE',
               glowColor: primaryCyan,
               valueColor: primaryCyan,
@@ -120,102 +112,90 @@ class _StatCard extends StatelessWidget {
 
     return SizedBox(
       width: width,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: isHighlighted
-                  ? null
-                  : surfaceContainer.withValues(alpha: 0.6),
-              gradient: isHighlighted
-                  ? LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        surfaceContainer,
-                        primaryCyan.withValues(alpha: 0.08),
-                      ],
-                    )
-                  : null,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isHighlighted
-                    ? primaryCyan.withValues(alpha: 0.25)
-                    : Colors.white.withValues(alpha: 0.05),
-                width: 1,
-              ),
-              boxShadow: isHighlighted
-                  ? [
-                      BoxShadow(
-                        color: primaryCyan.withValues(alpha: 0.12),
-                        blurRadius: 15,
-                        spreadRadius: -3,
-                      ),
-                    ]
-                  : null,
-            ),
-            child: Stack(
-              clipBehavior: Clip.hardEdge,
-              children: [
-                // Corner ambient radial glow
-                Positioned(
-                  top: -20,
-                  right: -20,
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: glowColor.withValues(alpha: 0.12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: glowColor.withValues(alpha: 0.2),
-                          blurRadius: 20,
-                          spreadRadius: 8,
-                        ),
-                      ],
-                    ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isHighlighted ? null : surfaceContainer.withValues(alpha: 0.6),
+          gradient: isHighlighted
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    surfaceContainer,
+                    primaryCyan.withValues(alpha: 0.08),
+                  ],
+                )
+              : null,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isHighlighted
+                ? primaryCyan.withValues(alpha: 0.25)
+                : Colors.white.withValues(alpha: 0.05),
+            width: 1,
+          ),
+          boxShadow: isHighlighted
+              ? [
+                  BoxShadow(
+                    color: primaryCyan.withValues(alpha: 0.12),
+                    blurRadius: 15,
+                    spreadRadius: -3,
                   ),
-                ),
-
-                // Card Content
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      icon,
-                      color: iconColor,
-                      size: 24,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      value,
-                      style: GoogleFonts.spaceGrotesk(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: valueColor,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      label,
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.8,
-                        color: labelColor,
-                      ),
+                ]
+              : null,
+        ),
+        child: Stack(
+          clipBehavior: Clip.hardEdge,
+          children: [
+            // Corner ambient radial glow
+            Positioned(
+              top: -20,
+              right: -20,
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: glowColor.withValues(alpha: 0.12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: glowColor.withValues(alpha: 0.2),
+                      blurRadius: 20,
+                      spreadRadius: 8,
                     ),
                   ],
                 ),
+              ),
+            ),
+
+            // Card Content
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, color: iconColor, size: 24),
+                const SizedBox(height: 12),
+                Text(
+                  value,
+                  style: GoogleFonts.spaceGrotesk(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: valueColor,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  label,
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.8,
+                    color: labelColor,
+                  ),
+                ),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );

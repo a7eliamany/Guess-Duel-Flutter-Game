@@ -30,6 +30,7 @@ class HiveService {
     await Hive.openBox(HiveBoxes.players);
     await Hive.openBox(HiveBoxes.attempts);
     await Hive.openBox(HiveBoxes.gameHistory);
+    await Hive.openBox(HiveBoxes.recentGameHistory);
     await Hive.openBox(HiveBoxes.stats);
     await Hive.openBox(HiveBoxes.offlineGame);
     await Hive.openBox(HiveBoxes.roomSettings);
@@ -41,6 +42,7 @@ class HiveService {
   static Box get roomSettings => Hive.box(HiveBoxes.roomSettings);
   static Box get attemptsBox => Hive.box(HiveBoxes.attempts);
   static Box get gameHistoryBox => Hive.box(HiveBoxes.gameHistory);
+  static Box get recentGameHistoryBox => Hive.box(HiveBoxes.recentGameHistory);
   static Box get statsBox => Hive.box(HiveBoxes.stats);
   static Box get offlineGameBox => Hive.box(HiveBoxes.offlineGame);
   static Box get userData => Hive.box(HiveBoxes.userData);
@@ -83,6 +85,7 @@ class HiveBoxes {
   static const offlineGame = 'OfflineGame';
   static const roomSettings = 'roomSettings';
   static const userData = 'userData';
+  static const recentGameHistory = 'recentGameHistory';
 }
 
 class HiveBoxPlayers {

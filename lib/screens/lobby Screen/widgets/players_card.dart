@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:guess_duel/constants/app_avatars.dart';
 import 'package:guess_duel/extensions/player_role_extension.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:remixicon/remixicon.dart';
@@ -10,7 +12,7 @@ class PlayerOneHost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20),
       height: 82,
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: .3),
@@ -18,15 +20,17 @@ class PlayerOneHost extends StatelessWidget {
       ),
       child: Center(
         child: ListTile(
-          trailing: Icon(RemixIcons.check_double_fill, color: Colors.blue),
-          title: Text(
-            "${roomPlayer.playerModel.username}(host)",
-
-            style: TextStyle(fontWeight: FontWeight.bold),
+          trailing: const Icon(
+            RemixIcons.check_double_fill,
+            color: Colors.blue,
           ),
-          leading: CircleAvatar(
-            radius: 30,
-            child: Icon(RemixIcons.user_5_fill),
+          title: Text(
+            "${roomPlayer.playerModel.username} (host)",
+
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          leading: SvgPicture.asset(
+            AppAvatars.getAvatarById(roomPlayer.playerModel.avatarID).assetPath,
           ),
         ),
       ),
@@ -73,14 +77,14 @@ class PlayerPassive extends StatelessWidget {
                   children: [
                     Text(
                       'Player $number',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFFffffff),
                       ),
                     ),
-                    SizedBox(height: 4),
-                    Text(
+                    const SizedBox(height: 4),
+                    const Text(
                       'SEARCHING...',
                       style: TextStyle(
                         fontSize: 8,
@@ -117,7 +121,7 @@ class PlayerTwoActive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20),
       height: 82,
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: .1),
@@ -128,15 +132,13 @@ class PlayerTwoActive extends StatelessWidget {
           title: Text(
             roomPlayer.playerModel.username,
 
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          leading: CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-            child: Icon(RemixIcons.user_2_fill),
+          leading: SvgPicture.asset(
+            AppAvatars.getAvatarById(roomPlayer.playerModel.avatarID).assetPath,
           ),
           trailing: (roomPlayer.roomPlayerStatus == RoomPlayerStatus.ready)
-              ? Icon(RemixIcons.check_double_line, color: Colors.blue)
+              ? const Icon(RemixIcons.check_double_line, color: Colors.blue)
               : null,
         ),
       ),
