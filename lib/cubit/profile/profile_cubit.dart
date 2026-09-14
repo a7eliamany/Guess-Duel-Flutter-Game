@@ -8,7 +8,8 @@ import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
-  ProfileCubit(super.initialState);
+  ProfileCubit()
+    : super(ProfileState(createdAt: DateTime(2026).millisecondsSinceEpoch));
 
   void getInitialValue() {
     emit(state.copyWith(isLoading: true));

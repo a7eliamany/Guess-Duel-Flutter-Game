@@ -11,7 +11,7 @@ import 'package:guess_duel/cubit/get%20started/get_started_cubit.dart';
 import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
 import 'package:guess_duel/cubit/navigation%20bottom%20bar/navigation_bottombar_cubit.dart';
 import 'package:guess_duel/cubit/profile/profile_cubit.dart';
-import 'package:guess_duel/cubit/profile/profile_state.dart';
+import 'package:guess_duel/cubit/sign%20in/sign_in_cubit.dart';
 import 'package:guess_duel/screens/Splash%20Screen/splash_screen.dart';
 import 'package:guess_duel/services/Firebase/firebase_options.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
@@ -53,11 +53,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AppConfigCubit()),
         BlocProvider(create: (context) => HistoryCubit()),
         BlocProvider(create: (context) => CreateOfflineGameCubit()),
-        BlocProvider(
-          create: (context) => ProfileCubit(
-            ProfileState(createdAt: DateTime(2026).millisecondsSinceEpoch),
-          ),
-        ),
+        BlocProvider(create: (context) => ProfileCubit()),
+        BlocProvider(create: (context) => SignInCubit()..checkSignIn()),
       ],
       child: GetMaterialApp(
         title: "Guess duel",

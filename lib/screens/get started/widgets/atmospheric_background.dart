@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guess_duel/screens/sign_in/widgets/floating_accent.dart';
+import 'package:guess_duel/screens/get%20started/widgets/floating_accent.dart';
 
 class AtmosphericBackground extends StatelessWidget {
   const AtmosphericBackground({super.key});

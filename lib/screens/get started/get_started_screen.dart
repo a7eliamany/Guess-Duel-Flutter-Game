@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:guess_duel/cubit/get%20started/get_started_cubit.dart';
 import 'package:guess_duel/cubit/get%20started/get_started_state.dart';
 import 'package:guess_duel/pageview.dart';
-import 'package:guess_duel/screens/sign_in/widgets/atmospheric_background.dart';
-import 'package:guess_duel/screens/sign_in/widgets/feature_item.dart';
-import 'package:guess_duel/screens/sign_in/widgets/sign_in_form.dart';
-import 'package:guess_duel/screens/sign_in/widgets/sign_in_header.dart';
+import 'package:guess_duel/screens/get%20started/widgets/atmospheric_background.dart';
+import 'package:guess_duel/screens/get%20started/widgets/feature_item.dart';
+import 'package:guess_duel/screens/get%20started/widgets/sign_in_form.dart';
+import 'package:guess_duel/screens/get%20started/widgets/sign_in_header.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});

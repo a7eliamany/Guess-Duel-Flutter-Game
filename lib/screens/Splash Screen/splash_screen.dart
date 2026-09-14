@@ -10,7 +10,7 @@ import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
 import 'package:guess_duel/screens/Splash%20Screen/Widgets/maintenance_dialog.dart';
 import 'package:guess_duel/screens/Splash%20Screen/Widgets/update_dialog.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/offline%20home/offline_home_screen.dart';
-import 'package:guess_duel/screens/sign_in/sign_in_screen.dart';
+import 'package:guess_duel/screens/get%20started/get_started_screen.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/cubit/App%20Config/app_config_cubit.dart';
 import 'package:guess_duel/pageview.dart';

@@ -11,6 +11,8 @@ import 'package:guess_duel/screens/profile/widgets/guest_account_banner_widget.d
 import 'package:guess_duel/screens/profile/widgets/performance_snippets_widget.dart';
 import 'package:guess_duel/screens/profile/widgets/profile_header_widget.dart';
 import 'package:guess_duel/screens/profile/widgets/stats_grid_widget.dart';
+import 'package:get/get.dart';
+import 'package:guess_duel/screens/auth/create_account_screen.dart';
 
 /// Main Profile Screen for Guess Duel.
 /// Assembles ambient background glows, top glass app bar, modular profile sections,
@@ -168,8 +170,9 @@ class ProfileScreen extends HookWidget {
                   // const SizedBox(height: 24),
 
                   // Guest Account Banner & Buttons
-                  const GuestAccountBannerWidget(
-                    onCreateAccount: null,
+                  GuestAccountBannerWidget(
+                    onCreateAccount: () =>
+                        Get.to(() => const CreateAccountScreen()),
                     onLogout: null,
                   ),
                 ],
