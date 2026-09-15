@@ -3,6 +3,7 @@ import 'package:guess_duel/extensions/player_role_extension.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
 
 class RoomPlayerCache {
+  final String id;
   final String firebaseID;
   final String username;
   final int lvl;
@@ -24,6 +25,7 @@ class RoomPlayerCache {
     required this.lastSeen,
     required this.createdAt,
     required this.avatarID,
+    required this.id,
   });
 
   factory RoomPlayerCache.fromModel(RoomPlayer p) {
@@ -38,6 +40,7 @@ class RoomPlayerCache {
       lastSeen: p.playerModel.lastSeen.millisecondsSinceEpoch,
       createdAt: p.playerModel.createdAt.millisecondsSinceEpoch,
       avatarID: p.playerModel.avatarID,
+      id: p.playerModel.id,
     );
   }
 
@@ -48,7 +51,7 @@ class RoomPlayerCache {
         username: c.username,
         lvl: c.lvl,
         avatarID: c.avatarID,
-        id: c.firebaseID,
+        id: c.id,
         lastSeen: Timestamp.fromMillisecondsSinceEpoch(c.lastSeen),
         createdAt: Timestamp.fromMillisecondsSinceEpoch(c.createdAt),
       ),
@@ -65,7 +68,7 @@ class RoomPlayerCache {
       firebaseID: c.firebaseID,
       username: c.username,
       lvl: c.lvl,
-      id: c.firebaseID,
+      id: c.id,
       avatarID: c.avatarID,
       lastSeen: Timestamp.fromMillisecondsSinceEpoch(c.lastSeen),
       createdAt: Timestamp.fromMillisecondsSinceEpoch(c.createdAt),
@@ -74,6 +77,7 @@ class RoomPlayerCache {
 
   //copy with
   RoomPlayerCache copyWith({
+    String? id,
     String? firebaseID,
     String? username,
     int? lvl,
@@ -94,6 +98,7 @@ class RoomPlayerCache {
       secretCode: secretCode ?? this.secretCode,
       lastSeen: lastSeen ?? this.lastSeen,
       createdAt: createdAt ?? this.createdAt,
+      id: id ?? this.id,
     );
   }
 }

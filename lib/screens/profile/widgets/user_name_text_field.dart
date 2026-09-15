@@ -51,10 +51,11 @@ class UserNameHandlerWidget extends HookWidget {
     }
 
     void toggleEditing() {
+      usernameController.text = username;
       if (!isEditing) {
-        usernameController.text = username;
         width.value = (username.length * 24) + 20;
       }
+
       isValidUsername.value = true;
       context.read<ProfileCubit>().updateIsEditing();
     }

@@ -8,7 +8,6 @@ import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
 import 'package:guess_duel/extensions/game_status_extension.dart';
 import 'package:guess_duel/extensions/player_role_extension.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
-import 'package:guess_duel/models/Players/room_player_cache.dart';
 import 'package:guess_duel/models/Rooms/rooms_model.dart';
 import 'package:guess_duel/models/Room%20Settings/room_settings_model.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
@@ -36,9 +35,7 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
         return;
       }
 
-      final PlayerModel playerData = RoomPlayerCache.toPlayerModel(
-        HiveService.userData.get(userId),
-      );
+      final PlayerModel playerData = HiveService.userData.get(userId);
 
       final RoomPlayer roomPlayer = RoomPlayer(
         roomPlayerStatus: RoomPlayerStatus.ready,

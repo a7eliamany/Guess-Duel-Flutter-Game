@@ -47,8 +47,15 @@ class StatsModel {
   final int wins;
   final int winStreak;
   final int bestWinStreak;
+  final Map<String, dynamic> recentGames;
 
-  String get winRate => ((wins / gamesPlayed) * 100).toStringAsFixed(1);
+  String get winRate {
+    if (gamesPlayed == 0) {
+      return "0";
+    }
+    return ((wins / gamesPlayed) * 100).toStringAsFixed(1);
+  }
+
   int get losess => gamesPlayed - wins;
   int get currentLevel => (experiences / 200).floor();
 
@@ -58,6 +65,7 @@ class StatsModel {
     this.experiences = 0,
     this.bestWinStreak = 0,
     this.winStreak = 0,
+    this.recentGames = const {"recent games": 0, "wins": 0, "losses": 0},
   });
 
   Map<String, dynamic> toFirestore() {
@@ -67,6 +75,8 @@ class StatsModel {
       "wins": wins,
       "winStreak": winStreak,
       "bestWinStreak": bestWinStreak,
+
+      "recentGames": recentGames,
     };
   }
 
@@ -77,6 +87,7 @@ class StatsModel {
       wins: map["wins"] ?? 0,
       winStreak: map["winStreak"] ?? 0,
       bestWinStreak: map["bestWinStreak"] ?? 0,
+      recentGames: Map<String, dynamic>.from(map["recentGames"] ?? {}),
     );
   }
 
@@ -86,6 +97,7 @@ class StatsModel {
     int? winStreak,
     int? bestWinStreak,
     int? experiences,
+    Map<String, dynamic>? recentGames,
   }) {
     return StatsModel(
       gamesPlayed: gamesPlayed ?? this.gamesPlayed,
@@ -93,6 +105,7 @@ class StatsModel {
       winStreak: winStreak ?? this.winStreak,
       bestWinStreak: bestWinStreak ?? this.bestWinStreak,
       experiences: experiences ?? this.experiences,
+      recentGames: recentGames ?? this.recentGames,
     );
   }
 }

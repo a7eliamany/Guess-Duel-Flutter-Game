@@ -47,6 +47,26 @@ class PlayerModel {
       'lastSeen': lastSeen,
     };
   }
+
+  PlayerModel copyWith({
+    String? username,
+    String? firebaseID,
+    String? id,
+    int? lvl,
+    String? avatarID,
+    Timestamp? lastSeen,
+    Timestamp? createdAt,
+  }) {
+    return PlayerModel(
+      id: id ?? this.id,
+      lvl: lvl ?? this.lvl,
+      firebaseID: firebaseID ?? this.firebaseID,
+      username: username ?? this.username,
+      lastSeen: lastSeen ?? this.lastSeen,
+      createdAt: createdAt ?? this.createdAt,
+      avatarID: avatarID ?? this.avatarID,
+    );
+  }
 }
 
 class RoomPlayer {

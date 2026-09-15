@@ -18,12 +18,14 @@ class HiveService {
     Hive.registerAdapter(StatsAdapter()); // 4
     Hive.registerAdapter(OfflineGameAdapter()); // 5
     Hive.registerAdapter(RoomSettingsAdapter()); // 6
+    Hive.registerAdapter(PlayersTypeAdabter()); // 7
 
     // remove old boxes
     await Hive.deleteBoxFromDisk(HiveBoxes.rooms);
     await Hive.deleteBoxFromDisk(HiveBoxes.roomSettings);
     await Hive.deleteBoxFromDisk(HiveBoxes.players);
     await Hive.deleteBoxFromDisk(HiveBoxes.attempts);
+    await Hive.deleteBoxFromDisk(HiveBoxes.offlineGame);
 
     // open boxes
     await Hive.openBox(HiveBoxes.rooms);
@@ -73,6 +75,18 @@ class HiveService {
     // delete players data
 
     await clearStoragePlayers(roomID);
+  }
+
+  static Future<void> clearAllBoxes() async {
+    await roomsBox.clear();
+    await playersBox.clear();
+    await attemptsBox.clear();
+    await gameHistoryBox.clear();
+    await recentGameHistoryBox.clear();
+    await statsBox.clear();
+    await offlineGameBox.clear();
+    await roomSettings.clear();
+    await userData.clear();
   }
 }
 

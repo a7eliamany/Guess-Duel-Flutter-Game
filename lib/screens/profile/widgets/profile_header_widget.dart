@@ -14,7 +14,7 @@ class ProfileHeaderWidget extends HookWidget {
   final String username;
   final int createdAt;
   final String avatarID;
-  final String firebaseID;
+  final String id;
   final bool isLoading;
   final bool isEditing;
 
@@ -23,7 +23,7 @@ class ProfileHeaderWidget extends HookWidget {
     required this.username,
     required this.createdAt,
     required this.avatarID,
-    required this.firebaseID,
+    required this.id,
     required this.isEditing,
     required this.isLoading,
   });
@@ -131,7 +131,7 @@ class ProfileHeaderWidget extends HookWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: firebaseID,
+                    text: id,
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,

@@ -9,8 +9,8 @@ import 'package:guess_duel/screens/get%20started/widgets/feature_item.dart';
 import 'package:guess_duel/screens/get%20started/widgets/sign_in_form.dart';
 import 'package:guess_duel/screens/get%20started/widgets/sign_in_header.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+class GetStartedScreen extends StatelessWidget {
+  const GetStartedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

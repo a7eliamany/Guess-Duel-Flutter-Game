@@ -43,6 +43,7 @@ class StatsAdapter extends TypeAdapter<StatsModel> {
       bestWinStreak: reader.readInt(),
       winStreak: reader.readInt(),
       experiences: reader.readInt(),
+      recentGames: reader.readMap().cast<String, dynamic>(),
     );
   }
 
@@ -53,5 +54,6 @@ class StatsAdapter extends TypeAdapter<StatsModel> {
     writer.writeInt(obj.bestWinStreak);
     writer.writeInt(obj.winStreak);
     writer.writeInt(obj.experiences);
+    writer.writeMap(obj.recentGames);
   }
 }

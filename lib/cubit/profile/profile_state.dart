@@ -5,6 +5,7 @@ class ProfileState {
   final String avatarID;
   final int createdAt;
   final String firebaseID;
+  final String id;
   final bool isErorr;
   ProfileState({
     this.isEditing = false,
@@ -14,6 +15,7 @@ class ProfileState {
     this.firebaseID = '',
     this.isLoading = false,
     this.isErorr = false,
+    this.id = '',
   });
   ProfileState copyWith({
     bool? isEditing,
@@ -23,6 +25,7 @@ class ProfileState {
     String? firebaseID,
     bool? isLoading,
     bool? isErorr,
+    String? id,
   }) {
     return ProfileState(
       isEditing: isEditing ?? this.isEditing,
@@ -32,6 +35,7 @@ class ProfileState {
       firebaseID: firebaseID ?? this.firebaseID,
       isLoading: isLoading ?? this.isLoading,
       isErorr: isErorr ?? this.isErorr,
+      id: id ?? this.id,
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_duel/cubit/profile/profile_cubit.dart';
 import 'package:guess_duel/cubit/profile/profile_state.dart';
+import 'package:guess_duel/cubit/sign%20in/sign_in_cubit.dart';
 import 'package:guess_duel/models/History/history_model.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:remixicon/remixicon.dart';
@@ -33,21 +34,21 @@ class ProfileScreen extends HookWidget {
     final StatsModel statsModel =
         HiveService.statsBox.get("Stats") ?? StatsModel();
 
-    final List<GameHistoryModel> recentGamesHistory = HiveService
-        .recentGameHistoryBox
-        .values
-        .toList()
-        .cast<GameHistoryModel>();
+    // final List<GameHistoryModel> recentGamesHistory = HiveService
+    //     .recentGameHistoryBox
+    //     .values
+    //     .toList()
+    //     .cast<GameHistoryModel>();
 
-    int wins = 0;
-    int losses = 0;
-    for (var game in recentGamesHistory) {
-      if (game.isWin) {
-        wins++;
-      } else {
-        losses++;
-      }
-    }
+    // int wins = 0;
+    // int losses = 0;
+    // for (var game in recentGamesHistory) {
+    //   if (game.isWin) {
+    //     wins++;
+    //   } else {
+    //     losses++;
+    //   }
+    // }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -90,7 +91,7 @@ class ProfileScreen extends HookWidget {
                         username: state.username,
                         createdAt: state.createdAt,
                         avatarID: state.avatarID,
-                        firebaseID: state.firebaseID,
+                        id: state.id,
                         isEditing: state.isEditing,
                         isLoading: state.isLoading,
                       );
@@ -123,7 +124,8 @@ class ProfileScreen extends HookWidget {
                       ),
                       children: [
                         TextSpan(
-                          text: '${recentGamesHistory.length} Games',
+                          text:
+                              '${statsModel.recentGames['recent games']} Games',
                           style: const TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.w600,
@@ -131,7 +133,7 @@ class ProfileScreen extends HookWidget {
                         ),
                         const TextSpan(text: ': '),
                         TextSpan(
-                          text: '$wins Wins',
+                          text: '${statsModel.recentGames['wins']} Wins',
                           style: const TextStyle(
                             color: Colors.green,
                             fontWeight: FontWeight.w600,
@@ -139,7 +141,7 @@ class ProfileScreen extends HookWidget {
                         ),
                         const TextSpan(text: ' · '),
                         TextSpan(
-                          text: '$losses Losses',
+                          text: '${statsModel.recentGames['losses']} Losses',
                           style: const TextStyle(
                             color: Colors.red,
                             fontWeight: FontWeight.w600,
@@ -173,7 +175,7 @@ class ProfileScreen extends HookWidget {
                   GuestAccountBannerWidget(
                     onCreateAccount: () =>
                         Get.to(() => const CreateAccountScreen()),
-                    onLogout: null,
+                    onLogout: () => context.read<SignInCubit>().logOut(),
                   ),
                 ],
               ),

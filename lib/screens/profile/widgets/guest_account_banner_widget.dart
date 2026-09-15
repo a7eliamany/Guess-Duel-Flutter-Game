@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_duel/Widgets/scale_on_press_button.dart';
 import 'package:guess_duel/cubit/sign%20in/sign_in_cubit.dart';
 import 'package:guess_duel/cubit/sign%20in/sign_in_state.dart';
+import 'package:guess_duel/screens/auth/sign_in_screen.dart';
 
 /// Guest warning card and action buttons ("Create Account" / "Log Out").
 class GuestAccountBannerWidget extends StatelessWidget {
@@ -129,9 +131,15 @@ class GuestAccountBannerWidget extends StatelessWidget {
         ),
 
         // Log Out Button
-        BlocBuilder<SignInCubit, SignInState>(
+        BlocConsumer<SignInCubit, SignInState>(
+          listener: (context, state) {
+            if (state is SignOut) {
+              Get.offAll(const SignInScreen());
+            }
+          },
           builder: (context, state) {
             final bool isGuest = state is SignOut;
+            final bool isLoading = state is SignInLoading;
             return !isGuest
                 ? ScaleOnPressButton(
                     onPressed: onLogout,
@@ -147,15 +155,17 @@ class GuestAccountBannerWidget extends StatelessWidget {
                         ),
                       ),
                       alignment: Alignment.center,
-                      child: Text(
-                        'LOG OUT',
-                        style: GoogleFonts.spaceGrotesk(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.2,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : Text(
+                              'LOG OUT',
+                              style: GoogleFonts.spaceGrotesk(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1.2,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   )
                 : const SizedBox.shrink();
