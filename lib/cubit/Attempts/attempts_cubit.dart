@@ -19,6 +19,8 @@ class AttemptsCubit extends Cubit<AttemptsState> {
   StreamSubscription? attemptsListen;
 
   void getAttempts(String roomID) {
+    emit(AttemptsLoading());
+    attemptsListen?.cancel();
     attemptsListen = FirebaseFirestore.instance
         .collection(FirebaseCollections.rooms)
         .doc(roomID)
@@ -27,7 +29,7 @@ class AttemptsCubit extends Cubit<AttemptsState> {
         .snapshots()
         .listen((data) async {
           if (isClosed) return;
-          final attempts = data.docs.map((doc) {
+          List<AttemptModel> attempts = data.docs.map((doc) {
             return AttemptModel.fromFirestore(doc.data());
           }).toList();
           if (attempts.isNotEmpty) {

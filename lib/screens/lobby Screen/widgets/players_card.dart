@@ -24,10 +24,16 @@ class PlayerOneHost extends StatelessWidget {
             RemixIcons.check_double_fill,
             color: Colors.blue,
           ),
-          title: Text(
-            "${roomPlayer.playerModel.username} (host)",
+          title: Row(
+            children: [
+              Text(
+                roomPlayer.playerModel.username,
 
-            style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 5),
+              const Icon(RemixIcons.vip_crown_2_line, color: Colors.orange),
+            ],
           ),
           leading: SvgPicture.asset(
             AppAvatars.getAvatarById(roomPlayer.playerModel.avatarID).assetPath,
