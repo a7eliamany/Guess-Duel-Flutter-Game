@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_duel/cubit/Create%20game/create_game_cubit.dart';
@@ -14,41 +15,21 @@ import 'widgets/room_name_input.dart';
 import 'widgets/private_room_card.dart';
 import 'widgets/password_input_card.dart';
 
-class CreateGameBottomsheet extends StatefulWidget {
+class CreateGameBottomsheet extends HookWidget {
   const CreateGameBottomsheet({super.key});
-
-  @override
-  State<CreateGameBottomsheet> createState() => _CreateGameBottomsheetState();
-}
-
-class _CreateGameBottomsheetState extends State<CreateGameBottomsheet> {
-  late final TextEditingController roomNameController;
-  late final TextEditingController passwordController;
-  RoomSettingsModel roomSettingsModel = RoomSettingsModel();
-
-  @override
-  void initState() {
-    roomNameController = TextEditingController();
-    passwordController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    roomNameController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final roomNameController = useTextEditingController();
+    final passwordController = useTextEditingController();
+    final roomSettingsModel = useState(RoomSettingsModel());
+
     final mediaQuery = MediaQuery.of(context);
 
     return Padding(
       padding: EdgeInsets.only(bottom: mediaQuery.viewInsets.bottom),
       child: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: 12),
             Container(
@@ -102,13 +83,10 @@ class _CreateGameBottomsheetState extends State<CreateGameBottomsheet> {
                     icon: Icons.lock,
                     title: "Private Room",
                     subtitle: "Require a password to join",
-                    isPrivate: roomSettingsModel.isPrivate ?? false,
+                    isPrivate: roomSettingsModel.value.isPrivate ?? false,
                     onChanged: (val) {
-                      setState(() {
-                        roomSettingsModel = roomSettingsModel.copyWith(
-                          isPrivate: val,
-                        );
-                      });
+                      roomSettingsModel.value = roomSettingsModel.value
+                          .copyWith(isPrivate: val);
                     },
                   ),
 
@@ -117,19 +95,18 @@ class _CreateGameBottomsheetState extends State<CreateGameBottomsheet> {
                     curve: Curves.easeInOut,
                     child: AnimatedOpacity(
                       duration: const Duration(milliseconds: 300),
-                      opacity: (roomSettingsModel.isPrivate ?? false)
+                      opacity: (roomSettingsModel.value.isPrivate ?? false)
                           ? 1.0
                           : 0.0,
-                      child: (roomSettingsModel.isPrivate ?? false)
+                      child: (roomSettingsModel.value.isPrivate ?? false)
                           ? Padding(
                               padding: const EdgeInsets.only(top: 24),
                               child: PasswordInputCard(
                                 controller: passwordController,
                                 onChanged: (val) {
-                                  setState(() {
-                                    roomSettingsModel = roomSettingsModel
-                                        .copyWith(roomPassword: val);
-                                  });
+                                  roomSettingsModel.value = roomSettingsModel
+                                      .value
+                                      .copyWith(roomPassword: val);
                                 },
                               ),
                             )
@@ -138,24 +115,19 @@ class _CreateGameBottomsheetState extends State<CreateGameBottomsheet> {
                   ),
                   const SizedBox(height: 10),
                   RoundTimeSelector(
-                    selectedItem: roomSettingsModel.roundTime?.toInt() ?? 30,
+                    selectedItem:
+                        roomSettingsModel.value.roundTime?.toInt() ?? 30,
                     onSelected: (value) {
-                      setState(() {
-                        roomSettingsModel = roomSettingsModel.copyWith(
-                          roundTime: RoundTimeToInt.fromInt(value),
-                        );
-                      });
+                      roomSettingsModel.value = roomSettingsModel.value
+                          .copyWith(roundTime: RoundTimeToInt.fromInt(value));
                     },
-                    isEnabled: roomSettingsModel.isTimeEnabled ?? false,
+                    isEnabled: roomSettingsModel.value.isTimeEnabled ?? false,
                     onChanged: (value) {
-                      roomSettingsModel = roomSettingsModel.copyWith(
-                        isTimeEnabled: value,
-                      );
-                      setState(() {});
+                      roomSettingsModel.value = roomSettingsModel.value
+                          .copyWith(isTimeEnabled: value);
                     },
                   ),
 
-                  const SizedBox(height: 48),
                   BlocConsumer<CreateRoomCubit, CreateRoomState>(
                     listener: (context, state) {
                       if (state is CreateRoomSuccess) {
@@ -192,7 +164,7 @@ class _CreateGameBottomsheetState extends State<CreateGameBottomsheet> {
                                     .read<CreateRoomCubit>()
                                     .createRoom(
                                       roomNameController.text.trim(),
-                                      roomSettingsModel,
+                                      roomSettingsModel.value,
                                     );
                               },
                       );

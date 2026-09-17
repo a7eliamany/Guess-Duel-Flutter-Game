@@ -62,35 +62,10 @@ class FirebaseService {
     return players;
   }
 
-  static Future<RoomPlayer> getRoomPlayerData(
-    String roomID,
-    String firebaseID,
-  ) async {
-    final playersData = await FirebaseFirestore.instance
-        .collection(FirebaseCollections.rooms)
-        .doc(roomID)
-        .collection(FirebaseCollections.roomPeople)
-        .doc(firebaseID)
-        .get();
-    final RoomPlayer roomPlayer = RoomPlayer.fromFirestore(playersData.data()!);
-    return roomPlayer;
-  }
-
   static Future<bool> checkUserHost(String roomID) async {
     final RoomModel? roomData = await FirebaseService.getRoomData(roomID);
     final String userId = SharedPrefService.getId()!;
     return (userId == roomData!.hostId) ? true : false;
-  }
-
-  static Future<String> getSecretNumber(String roomID) async {
-    final String userID = SharedPrefService.getId()!;
-
-    final players = await FirebaseService.getPeopleRoomData(roomID);
-
-    final String secretNumber = players
-        .firstWhere((player) => player.playerModel.firebaseID != userID)
-        .secretCode!;
-    return secretNumber;
   }
 
   static Future<AppConfig> getAppConfig() async {

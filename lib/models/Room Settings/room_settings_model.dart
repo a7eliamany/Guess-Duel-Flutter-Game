@@ -48,9 +48,9 @@ class RoomSettingsModel {
     this.roomID,
     this.roomName,
     this.roomPassword,
-    this.isPrivate,
-    this.roundTime,
-    this.isTimeEnabled,
+    this.isPrivate = false,
+    this.roundTime = RoundTime.s30,
+    this.isTimeEnabled = false,
   });
 
   Map<String, dynamic> toFirestore() {

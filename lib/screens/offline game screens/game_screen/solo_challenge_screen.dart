@@ -18,6 +18,7 @@ import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/
 import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/solo_header.dart';
 import 'package:guess_duel/screens/offline%20game%20screens/game_screen/widgets/submit_button.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 import 'package:guess_duel/theme/solo_challenge_theme.dart';
 
 class SoloChallengeScreen extends StatefulWidget {
@@ -164,10 +165,14 @@ class _SoloChallengeScreenState extends State<SoloChallengeScreen> {
                                   roomID: updatedData.id,
                                   attempts: updatedData.history ?? [],
                                   isWin: state.isWin,
-                                  players: ["me", "Solo"],
                                   secretCode: updatedData.secretCode,
                                   offlineGameModel: updatedData,
                                   isOffline: true,
+                                  playersmodels: [
+                                    HiveService.userData.get(
+                                      SharedPrefService.getId(),
+                                    ),
+                                  ],
                                 );
                                 HiveService.offlineGameBox.put(
                                   updatedData.id,

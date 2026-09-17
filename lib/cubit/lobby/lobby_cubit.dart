@@ -60,6 +60,7 @@ class LobbyCubit extends Cubit<LobbyDataState> {
 
           // Store players data in Hive
           if (currentPlayer == null) {
+            emit(LobbyFailure(errorM: "You left the room"));
             return;
           }
           HiveService.playersBox.put(
@@ -124,7 +125,7 @@ class LobbyCubit extends Cubit<LobbyDataState> {
   RoomPlayer? _getOpponent(String? myID, List<RoomPlayer> players) {
     if (myID == null) return null;
     try {
-      return players.firstWhere((p) => p.playerModel.firebaseID != myID);
+      return players.firstWhere((p) => p.playerModel.id != myID);
     } catch (_) {
       return null;
     }
@@ -133,7 +134,7 @@ class LobbyCubit extends Cubit<LobbyDataState> {
   RoomPlayer? _getMe(String? myID, List<RoomPlayer> players) {
     if (myID == null) return null;
     try {
-      return players.firstWhere((p) => p.playerModel.firebaseID == myID);
+      return players.firstWhere((p) => p.playerModel.id == myID);
     } catch (_) {
       return null;
     }

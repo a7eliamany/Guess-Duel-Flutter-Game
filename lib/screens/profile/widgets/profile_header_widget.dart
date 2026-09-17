@@ -7,6 +7,7 @@ import 'package:guess_duel/constants/app_avatars.dart';
 import 'package:guess_duel/cubit/profile/profile_cubit.dart';
 import 'package:guess_duel/screens/profile/widgets/user_name_text_field.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 /// Profile Header Widget displaying user avatar with gradient glow border,
 /// online status indicator, name, handle, join date, and rank badge.
@@ -56,13 +57,16 @@ class ProfileHeaderWidget extends HookWidget {
                 onTap: () {
                   context.read<ProfileCubit>().avatarOnTap();
                 },
-                child: isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : Center(
-                        child: SvgPicture.asset(
-                          AppAvatars.getAvatarById(avatarID).assetPath,
-                        ),
-                      ),
+                child: Skeletonizer(
+                  enabled: isLoading,
+                  child: Center(
+                    child: isLoading
+                        ? const Bone.circle(size: 112)
+                        : SvgPicture.asset(
+                            AppAvatars.getAvatarById(avatarID).assetPath,
+                          ),
+                  ),
+                ),
                 // .animate(
                 //   autoPlay: true,
                 //   onPlay: (controller) {
@@ -110,7 +114,7 @@ class ProfileHeaderWidget extends HookWidget {
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 0),
 
         // User Display Name
         UserNameHandlerWidget(

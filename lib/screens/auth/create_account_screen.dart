@@ -262,8 +262,11 @@ class CreateAccountScreen extends HookWidget {
                           // Social Auth Section
                           SocialAuthButtons(
                             dividerText: 'OR SIGN UP WITH',
-                            onGoogleTap: () {},
-                            onFacebookTap: () {},
+                            onGoogleTap: () =>
+                                context.read<SignInCubit>().signInWithGoogle(),
+                            onFacebookTap: () => context
+                                .read<SignInCubit>()
+                                .signInWithFacebook(),
                           ),
                         ],
                       ),

@@ -22,8 +22,8 @@ class HiveService {
 
     // remove old boxes
     await Hive.deleteBoxFromDisk(HiveBoxes.rooms);
-    await Hive.deleteBoxFromDisk(HiveBoxes.roomSettings);
     await Hive.deleteBoxFromDisk(HiveBoxes.players);
+    await Hive.deleteBoxFromDisk(HiveBoxes.roomSettings);
     await Hive.deleteBoxFromDisk(HiveBoxes.attempts);
     await Hive.deleteBoxFromDisk(HiveBoxes.offlineGame);
 

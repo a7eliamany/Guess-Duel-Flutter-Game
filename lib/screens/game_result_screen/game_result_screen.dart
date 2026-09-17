@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:guess_duel/cubit/History/history_cubit.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
+import 'package:guess_duel/models/Players/room_player_cache.dart';
+import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'widgets/result_header.dart';
 import 'widgets/opponent_code_card.dart';
 import 'widgets/total_guesses_card.dart';
@@ -13,7 +15,6 @@ class GameResultScreen extends HookWidget {
   final List<AttemptModel> attempts;
   final String roomID;
   final bool isWin;
-  final List<String> players;
 
   const GameResultScreen({
     super.key,
@@ -21,7 +22,6 @@ class GameResultScreen extends HookWidget {
     required this.opponentSecretCode,
     required this.attempts,
     required this.isWin,
-    required this.players,
   });
 
   static const Color background = Color(0xFF0E0E0E);
@@ -40,9 +40,16 @@ class GameResultScreen extends HookWidget {
         roomID: roomID,
         attempts: attempts,
         isWin: isWin,
-        players: players,
         secretCode: opponentSecretCode,
         isOffline: false,
+        playersmodels: [
+          RoomPlayerCache.toPlayerModel(
+            HiveService.playersBox.get(HiveBoxPlayers.currentPlayer(roomID))!,
+          ),
+          RoomPlayerCache.toPlayerModel(
+            HiveService.playersBox.get(HiveBoxPlayers.opponentPlayer(roomID))!,
+          ),
+        ],
       );
       return null;
     }, []);

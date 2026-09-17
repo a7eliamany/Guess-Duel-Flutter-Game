@@ -79,7 +79,7 @@ class GameSummeryScreen extends HookWidget {
 
                               // ── Player Indicators ──
                               PlayersIndicator(
-                                players: gameHistoryModel.players,
+                                players: gameHistoryModel.playermodels,
                               ),
 
                               const SizedBox(height: 24),

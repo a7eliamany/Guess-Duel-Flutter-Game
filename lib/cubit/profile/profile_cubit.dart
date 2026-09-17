@@ -66,7 +66,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       try {
         await FirebaseFirestore.instance
             .collection(FirebaseCollections.players)
-            .doc(SharedPrefService.getId())
+            .doc(oldUserData.firebaseID)
             .update({'username': username});
       } catch (_) {}
     }

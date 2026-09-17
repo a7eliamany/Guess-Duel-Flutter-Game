@@ -46,7 +46,7 @@ class JoinRoomCubit extends Cubit<JoinRoomState> {
       );
       await room
           .collection(FirebaseCollections.roomPeople)
-          .doc(userID)
+          .doc(playerData.id)
           .set(roomPlayerData.toFirestore());
 
       // Update room playersCount in Firestore to include the joining player

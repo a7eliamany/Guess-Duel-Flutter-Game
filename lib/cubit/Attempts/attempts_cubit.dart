@@ -68,7 +68,7 @@ class AttemptsCubit extends Cubit<AttemptsState> {
 
       // check attempt
 
-      final String currentPlayerID = currentPlayerData.firebaseID;
+      final String currentPlayerID = currentPlayerData.id;
 
       final opponentSecretNumber = opponentPlayerData.secretCode!;
 
@@ -165,7 +165,7 @@ class AttemptsCubit extends Cubit<AttemptsState> {
         .where((attempt) => attempt.userId == myID)
         .toList();
     final String? opponentSecretCode =
-        roomData.secretnumbers[opponentPlayer.firebaseID];
+        roomData.secretnumbers[opponentPlayer.id];
 
     final bool isWin = roomData.winnerId == myID;
 
@@ -178,7 +178,6 @@ class AttemptsCubit extends Cubit<AttemptsState> {
           attempts: yourAttempts,
           opponentSecretCode: opponentSecretCode!,
           isWin: isWin,
-          players: [SharedPrefService.getUsername()!, opponentPlayer.username],
         ),
       ),
     );

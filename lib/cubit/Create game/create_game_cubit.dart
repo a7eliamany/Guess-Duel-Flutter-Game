@@ -66,7 +66,7 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
           .collection(FirebaseCollections.rooms)
           .doc(roomID)
           .collection(FirebaseCollections.roomPeople)
-          .doc(roomPlayer.playerModel.firebaseID)
+          .doc(roomPlayer.playerModel.id)
           .set(roomPlayer.toFirestore());
       settings = settings.copyWith(roomID: roomID);
       await room

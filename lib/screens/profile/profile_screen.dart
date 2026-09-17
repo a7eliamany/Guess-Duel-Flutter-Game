@@ -34,22 +34,6 @@ class ProfileScreen extends HookWidget {
     final StatsModel statsModel =
         HiveService.statsBox.get("Stats") ?? StatsModel();
 
-    // final List<GameHistoryModel> recentGamesHistory = HiveService
-    //     .recentGameHistoryBox
-    //     .values
-    //     .toList()
-    //     .cast<GameHistoryModel>();
-
-    // int wins = 0;
-    // int losses = 0;
-    // for (var game in recentGamesHistory) {
-    //   if (game.isWin) {
-    //     wins++;
-    //   } else {
-    //     losses++;
-    //   }
-    // }
-
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

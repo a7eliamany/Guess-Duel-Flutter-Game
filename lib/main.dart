@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:guess_duel/app..bloc_observer.dart';
 import 'package:guess_duel/cubit/App%20Config/app_config_cubit.dart';
 import 'package:guess_duel/cubit/Create%20offline%20game/create_offline_game_cubit.dart';
@@ -28,6 +29,10 @@ void main() async {
 
   Bloc.observer = AppBlocObserver();
   await FirebaseService.initialize(DefaultFirebaseOptions.currentPlatform);
+  await GoogleSignIn.instance.initialize(
+    serverClientId:
+        '473182681993-koou96i7992k6qe2qnjjvmivd7belnc1.apps.googleusercontent.com',
+  );
   runApp(const MyApp());
 }
 

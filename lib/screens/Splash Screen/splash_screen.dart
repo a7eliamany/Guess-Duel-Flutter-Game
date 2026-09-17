@@ -94,6 +94,8 @@ class _SplashScreenState extends State<SplashScreen> {
       Get.offAll(() => const Pages());
     } else if (userId == null && user != null) {
       Get.offAll(() => const GetStartedScreen());
+    } else if (userId != null && user == null) {
+      Get.offAll(() => const Pages());
     } else {
       Get.offAll(() => const SignInScreen());
     }

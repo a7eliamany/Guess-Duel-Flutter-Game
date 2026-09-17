@@ -44,7 +44,7 @@ class PlayerTurnCubit extends Cubit<bool> {
         HiveBoxPlayers.opponentPlayer(roomID),
       );
 
-      final opponentID = oppenentData.firebaseID;
+      final opponentID = oppenentData.id;
 
       //change turn
       await roomRef.update({"currentTurnPlayerId": opponentID});

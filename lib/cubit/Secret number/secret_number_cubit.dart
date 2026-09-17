@@ -47,9 +47,7 @@ class SecretNumberCubit extends Cubit<SecretNumberState> {
           'secret_numbers.${SharedPrefService.getId()}':
               secretCode ?? state.digits,
         });
-      } catch (e) {
-        print(e);
-      }
+      } catch (_) {}
       if (secretCode == null) {
         if (isClosed) return;
         emit(state.copyWith(roomFlow: RoomFlow.waiting));

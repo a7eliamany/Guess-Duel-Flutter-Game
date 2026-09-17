@@ -83,7 +83,7 @@ class GameStatusCubit extends Cubit<GameStatusState> {
           .collection(FirebaseCollections.rooms)
           .doc(roomID)
           .collection(FirebaseCollections.roomPeople)
-          .doc(roomPlayer.playerModel.firebaseID)
+          .doc(roomPlayer.playerModel.id)
           .update({
             "RoomPlayerStatus":
                 (roomPlayer.roomPlayerStatus == RoomPlayerStatus.idle)

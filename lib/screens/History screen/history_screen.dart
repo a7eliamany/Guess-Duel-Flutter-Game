@@ -31,8 +31,8 @@ class HistoryScreen extends HookWidget {
           isWin: index == 1 ? false : true,
           createdAt: DateTime.now(),
           attemptsModel: [],
-          players: [],
           secretCode: '0000',
+          playermodels: [],
         ),
       );
     });

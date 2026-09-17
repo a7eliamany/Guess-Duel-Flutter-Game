@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:guess_duel/cubit/History/historty_state.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
 import 'package:guess_duel/models/History/history_model.dart';
+import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/models/offline/offline_game_model.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
@@ -34,10 +35,10 @@ class HistoryCubit extends Cubit<HistortyState> {
     required String roomID,
     required List<AttemptModel> attempts,
     required bool isWin,
-    required List<String> players,
     required String secretCode,
     required bool isOffline,
     OfflineGameModel? offlineGameModel,
+    required List<PlayerModel> playersmodels,
   }) async {
     try {
       // handle player stats
@@ -88,9 +89,9 @@ class HistoryCubit extends Cubit<HistortyState> {
         gameId: roomID,
         attemptsModel: attempts,
         isWin: isWin,
-        players: players,
         secretCode: secretCode,
         offlineGameModel: offlineGameModel,
+        playermodels: playersmodels,
       );
 
       //add to recent game history (last 15 games) (test)

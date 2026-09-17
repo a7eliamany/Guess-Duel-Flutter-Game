@@ -1,5 +1,6 @@
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
 import 'package:guess_duel/models/History/history_model.dart';
+import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HistoryAdabter extends TypeAdapter<GameHistoryModel> {
@@ -13,9 +14,9 @@ class HistoryAdabter extends TypeAdapter<GameHistoryModel> {
       gameId: reader.readString(),
       attemptsModel: reader.readList().cast<AttemptModel>(),
       isWin: reader.readBool(),
-      players: reader.readList().cast<String>(),
       offlineGameModel: reader.read(),
       secretCode: reader.readString(),
+      playermodels: reader.readList().cast<PlayerModel>(),
     );
   }
 
@@ -25,9 +26,9 @@ class HistoryAdabter extends TypeAdapter<GameHistoryModel> {
     writer.writeString(obj.gameId);
     writer.writeList(obj.attemptsModel);
     writer.writeBool(obj.isWin);
-    writer.writeList(obj.players);
     writer.write(obj.offlineGameModel);
     writer.writeString(obj.secretCode);
+    writer.writeList(obj.playermodels);
   }
 }
 

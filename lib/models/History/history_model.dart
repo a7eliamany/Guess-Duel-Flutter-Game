@@ -1,4 +1,5 @@
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
+import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/models/offline/offline_game_model.dart';
 
 class GameHistoryModel {
@@ -7,7 +8,7 @@ class GameHistoryModel {
   final String secretCode;
   final List<AttemptModel> attemptsModel;
   final bool isWin;
-  final List<String> players;
+  final List<PlayerModel> playermodels;
   final OfflineGameModel? offlineGameModel;
 
   GameHistoryModel({
@@ -15,9 +16,9 @@ class GameHistoryModel {
     required this.gameId,
     required this.attemptsModel,
     required this.isWin,
-    required this.players,
     this.offlineGameModel,
     required this.secretCode,
+    required this.playermodels,
   });
 
   GameHistoryModel copyWith({
@@ -25,18 +26,18 @@ class GameHistoryModel {
     String? gameId,
     List<AttemptModel>? attemptsModel,
     bool? isWin,
-    List<String>? players,
     OfflineGameModel? offlineGameModel,
     String? secretCode,
+    List<PlayerModel>? playermodels,
   }) {
     return GameHistoryModel(
       createdAt: createdAt ?? this.createdAt,
       gameId: gameId ?? this.gameId,
       attemptsModel: attemptsModel ?? this.attemptsModel,
       isWin: isWin ?? this.isWin,
-      players: players ?? this.players,
       offlineGameModel: offlineGameModel ?? this.offlineGameModel,
       secretCode: secretCode ?? this.secretCode,
+      playermodels: playermodels ?? this.playermodels,
     );
   }
 }

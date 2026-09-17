@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SegmentedSelector<T> extends StatelessWidget {
@@ -35,7 +36,7 @@ class SegmentedSelector<T> extends StatelessWidget {
             child: GestureDetector(
               onTap: () => onSelected(item),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
+                duration: 200.milliseconds,
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(

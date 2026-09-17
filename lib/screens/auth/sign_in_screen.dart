@@ -13,18 +13,12 @@ import 'package:guess_duel/screens/auth/widgets/auth_text_field.dart';
 import 'package:guess_duel/screens/auth/widgets/neon_button.dart';
 import 'package:guess_duel/screens/auth/widgets/social_auth_buttons.dart';
 import 'package:guess_duel/screens/get%20started/get_started_screen.dart';
+import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
 class SignInScreen extends HookWidget {
   final VoidCallback? onForgotPasswordTap;
-  final VoidCallback? onGoogleSignIn;
-  final VoidCallback? onFacebookSignIn;
 
-  const SignInScreen({
-    super.key,
-    this.onForgotPasswordTap,
-    this.onGoogleSignIn,
-    this.onFacebookSignIn,
-  });
+  const SignInScreen({super.key, this.onForgotPasswordTap});
 
   @override
   Widget build(BuildContext context) {
@@ -81,18 +75,6 @@ class SignInScreen extends HookWidget {
       context.read<SignInCubit>().signIn(
         identifierController.text.trim(),
         passwordController.text,
-      );
-    }
-
-    // Social login feedback
-    void handleSocialSignIn(String provider) {
-      Get.snackbar(
-        '$provider Sign-In',
-        'Connecting to $provider...',
-        backgroundColor: const Color(0xFF111624),
-        colorText: const Color(0xFFE2E8F0),
-        snackPosition: SnackPosition.TOP,
-        margin: const EdgeInsets.all(16),
       );
     }
 
@@ -301,10 +283,25 @@ class SignInScreen extends HookWidget {
                           BlocConsumer<SignInCubit, SignInState>(
                             listener: (context, state) {
                               if (state is SignInSuccess) {
-                                Get.offAll(const Pages());
+                                if (SharedPrefService.getId() == null) {
+                                  Get.offAll(() => const GetStartedScreen());
+                                } else {
+                                  Get.offAll(() => const Pages());
+                                }
                               }
                               if (state is SignInFailure) {
-                                Get.snackbar("Error", state.errorMessage);
+                                Get.snackbar(
+                                  'Sign In Failed',
+                                  state.errorMessage,
+                                  backgroundColor: const Color(0xFF1F1116),
+                                  colorText: const Color(0xFFFF6B6B),
+                                  borderColor: const Color(
+                                    0xFFFF4D4D,
+                                  ).withValues(alpha: 0.5),
+                                  borderWidth: 1,
+                                  snackPosition: SnackPosition.TOP,
+                                  margin: const EdgeInsets.all(16),
+                                );
                               }
                             },
                             builder: (context, state) {
@@ -325,12 +322,11 @@ class SignInScreen extends HookWidget {
                           // OAuth Providers & Play Instant as Guest
                           SocialAuthButtons(
                             dividerText: 'OR CONTINUE WITH',
-                            onGoogleTap:
-                                onGoogleSignIn ??
-                                () => handleSocialSignIn('Google'),
-                            onFacebookTap:
-                                onFacebookSignIn ??
-                                () => handleSocialSignIn('Facebook'),
+                            onGoogleTap: () =>
+                                context.read<SignInCubit>().signInWithGoogle(),
+                            onFacebookTap: () => context
+                                .read<SignInCubit>()
+                                .signInWithFacebook(),
                             onGuestTap: () =>
                                 Get.to(() => const GetStartedScreen()),
                           ),
