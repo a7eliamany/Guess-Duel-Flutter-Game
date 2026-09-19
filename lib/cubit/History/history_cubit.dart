@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:guess_duel/cubit/History/historty_state.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
@@ -8,7 +9,6 @@ import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/models/offline/offline_game_model.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class HistoryCubit extends Cubit<HistortyState> {
   HistoryCubit() : super(HistortyInitial());

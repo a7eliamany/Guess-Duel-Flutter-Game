@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guess_duel/Functions/random_f.dart';
 import 'package:guess_duel/constants/app_avatars.dart';
 import 'package:guess_duel/cubit/get%20started/get_started_state.dart';
@@ -9,7 +10,6 @@ import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:uuid/v4.dart';
 
 class GetStartedCubit extends Cubit<GetStartedState> {
