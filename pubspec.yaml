@@ -39,10 +39,7 @@ dependencies:
   firebase_auth: ^6.4.0
   cloud_firestore: ^6.3.0
   google_sign_in: ^7.2.0
-  flutter_facebook_auth: ^7.2.0
-  hydrated_bloc: ^11.0.0
   flutter_bloc: ^9.1.1
-  awesome_dialog: ^3.3.0
   remixicon: ^4.9.3
   salomon_bottom_bar: ^3.3.2
   google_fonts: ^8.1.0
