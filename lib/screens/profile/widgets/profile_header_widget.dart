@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -57,27 +58,31 @@ class ProfileHeaderWidget extends HookWidget {
                 onTap: () {
                   context.read<ProfileCubit>().avatarOnTap();
                 },
-                child: Skeletonizer(
-                  enabled: isLoading,
-                  child: Center(
-                    child: isLoading
-                        ? const Bone.circle(size: 112)
-                        : SvgPicture.asset(
-                            AppAvatars.getAvatarById(avatarID).assetPath,
+                child:
+                    Skeletonizer(
+                          enabled: isLoading,
+                          child: Center(
+                            child: isLoading
+                                ? const Bone.circle(size: 112)
+                                : SvgPicture.asset(
+                                    AppAvatars.getAvatarById(
+                                      avatarID,
+                                    ).assetPath,
+                                  ),
                           ),
-                  ),
-                ),
-                // .animate(
-                //   autoPlay: true,
-                //   onPlay: (controller) {
-                //     controller.repeat(reverse: true);
-                //   },
-                // )
-                // .shimmer(
-                //   duration: 2.seconds,
-                //   delay: 1.seconds,
-                //   curve: Curves.easeInCubic,
-                // ),
+                        )
+                        .animate(
+                          autoPlay: true,
+                          onPlay: (controller) {
+                            controller.repeat(reverse: true);
+                          },
+                        )
+                        .shimmer(
+                          color: Colors.white,
+                          duration: 3.seconds,
+                          delay: 2.seconds,
+                          curve: Curves.easeInCubic,
+                        ),
               ),
 
               // Online status indicator dot

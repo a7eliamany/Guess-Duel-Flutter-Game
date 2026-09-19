@@ -6,9 +6,21 @@ import 'package:hive_flutter/hive_flutter.dart';
 class HistoryAdabter extends TypeAdapter<GameHistoryModel> {
   @override
   int get typeId => 3;
+  final int currentVersion = 1;
 
   @override
   GameHistoryModel read(BinaryReader reader) {
+    final version = reader.readByte();
+    switch (version) {
+      case 1:
+        return _readV1(reader);
+
+      default:
+        throw HiveError("Error");
+    }
+  }
+
+  GameHistoryModel _readV1(BinaryReader reader) {
     return GameHistoryModel(
       createdAt: DateTime.fromMillisecondsSinceEpoch(reader.readInt()),
       gameId: reader.readString(),
@@ -22,6 +34,7 @@ class HistoryAdabter extends TypeAdapter<GameHistoryModel> {
 
   @override
   void write(BinaryWriter writer, GameHistoryModel obj) {
+    writer.writeByte(currentVersion);
     writer.writeInt(obj.createdAt.millisecondsSinceEpoch);
     writer.writeString(obj.gameId);
     writer.writeList(obj.attemptsModel);
@@ -36,8 +49,20 @@ class StatsAdapter extends TypeAdapter<StatsModel> {
   @override
   int get typeId => 4;
 
+  final int currentVersion = 1;
+
   @override
   StatsModel read(BinaryReader reader) {
+    final version = reader.readByte();
+    switch (version) {
+      case 1:
+        return _readV1(reader);
+      default:
+        throw HiveError("Error");
+    }
+  }
+
+  StatsModel _readV1(BinaryReader reader) {
     return StatsModel(
       gamesPlayed: reader.readInt(),
       wins: reader.readInt(),
@@ -50,6 +75,7 @@ class StatsAdapter extends TypeAdapter<StatsModel> {
 
   @override
   void write(BinaryWriter writer, StatsModel obj) {
+    writer.writeByte(currentVersion);
     writer.writeInt(obj.gamesPlayed);
     writer.writeInt(obj.wins);
     writer.writeInt(obj.bestWinStreak);

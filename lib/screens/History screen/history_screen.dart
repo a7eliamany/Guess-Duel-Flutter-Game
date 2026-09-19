@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/route_manager.dart';
+import 'package:guess_duel/Widgets/app_dialog.dart';
 import 'package:guess_duel/cubit/History/historty_state.dart';
 import 'package:guess_duel/cubit/History/history_cubit.dart';
 import 'package:guess_duel/models/History/history_model.dart';
@@ -147,26 +148,65 @@ class HistoryScreen extends HookWidget {
         ),
         Row(
           children: [
-            GestureDetector(
-              onTap: () {
-                // TODO: implement filter logic
+            // GestureDetector(
+            //   onTap: () {
+            //
+            //   },
+            //   child: Text(
+            //     'Filter List',
+            //     style: TextStyle(
+            //       fontFamily: 'Space Grotesk',
+            //       fontSize: 11,
+            //       fontWeight: FontWeight.w600,
+            //       color: theme.colorScheme.primary,
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(width: 5),
+            BlocBuilder<HistoryCubit, HistortyState>(
+              builder: (context, state) {
+                if (state is HistortyLoaded) {
+                  final bool isNotEmpty = state.history.isNotEmpty;
+
+                  return isNotEmpty
+                      ? IconButton(
+                          onPressed: () {
+                            AppDialog.show(
+                              context: context,
+                              title: "Delete All",
+                              message:
+                                  """Are you Sure you want to Clear All History Games""",
+                              icon: RemixIcons.delete_bin_2_line,
+                              accentColor: Colors.purple,
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  child: const Text("Cancel"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                    context
+                                        .read<HistoryCubit>()
+                                        .clearGameHistory();
+                                  },
+                                  child: const Text("Sure"),
+                                ),
+                              ],
+                            );
+                          },
+                          icon: const Icon(
+                            RemixIcons.delete_bin_line,
+                            color: Colors.red,
+                          ),
+                        )
+                      : const SizedBox.shrink();
+                } else {
+                  return const SizedBox.shrink();
+                }
               },
-              child: Text(
-                'Filter List',
-                style: TextStyle(
-                  fontFamily: 'Space Grotesk',
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            ),
-            const SizedBox(width: 5),
-            IconButton(
-              onPressed: () {
-                context.read<HistoryCubit>().clearGameHistory();
-              },
-              icon: const Icon(RemixIcons.delete_bin_line, color: Colors.red),
             ),
           ],
         ),

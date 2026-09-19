@@ -75,7 +75,9 @@ class SoloResultScreen extends StatelessWidget {
                               );
                               if (canPop == true) {
                                 Get.until((route) => route.isFirst);
-                                OfflineCreateBs.show(context);
+                                if (context.mounted) {
+                                  OfflineCreateBs.show(context);
+                                }
                               }
                             },
                           ),

@@ -50,7 +50,6 @@ class InternetCubit extends Cubit<InternetCheckState> {
 
   Future<void> retryConnection() async {
     emit(state.copyWith(isLoading: true));
-    await Future.delayed(const Duration(seconds: 2));
     final hasNet = await _connection.hasInternetAccess;
 
     if (hasNet) {

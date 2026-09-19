@@ -23,16 +23,17 @@ import 'package:guess_duel/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  ServiceLocator.setup();
+  Bloc.observer = AppBlocObserver();
   await SharedPrefService.init();
   await HiveService.init();
-  ServiceLocator.setup();
 
-  Bloc.observer = AppBlocObserver();
   await FirebaseService.initialize(DefaultFirebaseOptions.currentPlatform);
   await GoogleSignIn.instance.initialize(
     serverClientId:
         '473182681993-koou96i7992k6qe2qnjjvmivd7belnc1.apps.googleusercontent.com',
   );
+
   runApp(const MyApp());
 }
 

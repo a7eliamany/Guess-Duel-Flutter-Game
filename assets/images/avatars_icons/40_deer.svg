@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#f9e2af" />
+  <g transform="translate(60, 60)">
+    
+      <circle cx="0" cy="0" r="36" fill="#8d5b4c" />
+      <!-- Antlers -->
+      <path d="M -16,-32 L -24,-48 M -20,-40 L -12,-44" stroke="#e5c89b" stroke-width="4" stroke-linecap="round" />
+      <path d="M 16,-32 L 24,-48 M 20,-40 L 12,-44" stroke="#e5c89b" stroke-width="4" stroke-linecap="round" />
+      <circle cx="-12" cy="-6" r="4" fill="#11111b" />
+      <circle cx="12" cy="-6" r="4" fill="#11111b" />
+      <ellipse cx="0" cy="10" rx="14" ry="10" fill="#e5c89b" />
+      <circle cx="0" cy="6" r="3.5" fill="#11111b" />
+    
+  </g>
+</svg>

@@ -38,7 +38,7 @@ class GameResultScreen extends HookWidget {
     useEffect(() {
       context.read<HistoryCubit>().addToHistory(
         roomID: roomID,
-        attempts: attempts,
+        attempts: attempts.reversed.toList(),
         isWin: isWin,
         secretCode: opponentSecretCode,
         isOffline: false,

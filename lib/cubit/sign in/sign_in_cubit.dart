@@ -1,17 +1,23 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:get/route_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:guess_duel/cubit/sign%20in/sign_in_state.dart';
 import 'package:guess_duel/models/History/history_model.dart';
 import 'package:guess_duel/models/Players/players_model.dart';
+import 'package:guess_duel/screens/auth/sign_in_screen.dart';
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
+import 'package:uuid/v4.dart';
 
 class SignInCubit extends Cubit<SignInState> {
   SignInCubit() : super(SignOut("User is not signed in"));
+  StreamSubscription? userlistner;
 
   void checkSignIn() {
     final bool isSignedIn = FirebaseService.isUserSignedIn();
@@ -56,6 +62,7 @@ class SignInCubit extends Cubit<SignInState> {
     }
     // push data to firebase
     await pushDataToFirebase(userCredential.user!.uid);
+    listenToUser(FirebaseAuth.instance.currentUser!.uid);
 
     emit(SignInSuccess());
   }
@@ -96,7 +103,8 @@ class SignInCubit extends Cubit<SignInState> {
       return;
     }
     // get userdata from firebase
-    await pullDataFromFirebase(userCredential.user!.uid);
+    await pullDataFromFirebase(userCredential.user!.uid, true);
+    listenToUser(FirebaseAuth.instance.currentUser!.uid);
 
     emit(SignInSuccess());
   }
@@ -132,9 +140,10 @@ class SignInCubit extends Cubit<SignInState> {
       if (isNewUser) {
         await pushDataToFirebase(userCredential.user!.uid);
       } else {
-        await pullDataFromFirebase(userCredential.user!.uid);
+        await pullDataFromFirebase(userCredential.user!.uid, true);
       }
 
+      listenToUser(FirebaseAuth.instance.currentUser!.uid);
       emit(SignInSuccess());
     } catch (_) {
       emit(SignInFailure("Something went wrong"));
@@ -145,47 +154,47 @@ class SignInCubit extends Cubit<SignInState> {
     emit(SignInLoading());
     emit(SignInFailure("COMING SOON..."));
     return;
-    try {
-      final UserCredential userCredential;
-      try {
-        // Trigger the sign-in flow
-        final LoginResult loginResult = await FacebookAuth.instance.login();
-        // print('================ FACEBOOK ================');
-        // print('STATUS: ${loginResult.status}');
-        // print('MESSAGE: ${loginResult.message}');
-        // print('ACCESS TOKEN: ${loginResult.accessToken}');
-        // print('==========================================');
+    // try {
+    //   final UserCredential userCredential;
+    //   try {
+    //     // Trigger the sign-in flow
+    //     final LoginResult loginResult = await FacebookAuth.instance.login();
+    //     // print('================ FACEBOOK ================');
+    //     // print('STATUS: ${loginResult.status}');
+    //     // print('MESSAGE: ${loginResult.message}');
+    //     // print('ACCESS TOKEN: ${loginResult.accessToken}');
+    //     // print('==========================================');
 
-        // Create a credential from the access token
-        final OAuthCredential facebookAuthCredential =
-            FacebookAuthProvider.credential(
-              loginResult.accessToken!.tokenString,
-            );
+    //     // Create a credential from the access token
+    //     final OAuthCredential facebookAuthCredential =
+    //         FacebookAuthProvider.credential(
+    //           loginResult.accessToken!.tokenString,
+    //         );
 
-        // Once signed in, return the UserCredential
-        userCredential = await FirebaseAuth.instance.signInWithCredential(
-          facebookAuthCredential,
-        );
-      } catch (e) {
-        // coming soon
-        // print("error is : ${e.toString()}");
-        emit(SignInFailure(e.toString()));
-        return;
-      }
+    //     // Once signed in, return the UserCredential
+    //     userCredential = await FirebaseAuth.instance.signInWithCredential(
+    //       facebookAuthCredential,
+    //     );
+    //   } catch (e) {
+    //     // coming soon
+    //     // print("error is : ${e.toString()}");
+    //     emit(SignInFailure(e.toString()));
+    //     return;
+    //   }
 
-      final bool isNewUser =
-          userCredential.additionalUserInfo?.isNewUser ?? false;
-      if (isNewUser) {
-        await pushDataToFirebase(userCredential.user!.uid);
-      } else {
-        await pullDataFromFirebase(userCredential.user!.uid);
-      }
-    } catch (_) {
-      emit(SignInFailure("Failed to sign in with Facebook"));
-      return;
-    }
+    //   final bool isNewUser =
+    //       userCredential.additionalUserInfo?.isNewUser ?? false;
+    //   if (isNewUser) {
+    //     await pushDataToFirebase(userCredential.user!.uid);
+    //   } else {
+    //     await pullDataFromFirebase(userCredential.user!.uid);
+    //   }
+    // } catch (_) {
+    //   emit(SignInFailure("Failed to sign in with Facebook"));
+    //   return;
+    // }
 
-    emit(SignInSuccess());
+    // emit(SignInSuccess());
   }
 
   Future<void> logOut() async {
@@ -193,6 +202,7 @@ class SignInCubit extends Cubit<SignInState> {
 
     // sign out from firebase
     await FirebaseAuth.instance.signOut();
+    userlistner?.cancel();
 
     emit(SignOut("You have been signed out successfully"));
 
@@ -234,7 +244,10 @@ class SignInCubit extends Cubit<SignInState> {
     }
   }
 
-  Future<void> pullDataFromFirebase(String firebaseID) async {
+  Future<void> pullDataFromFirebase(
+    String firebaseID, [
+    bool isLogin = false,
+  ]) async {
     try {
       final playerData = await FirebaseFirestore.instance
           .collection(FirebaseCollections.players)
@@ -250,7 +263,7 @@ class SignInCubit extends Cubit<SignInState> {
 
       // clear date in hive if exists
 
-      if (SharedPrefService.getId() != null) {
+      if (SharedPrefService.getId() != null && isLogin) {
         await HiveService.clearAllBoxes();
       }
 
@@ -260,10 +273,28 @@ class SignInCubit extends Cubit<SignInState> {
           playerData.data()!,
         );
 
-        //save to hive and sharedpref
-        await HiveService.userData.put(playerModel.id, playerModel);
-        await SharedPrefService.setId(playerModel.id);
-        await SharedPrefService.setUsername(playerModel.username);
+        // change [currentSessionId] if login
+
+        if (isLogin) {
+          final newCurrentSessionId = const UuidV4().generate();
+          final newPlayerData = playerModel.copyWith(
+            currentSessionId: newCurrentSessionId,
+          );
+
+          //edit in firebase
+
+          await changeCurrentSessionId(newCurrentSessionId, firebaseID);
+
+          //save to hive and sharedpref
+          await HiveService.userData.put(playerModel.id, newPlayerData);
+          await SharedPrefService.setId(playerModel.id);
+          await SharedPrefService.setUsername(playerModel.username);
+          await SharedPrefService.setcurrentSessionId(newCurrentSessionId);
+        } else {
+          await HiveService.userData.put(playerModel.id, playerModel);
+          await SharedPrefService.setId(playerModel.id);
+          await SharedPrefService.setUsername(playerModel.username);
+        }
       }
 
       // handle statsData
@@ -276,5 +307,57 @@ class SignInCubit extends Cubit<SignInState> {
     } catch (e) {
       emit(SignInFailure(e.toString()));
     }
+  }
+
+  Future<void> changeCurrentSessionId(
+    String currentSessionId,
+    String firebaseID,
+  ) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(FirebaseCollections.players)
+          .doc(firebaseID)
+          .update({"currentSessionId": currentSessionId});
+    } catch (e) {
+      emit(SignInFailure('SomeThing Wrong'));
+    }
+  }
+
+  void listenToUser(String firebaseId) {
+    userlistner?.cancel();
+    userlistner = FirebaseFirestore.instance
+        .collection(FirebaseCollections.players)
+        .doc(firebaseId)
+        .snapshots()
+        .listen((doc) {
+          if (!doc.exists) return;
+          final PlayerModel playerModel = PlayerModel.fromFirestore(
+            doc.data()!,
+          );
+          final currentSessionId =
+              SharedPrefService.getcurrentSessionId() ?? '';
+          if (playerModel.currentSessionId != currentSessionId) {
+            logOut();
+            Get.offAll(() => const SignInScreen());
+            Get.snackbar(
+              'Signed out',
+              'Your account is active on another device.',
+              backgroundColor: const Color(0xFF1F1116),
+              colorText: const Color(0xFFFF6B6B),
+              borderColor: const Color(0xFFFF4D4D).withValues(alpha: 0.5),
+              borderWidth: 1,
+              snackPosition: SnackPosition.TOP,
+              margin: const EdgeInsets.all(16),
+            );
+            userlistner?.cancel();
+            return;
+          }
+        });
+  }
+
+  @override
+  Future<void> close() {
+    userlistner?.cancel();
+    return super.close();
   }
 }

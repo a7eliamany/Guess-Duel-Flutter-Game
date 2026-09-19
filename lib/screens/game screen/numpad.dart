@@ -69,7 +69,7 @@ class ButtonWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(
-        color: Color(0xFF131313),
+        color: const Color(0xFF131313),
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(20),
       ),
@@ -79,7 +79,7 @@ class ButtonWidget extends StatelessWidget {
         child: Center(
           child: Text(
             button.value,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Space Grotesk',
               fontSize: 20,
               color: Colors.white,
@@ -110,7 +110,7 @@ class SpecialButtonWidget extends StatelessWidget {
         child: Center(
           child: Icon(
             Icons.backspace,
-            color: Color(0xFFff716c).withValues(alpha: 0.8),
+            color: const Color(0xFFff716c).withValues(alpha: 0.8),
           ),
         ),
       ),

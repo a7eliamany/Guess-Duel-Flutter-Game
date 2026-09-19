@@ -5,9 +5,20 @@ import 'package:hive_flutter/hive_flutter.dart';
 class OfflineGameAdapter extends TypeAdapter<OfflineGameModel> {
   @override
   int get typeId => 5;
+  final int currentVersion = 1;
 
   @override
   OfflineGameModel read(BinaryReader reader) {
+    final version = reader.readByte();
+    switch (version) {
+      case 1:
+        return _readV1(reader);
+      default:
+        throw HiveError("Error");
+    }
+  }
+
+  OfflineGameModel _readV1(BinaryReader reader) {
     return OfflineGameModel(
       id: reader.readString(),
       difficultyLevel: DifficultyLevel.values.byName(reader.readString()),
@@ -24,6 +35,7 @@ class OfflineGameAdapter extends TypeAdapter<OfflineGameModel> {
 
   @override
   void write(BinaryWriter writer, OfflineGameModel obj) {
+    writer.writeByte(currentVersion);
     writer.writeString(obj.id);
     writer.writeString(obj.difficultyLevel.name);
     writer.writeBool(obj.allowRepeatedDigits);

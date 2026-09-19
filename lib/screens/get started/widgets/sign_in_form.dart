@@ -29,15 +29,36 @@ class _SignInFormState extends State<SignInForm> {
     super.dispose();
   }
 
-  void _handleGetStarted() {
-    final String text = _nameController.text.trim();
+  bool validator(String text) {
     if (text.isEmpty) {
       setState(() {
         _showErrorBorder = true;
       });
       _nameFocusNode.requestFocus();
       Get.snackbar("Error", "Please enter a name first");
+      return false;
+    } else if (text.length > 15) {
+      setState(() {
+        _showErrorBorder = true;
+      });
+      _nameFocusNode.requestFocus();
+      Get.snackbar("Error", "username must be shorter than 15 charcters");
+      return false;
+    } else if (text.length < 2) {
+      setState(() {
+        _showErrorBorder = true;
+      });
+      _nameFocusNode.requestFocus();
+      Get.snackbar("Error", "username must be at least 2 charcters");
+      return false;
     } else {
+      return true;
+    }
+  }
+
+  void _handleGetStarted() {
+    final String text = _nameController.text.trim();
+    if (validator(text)) {
       setState(() {
         _showErrorBorder = false;
       });
@@ -80,19 +101,11 @@ class _SignInFormState extends State<SignInForm> {
           child: TextField(
             controller: _nameController,
             focusNode: _nameFocusNode,
-            style: GoogleFonts.inter(
-              color: Colors.white,
-              fontSize: 16,
-            ),
+            style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
             decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.person,
-                color: Color(0xFF849396),
-              ),
+              prefixIcon: const Icon(Icons.person, color: Color(0xFF849396)),
               hintText: "Enter your name",
-              hintStyle: GoogleFonts.inter(
-                color: const Color(0xFF849396),
-              ),
+              hintStyle: GoogleFonts.inter(color: const Color(0xFF849396)),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 18,
@@ -117,56 +130,57 @@ class _SignInFormState extends State<SignInForm> {
           onTapUp: (_) => setState(() => _isButtonPressed = false),
           onTapCancel: () => setState(() => _isButtonPressed = false),
           onTap: widget.isLoading ? null : _handleGetStarted,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            curve: Curves.easeOut,
-            transform: Matrix4.identity()
-              ..scale(_isButtonPressed ? 0.96 : 1.0),
-            height: 56,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: const Color(0xFF00E5FF),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF00E5FF).withValues(
-                    alpha: _isButtonPressed ? 0.2 : 0.4,
+          child: Transform.scale(
+            scale: _isButtonPressed ? 0.96 : 1.0,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              curve: Curves.easeOut,
+              height: 56,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: const Color(0xFF00E5FF),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(
+                      0xFF00E5FF,
+                    ).withValues(alpha: _isButtonPressed ? 0.2 : 0.4),
+                    blurRadius: 15,
+                    offset: const Offset(0, 4),
                   ),
-                  blurRadius: 15,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            alignment: Alignment.center,
-            child: widget.isLoading
-                ? const SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      color: Colors.black,
-                      strokeWidth: 2.5,
-                    ),
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Get Started",
-                        style: GoogleFonts.inter(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.2,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Icon(
-                        Icons.arrow_forward,
+                ],
+              ),
+              alignment: Alignment.center,
+              child: widget.isLoading
+                  ? const SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(
                         color: Colors.black,
-                        size: 20,
+                        strokeWidth: 2.5,
                       ),
-                    ],
-                  ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Get Started",
+                          style: GoogleFonts.inter(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.black,
+                          size: 20,
+                        ),
+                      ],
+                    ),
+            ),
           ),
         ),
       ],

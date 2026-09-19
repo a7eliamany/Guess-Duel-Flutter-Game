@@ -10,6 +10,7 @@ import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:uuid/v4.dart';
 
 class GetStartedCubit extends Cubit<GetStartedState> {
   final InternetCubit internetCubit;
@@ -32,12 +33,13 @@ class GetStartedCubit extends Cubit<GetStartedState> {
   Future<void> getStarted(String username) async {
     emit(GetStartedLoading());
 
-    // id , username
+    // id , username , current session id
 
-    final String uniqueID = "1${RandomF.getUniqueID(14)}";
-
+    final String uniqueID = "1${RandomF.getUniqueID(12)}";
+    final String currentSessionId = const UuidV4().generate();
     await SharedPrefService.setId(uniqueID);
     await SharedPrefService.setUsername(username);
+    await SharedPrefService.setcurrentSessionId(currentSessionId);
 
     // player data
 
@@ -49,6 +51,7 @@ class GetStartedCubit extends Cubit<GetStartedState> {
       lastSeen: Timestamp.now(),
       createdAt: Timestamp.now(),
       avatarID: AppAvatars.getRandomAvatar().id,
+      currentSessionId: currentSessionId,
     );
 
     // store data in hive
@@ -76,27 +79,6 @@ class GetStartedCubit extends Cubit<GetStartedState> {
       }
     } else {
       emit(GetStartedSuccess());
-    }
-  }
-
-  Future<void> userLastSeen(String userID) async {
-    final playerRef = FirebaseService.getCollection(
-      FirebaseCollections.players,
-    );
-
-    await playerRef.doc(userID).update({
-      "lastSeen": FieldValue.serverTimestamp(),
-    });
-  }
-
-  // for debugging
-  void getOut() async {
-    emit(GetStartedLoading());
-    try {
-      await FirebaseService.signOut();
-      emit(GetStartedOut("Signed out successfully"));
-    } on FirebaseAuthException catch (e) {
-      emit(GetStartedFailure(e.code.toString()));
     }
   }
 }

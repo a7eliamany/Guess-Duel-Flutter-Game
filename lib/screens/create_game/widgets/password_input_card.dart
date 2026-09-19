@@ -63,7 +63,7 @@ class _PasswordInputCardState extends State<PasswordInputCard> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: _isFocused
-                  ? const Color(0xFFC3F5FF).withOpacity(0.4)
+                  ? const Color(0xFFC3F5FF).withValues(alpha: 0.4)
                   : Colors.transparent,
               width: 1,
             ),
@@ -91,7 +91,7 @@ class _PasswordInputCardState extends State<PasswordInputCard> {
                   decoration: InputDecoration(
                     hintText: "Enter room password...",
                     hintStyle: GoogleFonts.inter(
-                      color: const Color(0xFF849396).withOpacity(0.5),
+                      color: const Color(0xFF849396).withValues(alpha: 0.5),
                       fontWeight: FontWeight.w500,
                     ),
                     border: InputBorder.none,

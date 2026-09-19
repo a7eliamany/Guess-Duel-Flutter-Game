@@ -23,6 +23,21 @@ class CreateGameBottomsheet extends HookWidget {
     final passwordController = useTextEditingController();
     final roomSettingsModel = useState(RoomSettingsModel());
 
+    bool validator(String text) {
+      if (text.isEmpty) {
+        Get.snackbar("Error", "Room name can`t be empty");
+        return false;
+      } else if (text.length > 15) {
+        Get.snackbar("Error", "Room name must be shorter than 15 charcters");
+        return false;
+      } else if (text.length < 2) {
+        Get.snackbar("Error", "Room name must be at least 2 charcters");
+        return false;
+      } else {
+        return true;
+      }
+    }
+
     final mediaQuery = MediaQuery.of(context);
 
     return Padding(
@@ -153,19 +168,15 @@ class CreateGameBottomsheet extends HookWidget {
                         onPressed: isLoading
                             ? null
                             : () async {
-                                if (roomNameController.text.trim().isEmpty) {
-                                  Get.snackbar(
-                                    "Error",
-                                    "Room name cannot be empty",
-                                  );
-                                  return;
+                                final roomname = roomNameController.text.trim();
+                                if (validator(roomname)) {
+                                  await context
+                                      .read<CreateRoomCubit>()
+                                      .createRoom(
+                                        roomNameController.text.trim(),
+                                        roomSettingsModel.value,
+                                      );
                                 }
-                                await context
-                                    .read<CreateRoomCubit>()
-                                    .createRoom(
-                                      roomNameController.text.trim(),
-                                      roomSettingsModel.value,
-                                    );
                               },
                       );
                     },

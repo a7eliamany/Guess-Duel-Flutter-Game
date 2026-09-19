@@ -8,6 +8,7 @@ class PlayerModel {
   final String id;
   final int lvl;
   final String avatarID;
+  final String? currentSessionId;
 
   final Timestamp lastSeen;
   final Timestamp createdAt;
@@ -21,6 +22,7 @@ class PlayerModel {
     required this.lastSeen,
     required this.createdAt,
     required this.avatarID,
+    this.currentSessionId,
   });
 
   factory PlayerModel.fromFirestore(Map<String, dynamic> data) {
@@ -33,6 +35,7 @@ class PlayerModel {
       lastSeen: data['lastSeen'] ?? Timestamp.now(),
       createdAt: data['createdAt'] ?? Timestamp.now(),
       avatarID: data['avatarID'] ?? AppAvatars.list.first.id,
+      currentSessionId: data['currentSessionId'] ?? '',
     );
   }
 
@@ -45,6 +48,7 @@ class PlayerModel {
       'username': username,
       'createdAt': createdAt,
       'lastSeen': lastSeen,
+      'currentSessionId': currentSessionId ?? '',
     };
   }
 
@@ -56,6 +60,7 @@ class PlayerModel {
     String? avatarID,
     Timestamp? lastSeen,
     Timestamp? createdAt,
+    String? currentSessionId,
   }) {
     return PlayerModel(
       id: id ?? this.id,
@@ -65,6 +70,7 @@ class PlayerModel {
       lastSeen: lastSeen ?? this.lastSeen,
       createdAt: createdAt ?? this.createdAt,
       avatarID: avatarID ?? this.avatarID,
+      currentSessionId: currentSessionId ?? this.currentSessionId,
     );
   }
 }

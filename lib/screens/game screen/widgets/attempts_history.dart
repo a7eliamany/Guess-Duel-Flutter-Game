@@ -6,6 +6,7 @@ import 'package:guess_duel/Widgets/text.dart';
 import 'package:guess_duel/constants/app_avatars.dart';
 import 'package:guess_duel/cubit/Attempts/attempts_cubit.dart';
 import 'package:guess_duel/cubit/Attempts/attempts_state.dart';
+import 'package:guess_duel/cubit/numpad%20cubit/numpad_cubit.dart';
 import 'package:guess_duel/models/Attempts/attempts_model.dart';
 import 'package:guess_duel/models/Players/room_player_cache.dart';
 import 'package:guess_duel/screens/game%20screen/widgets/history_title.dart';
@@ -114,199 +115,213 @@ class AttemptsHistory extends HookWidget {
                                     ),
                                   ),
                                 ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-
-                                  // يعكس ترتيب العناصر
-                                  textDirection: isYourAttempt
-                                      ? TextDirection.rtl
-                                      : TextDirection.ltr,
-
-                                  children: [
-                                    // NUMBER
-                                    Text(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context.read<NumpadCubit>().loadAttempt(
                                       attempt.attempt,
-                                      style: TextStyle(
-                                        fontFamily: 'Space Grotesk',
-                                        fontSize: 20,
-                                        letterSpacing: 2,
-                                        color: isYourAttempt
-                                            ? Colors.white
-                                            : Colors.white.withValues(
-                                                alpha: 0.6,
-                                              ),
+                                    );
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+
+                                    // يعكس ترتيب العناصر
+                                    textDirection: isYourAttempt
+                                        ? TextDirection.rtl
+                                        : TextDirection.ltr,
+
+                                    children: [
+                                      // NUMBER
+                                      Text(
+                                        attempt.attempt,
+                                        style: TextStyle(
+                                          fontFamily: 'Space Grotesk',
+                                          fontSize: 20,
+                                          letterSpacing: 2,
+                                          color: isYourAttempt
+                                              ? Colors.white
+                                              : Colors.white.withValues(
+                                                  alpha: 0.6,
+                                                ),
+                                        ),
                                       ),
-                                    ),
 
-                                    const SizedBox(width: 20),
+                                      const SizedBox(width: 20),
 
-                                    // RESULT
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      // RESULT
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
 
-                                      children: [
-                                        if (attempt.correctNumbers > 0)
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                '${attempt.correctNumbers} Correct',
-                                                style: TextStyle(
-                                                  color: isYourAttempt
-                                                      ? const Color(0xFFa9ffac)
-                                                      : const Color(
-                                                          0xFFa9ffac,
-                                                        ).withValues(
-                                                          alpha: 0.6,
-                                                        ),
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                  letterSpacing: 1,
+                                        children: [
+                                          if (attempt.correctNumbers > 0)
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  '${attempt.correctNumbers} Correct',
+                                                  style: TextStyle(
+                                                    color: isYourAttempt
+                                                        ? const Color(
+                                                            0xFFa9ffac,
+                                                          )
+                                                        : const Color(
+                                                            0xFFa9ffac,
+                                                          ).withValues(
+                                                            alpha: 0.6,
+                                                          ),
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    letterSpacing: 1,
+                                                  ),
                                                 ),
-                                              ),
 
-                                              const SizedBox(width: 4),
+                                                const SizedBox(width: 4),
 
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: List.generate(
-                                                  attempt.correctNumbers,
-                                                  (i) => Container(
-                                                    width: 6,
-                                                    height: 6,
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                          right: 2,
-                                                        ),
-                                                    decoration: BoxDecoration(
-                                                      color: isYourAttempt
-                                                          ? const Color(
-                                                              0xFFa9ffac,
-                                                            )
-                                                          : const Color(
-                                                              0xFFa9ffac,
-                                                            ).withValues(
-                                                              alpha: 0.4,
-                                                            ),
-                                                      shape: BoxShape.circle,
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: List.generate(
+                                                    attempt.correctNumbers,
+                                                    (i) => Container(
+                                                      width: 6,
+                                                      height: 6,
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                            right: 2,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        color: isYourAttempt
+                                                            ? const Color(
+                                                                0xFFa9ffac,
+                                                              )
+                                                            : const Color(
+                                                                0xFFa9ffac,
+                                                              ).withValues(
+                                                                alpha: 0.4,
+                                                              ),
+                                                        shape: BoxShape.circle,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
+                                              ],
+                                            ),
 
-                                        if (attempt.correctPlaces > 0)
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                '${attempt.correctPlaces} positioned',
-                                                style: TextStyle(
-                                                  color: isYourAttempt
-                                                      ? const Color(0xFFd674ff)
-                                                      : const Color(
-                                                          0xFFd674ff,
-                                                        ).withValues(
-                                                          alpha: 0.6,
-                                                        ),
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                  letterSpacing: 1,
+                                          if (attempt.correctPlaces > 0)
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  '${attempt.correctPlaces} positioned',
+                                                  style: TextStyle(
+                                                    color: isYourAttempt
+                                                        ? const Color(
+                                                            0xFFd674ff,
+                                                          )
+                                                        : const Color(
+                                                            0xFFd674ff,
+                                                          ).withValues(
+                                                            alpha: 0.6,
+                                                          ),
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    letterSpacing: 1,
+                                                  ),
                                                 ),
-                                              ),
 
-                                              const SizedBox(width: 4),
+                                                const SizedBox(width: 4),
 
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: List.generate(
-                                                  attempt.correctPlaces,
-                                                  (i) => Container(
-                                                    width: 6,
-                                                    height: 6,
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                          right: 2,
-                                                        ),
-                                                    decoration: BoxDecoration(
-                                                      color: isYourAttempt
-                                                          ? const Color(
-                                                              0xFFd674ff,
-                                                            )
-                                                          : const Color(
-                                                              0xFFd674ff,
-                                                            ).withValues(
-                                                              alpha: 0.4,
-                                                            ),
-                                                      shape: BoxShape.circle,
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: List.generate(
+                                                    attempt.correctPlaces,
+                                                    (i) => Container(
+                                                      width: 6,
+                                                      height: 6,
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                            right: 2,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        color: isYourAttempt
+                                                            ? const Color(
+                                                                0xFFd674ff,
+                                                              )
+                                                            : const Color(
+                                                                0xFFd674ff,
+                                                              ).withValues(
+                                                                alpha: 0.4,
+                                                              ),
+                                                        shape: BoxShape.circle,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
+                                              ],
+                                            ),
 
-                                        if (attempt.correctNumbers < 1 &&
-                                            attempt.correctPlaces < 1)
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Container(
-                                                height: 12,
-                                                width: 1,
-                                                color: const Color(
-                                                  0xFF767575,
-                                                ).withValues(alpha: 0.2),
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                    ),
-                                              ),
-
-                                              Text(
-                                                '4 Wrong',
-                                                style: TextStyle(
-                                                  color: isYourAttempt
-                                                      ? Colors.red
-                                                      : Colors.red.withValues(
-                                                          alpha: 0.6,
-                                                        ),
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                  letterSpacing: 1,
+                                          if (attempt.correctNumbers < 1 &&
+                                              attempt.correctPlaces < 1)
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  height: 12,
+                                                  width: 1,
+                                                  color: const Color(
+                                                    0xFF767575,
+                                                  ).withValues(alpha: 0.2),
+                                                  margin:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 8,
+                                                      ),
                                                 ),
-                                              ),
 
-                                              const SizedBox(width: 4),
-
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: List.generate(
-                                                  4,
-                                                  (i) => Container(
-                                                    width: 6,
-                                                    height: 6,
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                          right: 2,
-                                                        ),
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                          color: Colors.red,
-                                                          shape:
-                                                              BoxShape.circle,
-                                                        ),
+                                                Text(
+                                                  '4 Wrong',
+                                                  style: TextStyle(
+                                                    color: isYourAttempt
+                                                        ? Colors.red
+                                                        : Colors.red.withValues(
+                                                            alpha: 0.6,
+                                                          ),
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    letterSpacing: 1,
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                      ],
-                                    ),
-                                  ],
+
+                                                const SizedBox(width: 4),
+
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: List.generate(
+                                                    4,
+                                                    (i) => Container(
+                                                      width: 6,
+                                                      height: 6,
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                            right: 2,
+                                                          ),
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                            color: Colors.red,
+                                                            shape:
+                                                                BoxShape.circle,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 18),

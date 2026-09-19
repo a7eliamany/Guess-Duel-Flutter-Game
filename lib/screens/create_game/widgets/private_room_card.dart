@@ -26,7 +26,7 @@ class PrivateRoomCard extends StatelessWidget {
         color: const Color(0xFF1C1B1B),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF3B494C).withOpacity(0.1),
+          color: const Color(0xFF3B494C).withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -36,7 +36,7 @@ class PrivateRoomCard extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: const Color(0xFF582A9F).withOpacity(0.2),
+              color: const Color(0xFF582A9F).withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: const Color(0xFFD4BBFF), size: 24),

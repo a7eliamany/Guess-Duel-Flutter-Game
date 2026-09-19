@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#94e2d5" />
+  <g transform="translate(60, 60)">
+    
+      <circle cx="0" cy="-2" r="36" fill="#9399b2" />
+      <circle cx="-14" cy="-10" r="4" fill="#11111b" />
+      <circle cx="14" cy="-10" r="4" fill="#11111b" />
+      <ellipse cx="0" cy="12" rx="22" ry="16" fill="#bac2de" />
+      <!-- Horn -->
+      <path d="M -6,10 Q 0,-6 6,10 Z" fill="#ffffff" />
+      <circle cx="-10" cy="14" r="2.5" fill="#11111b" />
+      <circle cx="10" cy="14" r="2.5" fill="#11111b" />
+    
+  </g>
+</svg>

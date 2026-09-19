@@ -98,7 +98,7 @@ class _NumberDisplayState extends State<NumberDisplay>
                           ? [
                               BoxShadow(
                                 color: SoloChallengeTheme.primaryContainer
-                                    .withOpacity(0.2),
+                                    .withAlpha(51),
                                 blurRadius: 15,
                                 spreadRadius: 1,
                               ),
@@ -109,8 +109,8 @@ class _NumberDisplayState extends State<NumberDisplay>
                           color: isCurrentFocus
                               ? SoloChallengeTheme.primary
                               : (isFilled
-                                    ? SoloChallengeTheme.primary.withOpacity(
-                                        0.5,
+                                    ? SoloChallengeTheme.primary.withValues(
+                                        alpha: 0.5,
                                       )
                                     : SoloChallengeTheme.outlineVariant),
                           width: isCurrentFocus ? 3 : 2,
@@ -136,7 +136,7 @@ class _NumberDisplayState extends State<NumberDisplay>
                                       fontSize: fontSize,
                                       fontWeight: FontWeight.bold,
                                       color: SoloChallengeTheme.onSurfaceVariant
-                                          .withOpacity(0.5),
+                                          .withValues(alpha: 0.5),
                                     ),
                                   ),
                                 )
@@ -146,7 +146,7 @@ class _NumberDisplayState extends State<NumberDisplay>
                                     fontSize: fontSize,
                                     fontWeight: FontWeight.bold,
                                     color: SoloChallengeTheme.onSurfaceVariant
-                                        .withOpacity(0.3),
+                                        .withValues(alpha: 0.3),
                                   ),
                                 )),
                   ),

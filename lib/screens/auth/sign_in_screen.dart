@@ -303,6 +303,20 @@ class SignInScreen extends HookWidget {
                                   margin: const EdgeInsets.all(16),
                                 );
                               }
+                              if (state is SignOut) {
+                                Get.snackbar(
+                                  'Signed out',
+                                  state.message,
+                                  backgroundColor: const Color(0xFF1F1116),
+                                  colorText: const Color(0xFFFF6B6B),
+                                  borderColor: const Color(
+                                    0xFFFF4D4D,
+                                  ).withValues(alpha: 0.5),
+                                  borderWidth: 1,
+                                  snackPosition: SnackPosition.TOP,
+                                  margin: const EdgeInsets.all(16),
+                                );
+                              }
                             },
                             builder: (context, state) {
                               final bool isLoading = state is SignInLoading;
@@ -327,8 +341,13 @@ class SignInScreen extends HookWidget {
                             onFacebookTap: () => context
                                 .read<SignInCubit>()
                                 .signInWithFacebook(),
-                            onGuestTap: () =>
-                                Get.to(() => const GetStartedScreen()),
+                            onGuestTap: () {
+                              if (SharedPrefService.getId() != null) {
+                                Get.offAll(() => const Pages());
+                              } else {
+                                Get.to(() => const GetStartedScreen());
+                              }
+                            },
                           ),
                         ],
                       ),

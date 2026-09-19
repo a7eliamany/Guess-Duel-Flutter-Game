@@ -32,6 +32,12 @@ class SharedPrefService {
 
   static String? getUsername() => getString('username');
 
+  static Future<void> setcurrentSessionId(String currentSessionId) async {
+    await setString("currentSessionId", currentSessionId);
+  }
+
+  static String? getcurrentSessionId() => getString('currentSessionId');
+
   // ==================== Int ====================
 
   static Future<bool> setInt(String key, int value) async {

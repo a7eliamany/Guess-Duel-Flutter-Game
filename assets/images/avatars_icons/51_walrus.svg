@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#89b4fa" />
+  <g transform="translate(60, 60)">
+    
+      <circle cx="0" cy="-4" r="36" fill="#8d5b4c" />
+      <circle cx="-14" cy="-10" r="4" fill="#11111b" />
+      <circle cx="14" cy="-10" r="4" fill="#11111b" />
+      <!-- Muzzle -->
+      <ellipse cx="-10" cy="6" rx="12" ry="9" fill="#e5c89b" />
+      <ellipse cx="10" cy="6" rx="12" ry="9" fill="#e5c89b" />
+      <circle cx="0" cy="2" r="4" fill="#11111b" />
+      <!-- Tusks -->
+      <rect x="-8" y="10" width="5" height="18" rx="2.5" fill="#ffffff" />
+      <rect x="3" y="10" width="5" height="18" rx="2.5" fill="#ffffff" />
+    
+  </g>
+</svg>

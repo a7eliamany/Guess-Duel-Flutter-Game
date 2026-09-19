@@ -9,7 +9,6 @@ import 'package:guess_duel/cubit/numpad%20cubit/numpad_state.dart';
 import 'package:guess_duel/screens/game%20screen/widgets/attempts_history.dart';
 import 'package:guess_duel/screens/game%20screen/widgets/code_input.dart';
 import 'package:guess_duel/screens/game%20screen/widgets/game_header.dart';
-import 'package:guess_duel/screens/game%20screen/widgets/history_title.dart';
 import 'package:guess_duel/screens/game%20screen/widgets/submit_button.dart';
 
 class GameScreen extends HookWidget {

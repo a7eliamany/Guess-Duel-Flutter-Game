@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#a6adc8" />
+  <g transform="translate(60, 60)">
+    
+      <polygon points="-30,-20 -15,-40 0,-20" fill="#585b70" />
+      <polygon points="30,-20 15,-40 0,-20" fill="#585b70" />
+      <circle cx="0" cy="0" r="36" fill="#a6adc8" />
+      <!-- Mask -->
+      <ellipse cx="-14" cy="-4" rx="12" ry="8" fill="#11111b" transform="rotate(-10 -14 -4)" />
+      <ellipse cx="14" cy="-4" rx="12" ry="8" fill="#11111b" transform="rotate(10 14 -4)" />
+      <circle cx="-12" cy="-4" r="3" fill="#ffffff" />
+      <circle cx="12" cy="-4" r="3" fill="#ffffff" />
+      <ellipse cx="0" cy="8" rx="10" ry="7" fill="#ffffff" />
+      <circle cx="0" cy="6" r="3" fill="#11111b" />
+    
+  </g>
+</svg>

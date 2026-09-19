@@ -51,7 +51,7 @@ class ResultActionSuite extends StatelessWidget {
         GradientButton(
           text: "MODIFY DIFFICULTY",
           gradientColors: [
-            Color(0xFFDAB9FF),
+            const Color(0xFFDAB9FF),
             Colors.brown.shade800,
 
             Colors.brown.shade800,

@@ -1,12 +1,14 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guess_duel/cubit/internet%20check/internet_check_cubit.dart';
+import 'package:guess_duel/cubit/sign%20in/sign_in_cubit.dart';
+import 'package:guess_duel/models/Players/players_model.dart';
 import 'package:guess_duel/screens/Splash%20Screen/Widgets/maintenance_dialog.dart';
 import 'package:guess_duel/screens/Splash%20Screen/Widgets/update_dialog.dart';
 import 'package:guess_duel/screens/auth/sign_in_screen.dart';
@@ -15,130 +17,141 @@ import 'package:guess_duel/screens/offline%20game%20screens/offline%20home/offli
 import 'package:guess_duel/services/Firebase/firebase_service.dart';
 import 'package:guess_duel/cubit/App%20Config/app_config_cubit.dart';
 import 'package:guess_duel/pageview.dart';
+import 'package:guess_duel/services/Hive/hive_service.dart';
 import 'package:guess_duel/services/SharedPrefrences/shared_prefrences_service.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends HookWidget {
   const SplashScreen({super.key});
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  double _progress = 1.0;
-  Timer? _progressTimer;
-  @override
-  void initState() {
-    super.initState();
-
-    context.read<InternetCubit>().retryConnection();
-
-    _startSimulatedProgress();
-  }
-
-  void _startSimulatedProgress() {
-    final random = math.Random();
-    _progressTimer = Timer.periodic(const Duration(milliseconds: 150), (timer) {
-      if (_progress < 100) {
-        setState(() {
-          _progress += random.nextDouble() * 4.5;
-          if (_progress > 100) {
-            _progress = 100;
-          }
-        });
-      } else {
-        _progressTimer?.cancel();
-        _checkConfigAndNavigate();
-      }
-    });
-  }
-
-  Future<void> _checkConfigAndNavigate() async {
-    // check for internet connection
-
-    if (!await context.read<InternetCubit>().hasInternet()) {
-      Get.offAll(() => const OfflineHomeScreen());
-      return;
-    }
-    if (!mounted) return;
-
-    // get appConfig from firebase
-
-    final configCubit = context.read<AppConfigCubit>();
-    await configCubit.getAppConfig();
-
-    if (!mounted) return;
-
-    // 1. Check Maintenance state
-    if (configCubit.checkMaintenance()) {
-      _showMaintenanceDialog();
-      return;
-    }
-    // 2. Check Force Update state
-    if (configCubit.checkForceUpdate()) {
-      _showUpdateDialog(configCubit.getUpdateUrl());
-      return;
-    }
-    // 3. Complete navigation
-    _navigateToNextScreen();
-  }
-
-  void _navigateToNextScreen() {
-    final userId = SharedPrefService.getId();
-    final User? user = FirebaseAuth.instance.currentUser;
-    if (userId != null && user != null) {
-      FirebaseFirestore.instance
-          .collection(FirebaseCollections.players)
-          .doc(user.uid)
-          .update({"lastSeen": FieldValue.serverTimestamp()});
-
-      Get.offAll(() => const Pages());
-    } else if (userId == null && user != null) {
-      Get.offAll(() => const GetStartedScreen());
-    } else if (userId != null && user == null) {
-      Get.offAll(() => const Pages());
-    } else {
-      Get.offAll(() => const SignInScreen());
-    }
-  }
-
-  void _showMaintenanceDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const MaintenanceDialog();
-      },
-    );
-  }
-
-  void _showUpdateDialog(String updateUrl) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return UpdateDialog(updateUrl: updateUrl);
-      },
-    );
-  }
-
-  // void _showNoInternetDialog() {
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false,
-  //     builder: (context) {
-  //       return const InternetDialog();
-  //     },
-  //   );
-  // }
-
-  @override
-  void dispose() {
-    _progressTimer?.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final progress = useState<double>(1.0);
+
+    void showMaintenanceDialog() {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return const MaintenanceDialog();
+        },
+      );
+    }
+
+    Future<bool> checkCurrentSessionId() async {
+      final lastSessionId = SharedPrefService.getcurrentSessionId() ?? '';
+      final PlayerModel playerModel = HiveService.userData.get(
+        SharedPrefService.getId(),
+      );
+      final String currentSessionId = playerModel.currentSessionId ?? '';
+      if (currentSessionId != lastSessionId) {
+        await context.read<SignInCubit>().logOut();
+        Get.offAll(() => const SignInScreen());
+        return false;
+      }
+      return true;
+    }
+
+    void navigateToNextScreen() async {
+      final userId = SharedPrefService.getId();
+      final User? user = FirebaseAuth.instance.currentUser;
+
+      if (userId != null && user != null) {
+        await FirebaseFirestore.instance
+            .collection(FirebaseCollections.players)
+            .doc(user.uid)
+            .update({"lastSeen": FieldValue.serverTimestamp()});
+
+        // sync data from firebase
+        progress.value = 80;
+        if (!context.mounted) return;
+        await context.read<SignInCubit>().pullDataFromFirebase(user.uid);
+
+        // check current session id
+        if (!await checkCurrentSessionId()) return;
+
+        // Start listner to user to check login
+        if (!context.mounted) return;
+
+        context.read<SignInCubit>().listenToUser(user.uid);
+        progress.value = 100;
+        Get.offAll(() => const Pages());
+      } else if (userId == null && user != null) {
+        progress.value = 100;
+        Get.offAll(() => const GetStartedScreen());
+      } else if (userId != null && user == null) {
+        progress.value = 100;
+        Get.offAll(() => const Pages());
+      } else {
+        progress.value = 100;
+        Get.offAll(() => const SignInScreen());
+      }
+    }
+
+    void showUpdateDialog(String updateUrl) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return UpdateDialog(updateUrl: updateUrl);
+        },
+      );
+    }
+
+    Future<void> checkConfigAndNavigate() async {
+      progress.value = 40;
+      // check for internet connection
+
+      if (!await context.read<InternetCubit>().hasInternet()) {
+        progress.value = 100;
+
+        Get.offAll(() => const OfflineHomeScreen());
+        return;
+      }
+
+      if (!context.mounted) return;
+
+      // get appConfig from firebase
+      final configCubit = context.read<AppConfigCubit>();
+      await configCubit.getAppConfig();
+      progress.value = 50;
+
+      // 1. Check Maintenance state
+      if (configCubit.checkMaintenance()) {
+        progress.value = 100;
+        await Future.delayed(.4.seconds);
+
+        showMaintenanceDialog();
+        return;
+      }
+      // 2. Check Force Update state
+      if (configCubit.checkForceUpdate()) {
+        progress.value = 100;
+        await Future.delayed(.4.seconds);
+
+        showUpdateDialog(configCubit.getUpdateUrl());
+        return;
+      }
+      // 3. Complete navigation
+      progress.value = 70;
+      await Future.delayed(.2.seconds);
+
+      navigateToNextScreen();
+    }
+
+    useEffect(() {
+      Future<void> startup() async {
+        // Check internet
+        await context.read<InternetCubit>().retryConnection();
+        progress.value = 20;
+
+        await checkConfigAndNavigate();
+      }
+
+      startup();
+
+      return null;
+    }, []);
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -227,7 +240,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          (_progress < 90)
+                          (progress.value < 50)
                               ? "INITIALIZING..."
                               : "SEARCHING FOR UPDATES...",
                           style: GoogleFonts.spaceGrotesk(
@@ -240,7 +253,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                         ),
                         Text(
-                          "${_progress.toInt()}%",
+                          "${progress.value.toInt()}%",
                           style: GoogleFonts.spaceGrotesk(
                             color: const Color(
                               0xFF00F0FF,
@@ -263,9 +276,9 @@ class _SplashScreenState extends State<SplashScreen> {
                         ),
                         // Progress bar track fill (flat, no glow)
                         AnimatedFractionallySizedBox(
-                          duration: const Duration(milliseconds: 800),
+                          duration: const Duration(milliseconds: 200),
                           alignment: Alignment.centerLeft,
-                          widthFactor: _progress / 100.0,
+                          widthFactor: progress.value / 100.0,
                           child: Container(
                             height: 2,
                             color: const Color(0xFF00F0FF),

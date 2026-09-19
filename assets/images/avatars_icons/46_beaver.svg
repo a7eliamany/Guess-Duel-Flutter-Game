@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#fab387" />
+  <g transform="translate(60, 60)">
+    
+      <circle cx="-28" cy="-24" r="10" fill="#8d5b4c" />
+      <circle cx="28" cy="-24" r="10" fill="#8d5b4c" />
+      <circle cx="0" cy="0" r="38" fill="#8d5b4c" />
+      <circle cx="-14" cy="-8" r="4" fill="#11111b" />
+      <circle cx="14" cy="-8" r="4" fill="#11111b" />
+      <ellipse cx="0" cy="8" rx="18" ry="12" fill="#e5c89b" />
+      <circle cx="0" cy="4" r="4" fill="#11111b" />
+      <!-- Buck teeth -->
+      <rect x="-5" y="16" width="10" height="8" rx="2" fill="#ffffff" stroke="#11111b" stroke-width="1.5" />
+    
+  </g>
+</svg>

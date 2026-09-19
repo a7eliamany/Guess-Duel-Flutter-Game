@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#f9e2af" />
+  <g transform="translate(60, 60)">
+    
+      <ellipse cx="0" cy="0" rx="34" ry="32" fill="#f8c43a" />
+      <!-- Stripes -->
+      <rect x="-30" y="-8" width="60" height="6" fill="#11111b" rx="3" />
+      <rect x="-26" y="8" width="52" height="6" fill="#11111b" rx="3" />
+      <circle cx="-12" cy="-14" r="4" fill="#11111b" />
+      <circle cx="12" cy="-14" r="4" fill="#11111b" />
+      <!-- Wings -->
+      <ellipse cx="-24" cy="-28" rx="10" ry="16" fill="#ffffff" opacity="0.8" transform="rotate(-20 -24 -28)" />
+      <ellipse cx="24" cy="-28" rx="10" ry="16" fill="#ffffff" opacity="0.8" transform="rotate(20 24 -28)" />
+    
+  </g>
+</svg>

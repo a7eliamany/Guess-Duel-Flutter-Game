@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="60" fill="#fab387" />
+  <g transform="translate(60, 60)">
+    
+      <ellipse cx="0" cy="4" rx="34" ry="26" fill="#ef7c36" />
+      <!-- Eyes on stalks -->
+      <line x1="-12" y1="-20" x2="-12" y2="-8" stroke="#ef7c36" stroke-width="4" />
+      <line x1="12" y1="-20" x2="12" y2="-8" stroke="#ef7c36" stroke-width="4" />
+      <circle cx="-12" cy="-22" r="5" fill="#11111b" />
+      <circle cx="12" cy="-22" r="5" fill="#11111b" />
+      <!-- Claws -->
+      <circle cx="-32" cy="-10" r="10" fill="#ef7c36" />
+      <circle cx="32" cy="-10" r="10" fill="#ef7c36" />
+      <path d="M -10,12 Q 0,20 10,12" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+    
+  </g>
+</svg>

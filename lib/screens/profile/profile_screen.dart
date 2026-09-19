@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guess_duel/Widgets/app_dialog.dart';
 import 'package:guess_duel/cubit/profile/profile_cubit.dart';
 import 'package:guess_duel/cubit/profile/profile_state.dart';
 import 'package:guess_duel/cubit/sign%20in/sign_in_cubit.dart';
@@ -159,7 +160,30 @@ class ProfileScreen extends HookWidget {
                   GuestAccountBannerWidget(
                     onCreateAccount: () =>
                         Get.to(() => const CreateAccountScreen()),
-                    onLogout: () => context.read<SignInCubit>().logOut(),
+                    onLogout: () async {
+                      await AppDialog.show(
+                        context: context,
+                        title: "LOG OUT",
+                        message:
+                            """Are you Sure you want to log out , your game history will be deleted """,
+                        icon: RemixIcons.logout_box_line,
+                        accentColor: Colors.pink,
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.read<SignInCubit>().logOut();
+                            },
+                            child: const Text("Sure"),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
